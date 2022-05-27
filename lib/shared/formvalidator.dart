@@ -1,4 +1,3 @@
-/*
 import 'package:form_field_validator/form_field_validator.dart';
 
 class FormFieldValidate {
@@ -21,4 +20,3 @@ class FormFieldValidate {
     MinLengthValidator(6, errorText: 'full name must be entered'),
   ]);
 }
-*/

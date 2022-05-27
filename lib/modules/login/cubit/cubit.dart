@@ -36,4 +36,37 @@ class LoginCubit extends Cubit<LoginStates> {
       emit(LoginErrorState(error.toString()));
     });
   }
+
+  Future<void> RestPassword(email) async {
+    emit(ForgetPasswordLoadingState());
+    await FirebaseAuth.instance
+        .sendPasswordResetEmail(email: email)
+        .then((value) {
+      emit(ForgetPasswordSuccessState());
+      print('=============================================');
+      print('successfuly ');
+    }).catchError((Error) {
+      emit(ForgetPasswordErrorState(Error));
+    });
+  }
+
+/*
+  void _changePassword(String currentPassword, String newPassword) async {
+    final user = await FirebaseAuth.instance.currentUser;
+    final cred = EmailAuthProvider.credential(
+        email: user!.email!, password: currentPassword);
+
+    user.reauthenticateWithCredential(cred).then((value) {
+      user.updatePassword(newPassword).then((value) {
+        //Success, do something
+        emit(ForgetPasswordSuccessState());
+      }).catchError((error) {
+        //Error, show something
+        emit(ForgetPasswordErrorState(error));
+      });
+    }).catchError((error) {
+       emit(ForgetPasswordErrorState(error));
+    });
+  }
+  */
 }

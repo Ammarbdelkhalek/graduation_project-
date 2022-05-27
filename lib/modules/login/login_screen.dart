@@ -6,6 +6,7 @@ import 'package:realestateapp/modules/cubit/cubit.dart';
 import 'package:realestateapp/modules/cubit/states.dart';
 import 'package:realestateapp/modules/login/cubit/cubit.dart';
 import 'package:realestateapp/modules/login/cubit/states.dart';
+import 'package:realestateapp/modules/login/forgetpassword.dart';
 import 'package:realestateapp/modules/register/register_screen.dart';
 import 'package:realestateapp/shared/components/components.dart';
 import 'package:realestateapp/shared/components/constant.dart';
@@ -49,128 +50,204 @@ class LoginScreen extends StatelessWidget {
         },
         builder: (context, state) {
           return Scaffold(
-            body: Padding(
-              padding: const EdgeInsets.all(20.0),
-              child: SingleChildScrollView(
-                child: Form(
-                  key: formKey,
-                  child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Container(
-                          height: _headerHeight,
-                          width: double.infinity,
-                          child: HeaderWidget(
-                              _headerHeight,
-                              true,
-                              Icons
-                                  .login_rounded), //let's create a common header widget
-                        ),
-                        SafeArea(
-                          child: Container(
-                            padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
-                            margin: const EdgeInsets.fromLTRB(
-                                15, 5, 5, 10), // This will be the login form
-                            child: Column(
-                              children: [
-                                const Text(
-                                  'Hello',
-                                  style: TextStyle(
-                                      fontSize: 40,
-                                      fontWeight: FontWeight.bold),
+            body: Stack(
+              alignment: AlignmentDirectional.center,
+              children: [
+                const Image(
+                  image: AssetImage('assets/images/image5.jpg'),
+                  height: double.infinity,
+                  width: double.infinity,
+                  fit: BoxFit.fill,
+                ),
+                Container(
+                  alignment: AlignmentDirectional.center,
+                  width: 310,
+                  height: 500,
+                  color: Colors.black54.withOpacity(0.5),
+                  //     decoration: BoxDecoration(backgroundBlendMode: BlendMode.darken),
+                  child: Padding(
+                    padding: const EdgeInsets.all(20.0),
+                    child: SingleChildScrollView(
+                      child: Form(
+                        key: formKey,
+                        autovalidateMode: AutovalidateMode.always,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const Center(
+                              child: Text(
+                                'Login',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 40,
                                 ),
-                                const Text(
-                                  'Signin into your account',
-                                  style: TextStyle(color: Colors.grey),
+                              ),
+                            ),
+                            SizedBox(
+                              height: MediaQuery.of(context).size.height * 0.02,
+                            ),
+                            const Text(
+                              'Login now to buy or rent any real estste easily',
+                              style: TextStyle(
+                                color: Colors.grey,
+                                fontSize: 10,
+                              ),
+                            ),
+                            SizedBox(
+                              height: MediaQuery.of(context).size.height * 0.05,
+                            ),
+                            Container(
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(50),
+                                  color: Colors.black45),
+                              child: defaultFormField(
+                                style: const TextStyle(color: Colors.white),
+                                controller: emailController,
+                                type: TextInputType.emailAddress,
+                                validate: (value) {
+                                  if (value!.isEmpty) {
+                                    return 'Please Enter Your Email Address';
+                                  }
+                                  String pattern = r'\w+@\w+\.\w+';
+                                  if (!RegExp(pattern).hasMatch(value)) {
+                                    return 'invalid email address format';
+                                  }
+                                },
+                                label: 'Email Address',
+                                labelStyle: const TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 13,
                                 ),
-                                const SizedBox(height: 30.0),
-                                defaultFormField(
-                                  controller: emailController,
-                                  type: TextInputType.emailAddress,
+                                prefix: Icons.email,
+                                color: Colors.white,
+                              ),
+                            ),
+                            SizedBox(
+                              height: MediaQuery.of(context).size.height * 0.02,
+                            ),
+                            Container(
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(50),
+                                color: Colors.black45,
+                              ),
+                              child: defaultFormField(
+                                  style: const TextStyle(color: Colors.white),
+                                  isPassword:
+                                      LoginCubit.get(context).isPassword,
+                                  controller: passwordController,
+                                  type: TextInputType.visiblePassword,
                                   validate: (value) {
                                     if (value!.isEmpty) {
-                                      return 'Please Enter Your Email Address';
+                                      return 'Please Enter Your Password';
+                                    }
+                                    /*
+                                    String pattern =
+                                        r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#\$&*~]).{8,}$';
+                                    if (!RegExp(pattern).hasMatch(value)) {
+                                      return 'invalid password format';
+                                    }
+                                     */
+                                  },
+                                  onSubmit: (value) {
+                                    if (formKey.currentState!.validate()) {
+                                      LoginCubit.get(context).userLogin(
+                                        email: emailController.text,
+                                        password: passwordController.text,
+                                      );
                                     }
                                   },
-                                  label: 'Email Address',
-                                  prefix: Icons.email,
-                                ),
-                                const SizedBox(
-                                  height: 30.0,
-                                ),
-                                defaultFormField(
-                                    isPassword:
-                                        LoginCubit.get(context).isPassword,
-                                    controller: passwordController,
-                                    type: TextInputType.visiblePassword,
-                                    validate: (value) {
-                                      if (value!.isEmpty) {
-                                        return 'Please Enter Your Password';
-                                      }
-                                    },
-                                    onSubmit: (value) {
-                                      if (formKey.currentState!.validate()) {
-                                        LoginCubit.get(context).userLogin(
-                                          email: emailController.text,
-                                          password: passwordController.text,
-                                        );
-                                      }
-                                    },
-                                    label: 'Password',
-                                    prefix: Icons.lock,
-                                    suffix: LoginCubit.get(context).suffix,
-                                    suffixpressed: () {
-                                      LoginCubit.get(context)
-                                          .ChangePasswordVisibility();
-                                    }),
-                                const SizedBox(
-                                  height: 20.0,
-                                ),
-                                ConditionalBuilder(
-                                  condition: state is! LoginLoadingState,
-                                  builder: (context) => defaultButton(
-                                    function: () {
-                                      if (formKey.currentState!.validate()) {
-                                        LoginCubit.get(context).userLogin(
-                                            email: emailController.text,
-                                            password: passwordController.text);
-                                      }
-                                    },
-                                    text: 'Login',
+                                  label: 'Password',
+                                  labelStyle: const TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 13,
                                   ),
-                                  fallback: (context) => const Center(
-                                      child: CircularProgressIndicator()),
+                                  prefix: Icons.lock,
+                                  color: Colors.white,
+                                  suffix: LoginCubit.get(context).suffix,
+                                  suffixpressed: () {
+                                    LoginCubit.get(context)
+                                        .ChangePasswordVisibility();
+                                  }),
+                            ),
+                            const SizedBox(
+                              height: 20.0,
+                            ),
+                            ConditionalBuilder(
+                              condition: state is! LoginLoadingState,
+                              builder: (context) => defaultButton(
+                                function: () {
+                                  if (formKey.currentState!.validate()) {
+                                    LoginCubit.get(context).userLogin(
+                                        email: emailController.text,
+                                        password: passwordController.text);
+                                  }
+                                },
+                                text: 'Login',
+                              ),
+                              fallback: (context) => const Center(
+                                  child: CircularProgressIndicator()),
+                            ),
+                            const SizedBox(
+                              height: 15.0,
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                const Text(
+                                  'Don\'t have an account ?',
+                                  style: TextStyle(
+                                    color: Colors.grey,
+                                    fontSize: 10,
+                                  ),
                                 ),
-                                const SizedBox(
-                                  height: 15.0,
-                                ),
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Text(
-                                      'Don\'t have an account ?',
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .bodySmall!,
-                                    ),
-                                    defaultTextButton(
-                                      function: () {
-                                        navigateTo(
-                                          context,
-                                          RegisterScreen(),
-                                        );
-                                      },
-                                      text: 'Register',
-                                    ),
-                                  ],
+                                TextButton(
+                                  onPressed: () {
+                                    navigateTo(
+                                      context,
+                                      RegisterScreen(),
+                                    );
+                                  },
+                                  child: const Text(
+                                    'Register',
+                                    style: TextStyle(color: Colors.white),
+                                  ),
                                 ),
                               ],
                             ),
-                          ),
+                            SizedBox(
+                              height: MediaQuery.of(context).size.height * 0.05,
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                const Text(
+                                  'do you forget password?? ',
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 12.0,
+                                    color: Colors.white,
+                                  ),
+                                ),
+                                TextButton(
+                                  onPressed: () {
+                                    navigateTo(context, Forgetpassword());
+                                  },
+                                  child: const Text(
+                                    'forget password',
+                                    style: TextStyle(
+                                      color: Colors.amber,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
                         ),
-                      ]),
+                      ),
+                    ),
+                  ),
                 ),
-              ),
+              ],
             ),
           );
         },

@@ -29,13 +29,14 @@ class EditPost extends StatelessWidget {
         if (state is UpdatePostSuccessState) {
           showToast(text: 'success', state: ToastStates.SUCCESS);
           navigateTo(context, User_Profile(postmodel));
+          AppCubit.get(context).getUserAds();
         }
         if (state is UpdatePostErrorState) {
           showToast(text: 'failed', state: ToastStates.ERROR);
         }
       },
       builder: (context, state) {
-        var profileImage = AppCubit.get(context).postImage;
+        //var profileImage = AppCubit.get(context).postImage;
 
         NamePostController.text = postmodel!.namePost!;
         DescriptionController.text = postmodel!.description!;
@@ -43,7 +44,7 @@ class EditPost extends StatelessWidget {
         no_of_roomsController.text = postmodel!.no_of_room!;
         no_of_bathroomController.text = postmodel!.no_of_bathroom!;
         AreaController.text = postmodel!.area!;
-        //  PriceController.text = postmodel!.price!;
+        PriceController.text = postmodel!.price!;
 
         return Scaffold(
           appBar: AppBar(
@@ -85,16 +86,14 @@ class EditPost extends StatelessWidget {
                           const SizedBox(
                             height: 10,
                           ),
-                          defaultFormField(
+                          TextField(
                             controller: DescriptionController,
-                            type: TextInputType.text,
-                            validate: (value) {
-                              if (value!.isEmpty) {
-                                return 'Please Enter Description';
-                              }
-                            },
-                            label: 'Description',
-                            prefix: Icons.description,
+                            keyboardType: TextInputType.multiline,
+                            maxLines: null,
+                            decoration: const InputDecoration(
+                                prefixIcon: Icon(Icons.description),
+                                hintText: 'describtion',
+                                border: OutlineInputBorder()),
                           ),
                           const SizedBox(
                             height: 10,
@@ -169,6 +168,7 @@ class EditPost extends StatelessWidget {
                           const SizedBox(
                             height: 10,
                           ),
+                          /*
                           TextButton(
                             onPressed: () {
                               AppCubit.get(context).getPostImage();
@@ -185,6 +185,8 @@ class EditPost extends StatelessWidget {
                               ],
                             ),
                           ),
+                          */
+                          /*
                           Stack(
                             alignment: AlignmentDirectional.bottomEnd,
                             children: [
@@ -208,15 +210,18 @@ class EditPost extends StatelessWidget {
                               ),
                             ],
                           ),
+                          */
                         ],
                       ),
                     ),
-                    if (AppCubit.get(context).postImage != null)
-                      Row(
-                        children: [
-                          OutlinedButton(
-                            onPressed: () {
-                              if (formKey.currentState!.validate()) {
+                    //
+                    // if (AppCubit.get(context).postImage != null)
+                    /*
+                    Row(
+                      children: [
+                        OutlinedButton(
+                          onPressed: () {
+                            /* if (formKey.currentState!.validate()) {
                                 AppCubit.get(context).updatePostImage(
                                   name: AppCubit.get(context).userModel!.name!,
                                   uid: AppCubit.get(context).userModel!.uid!,
@@ -231,22 +236,22 @@ class EditPost extends StatelessWidget {
                                   price: PriceController.text,
                                 );
                               }
-                            },
-                            child: const Text(
-                              'Upload Post Image',
-                            ),
+                              */
+                          },
+                          child: const Text(
+                            'Upload Post Image',
                           ),
-                        ],
-                      ),
+                        ),
+                      ],
+                    ),
+                    */
                     OutlinedButton(
-                      onPressed: () {
-                        int? index;
+                      onPressed: ({currentindex}) {
+                        var index = 0;
+                        currentindex = index;
                         if (formKey.currentState!.validate()) {
                           AppCubit.get(context).updatePost(
-                              name: AppCubit.get(context).userModel!.name!,
-                              uid: AppCubit.get(context).userModel!.uid!,
-                              image: AppCubit.get(context).userModel!.image!,
-                              category: postmodel!.category!,
+                              //    type: postmodel!.type!,
                               namePost: NamePostController.text,
                               description: DescriptionController.text,
                               place: PlaceController.text,
@@ -254,10 +259,10 @@ class EditPost extends StatelessWidget {
                               no_of_bathroom: no_of_bathroomController.text,
                               area: AreaController.text,
                               price: PriceController.text,
-                              postid: postmodel!.postid
-
-                              // postImage: AppCubit.get(context).Yourposts.first.postImage,
-                              );
+                              category: postmodel!.category!,
+                              postImage: postmodel!.postImage!,
+                              date: postmodel!.date!,
+                              postid: AppCubit.get(context).postsId[index]);
                         }
                       },
                       child: const Text(

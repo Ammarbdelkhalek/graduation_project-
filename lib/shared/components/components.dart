@@ -27,6 +27,9 @@ Widget defaultFormField({
   bool isClickable = true,
   VoidCallback? suffixpressed,
   VoidCallback? ontap,
+  final TextStyle? labelStyle,
+  Color? color,
+  final TextStyle? style,
 }) =>
     TextFormField(
       validator: validate,
@@ -38,18 +41,24 @@ Widget defaultFormField({
       onTap: ontap,
       decoration: InputDecoration(
         labelText: label,
+        labelStyle: labelStyle,
         prefixIcon: Icon(
           prefix,
+          color: color,
         ),
         suffixIcon: suffix != null
             ? IconButton(
                 onPressed: suffixpressed,
                 icon: Icon(
                   suffix,
+                  color: color,
                 ))
             : null,
-        border: const OutlineInputBorder(),
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(30),
+        ),
       ),
+      style: style,
     );
 
 Widget defaultButton({
@@ -128,11 +137,17 @@ Widget myDivider() => Padding(
 
 List<Widget> carouselSliderImages = [
   Image.network(
-      'https://s3.amazonaws.com/thumbnails.venngage.com/template/83840a84-2f67-4924-ac58-22d736c86712.png'),
+    'https://vietnaminsider.vn/wp-content/uploads/2019/09/billboard-novaworld-phan-thiet-585x329.jpg',
+    width: double.infinity,
+  ),
   Image.network(
-      'https://img.freepik.com/free-photo/3d-rendering-large-modern-contemporary-house-wood-concrete-early-evening_190619-1492.jpg?w=1380'),
+    'https://images.template.net/wp-content/uploads/2019/05/Real-Estate-Banner-Ad-Templates.jpg',
+    width: double.infinity,
+  ),
   Image.network(
-      'https://img.lovepik.com/desgin_photo/40016/4727_list.jpg!/fw/431/clip/0x300a0a0'),
+    'https://en.pimg.jp/067/276/608/1/67276608.jpg',
+    width: double.infinity,
+  ),
 ];
 
 

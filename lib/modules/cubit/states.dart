@@ -149,3 +149,39 @@ class UpdatePostErrorState extends AppStates {
 }
 
 class getLatAndLongStates extends AppStates {}
+
+class AppGetSearchADSSuccessState extends AppStates {}
+
+class AppGetSearchADSErrorState extends AppStates {
+  final String error;
+  AppGetSearchADSErrorState(this.error);
+}
+
+class AppGetFilterADSloadingState extends AppStates {}
+
+class AppGetFilterADSSuccessState extends AppStates {}
+
+class AppGetFilterADSErrorState extends AppStates {
+  final String error;
+  AppGetFilterADSErrorState(this.error);
+}
+
+class AppGetServicesloadingState extends AppStates {}
+
+class AppGetServicesSuccessState extends AppStates {}
+
+class AppGetServicesErrorState extends AppStates {
+  final String error;
+  AppGetServicesErrorState(this.error);
+}
+
+class AppGetBundleloadingState extends AppStates {}
+
+class AppGetBundleSuccessState extends AppStates {}
+
+class AppGetBundelErrorState extends AppStates {
+  final String error;
+  AppGetBundelErrorState(this.error);
+}
+
+class BundelListChangeState extends AppStates {}

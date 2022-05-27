@@ -26,20 +26,17 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
 
   List<BoardingModel> boarding = [
     BoardingModel(
-        image:
-            'https://thumbs.dreamstime.com/b/jour-de-terre-d-environnement-dans-les-mains-des-arbres-cultivant-jeunes-plantes-bokeh-verdissent-la-main-femelle-fond-tenant-l-130247647.jpg',
+        image: 'assets/images/image5.jpg',
         title: 'On Boarding 1 Title',
-        body: 'On Board 1 Body'),
+        body: 'Through our application, You can sale your real estate easily'),
     BoardingModel(
-        image:
-            'https://img.freepik.com/free-photo/3d-rendering-large-modern-contemporary-house-wood-concrete_190619-1484.jpg?w=1380',
-        title: 'On Boarding 2 Title',
-        body: 'On Board 2 Body'),
+        image: 'assets/images/image5.jpg',
+        title: ' onboarding 2 title',
+        body: 'You can search about your dream house in few minutes'),
     BoardingModel(
-        image:
-            'https://img.freepik.com/free-photo/3d-rendering-large-modern-contemporary-house-wood-concrete-early-evening_190619-1492.jpg?w=1380',
+        image: 'assets/images/image5.jpg',
         title: 'On Boarding 3 Title',
-        body: 'On Board 3 Body'),
+        body: 'We wish you Successful deals'),
   ];
 
   bool isLast = false;

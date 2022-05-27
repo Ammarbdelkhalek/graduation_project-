@@ -8,12 +8,12 @@ class FavoriteDataModel {
   String? no_of_room;
   String? no_of_bathroom;
   String? area;
-  String? postImage;
+  List? postImage;
+  String? wishListId;
   String? date;
   String? price;
   String? category;
   String? postid;
-  bool? isfav;
 
   FavoriteDataModel({
     this.name,
@@ -30,7 +30,6 @@ class FavoriteDataModel {
     this.date,
     this.category,
     this.postid,
-    this.isfav,
   });
 
   FavoriteDataModel.fromJson(Map<String, dynamic> json) {
@@ -48,7 +47,6 @@ class FavoriteDataModel {
     date = json['date'];
     category = json['category'];
     postid = json['postid'];
-    isfav = json['isfav'];
   }
 
   Map<String, dynamic> toMap() {
@@ -67,7 +65,6 @@ class FavoriteDataModel {
       'date': date,
       'category': category,
       'postid': postid,
-      'isfav': isfav,
     };
   }
 }

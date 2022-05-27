@@ -2,9 +2,13 @@ import 'package:conditional_builder_null_safety/conditional_builder_null_safety.
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:material_floating_search_bar/material_floating_search_bar.dart';
 import 'package:realestateapp/models/category_model.dart';
 import 'package:realestateapp/models/post_model.dart';
 import 'package:realestateapp/models/user_model.dart';
+import 'package:realestateapp/modules/category/rentcategory.dart';
 import 'package:realestateapp/modules/cubit/cubit.dart';
 import 'package:realestateapp/modules/cubit/states.dart';
 import 'package:realestateapp/modules/home/adsdetails.dart';
@@ -14,6 +18,7 @@ import 'package:realestateapp/shared/components/constant.dart';
 
 class HomeScreen extends StatelessWidget {
   HomeScreen({Key? key}) : super(key: key);
+  PageController AdsImages = PageController();
 
   @override
   Widget build(BuildContext context) {
@@ -23,144 +28,165 @@ class HomeScreen extends StatelessWidget {
             text: 'faviourite added successfuly ', state: ToastStates.SUCCESS);
       }
     }, builder: (context, state) {
-      return
-          /* SingleChildScrollView(
-          child: Column(children: [
-        Padding(
-          padding: const EdgeInsets.only(left: 10, right: 10),
-          child: Container(
-            width: double.infinity,
-            height: 200,
-            child: BuildCarusal(context),
-          ),
-        ),*/
-          ConditionalBuilder(
-        condition: AppCubit.get(context).posts.length > 0 &&
-            AppCubit.get(context).userModel != null,
-        builder: (context) => Stack(
-          alignment: AlignmentDirectional.bottomEnd,
-          children: [
-            ListView.separated(
-              physics: const BouncingScrollPhysics(),
-              itemBuilder: (context, index) => InkWell(
-                  onTap: (() {
-                    navigateTo(context,
-                        Ads_Details(model: AppCubit.get(context).posts[index]));
-                  }),
-                  child: BuildPost(
-                      AppCubit.get(context).posts[index], context, index)),
-              separatorBuilder: (context, index) => const SizedBox(
-                height: 10,
-              ),
-              itemCount: AppCubit.get(context).posts.length,
-            ),
-            Padding(
-              padding: const EdgeInsets.all(10.0),
-              child: FloatingActionButton(
-                onPressed: () {
-                  navigateTo(context, NewPost());
-                },
-                child: const Icon(Icons.add_card),
-              ),
-            )
-          ],
-        ),
-        fallback: (context) => AppCubit.get(context).posts.length == 0
-            ? Align(
-                alignment: Alignment.center,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    const Image(
-                      image: NetworkImage(
-                          'https://correspondentsoftheworld.com/images/elements/clear/undraw_Content_structure_re_ebkv_clear.png'),
-                      height: 300,
-                      width: 380,
-                      fit: BoxFit.cover,
+      return Scaffold(
+        body: SingleChildScrollView(
+          child: Expanded(
+            child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Container(
+                    width: double.infinity,
+                    height: 150.0,
+                    child: CarouselSlider(
+                      items: carouselSliderImages,
+                      options: CarouselOptions(
+                        height: 250,
+                        initialPage: 0,
+                        enableInfiniteScroll: true,
+                        reverse: false,
+                        autoPlay: true,
+                        autoPlayAnimationDuration:
+                            const Duration(milliseconds: 500),
+                        autoPlayCurve: Curves.fastOutSlowIn,
+                        viewportFraction: 0.9,
+                        scrollDirection: Axis.horizontal,
+                      ),
                     ),
-                    const SizedBox(
-                      height: 6.0,
-                    ),
-                    const Text(
-                      ' you have no posts  ',
-                      style: TextStyle(
-                          fontSize: 15.0,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.grey),
-                    ),
-                    FloatingActionButton(
-                      onPressed: () {
-                        navigateTo(context, NewPost());
+                  ),
+                  SizedBox(
+                    height: 8.0,
+                  ),
+                  ConditionalBuilder(
+                      condition: AppCubit.get(context).categories.length > 0,
+                      builder: (context) {
+                        return Row(
+                          children: [
+                            Expanded(
+                              child: SizedBox(
+                                width: double.infinity,
+                                height: 100.0,
+                                child: ListView.separated(
+                                  scrollDirection: Axis.horizontal,
+                                  physics: const BouncingScrollPhysics(),
+                                  shrinkWrap: true,
+                                  itemBuilder: (context, index) => InkWell(
+                                    onTap: (() {
+                                      navigateTo(
+                                          context,
+                                          rentcategory(AppCubit.get(context)
+                                              .categories[index]));
+                                    }),
+                                    child: BuildCategoryItems(
+                                        AppCubit.get(context)
+                                            .categories[index]),
+                                  ),
+                                  separatorBuilder: (context, index) =>
+                                      const SizedBox(
+                                    width: 5.0,
+                                  ),
+                                  itemCount:
+                                      AppCubit.get(context).categories.length,
+                                ),
+                              ),
+                            ),
+                          ],
+                        );
                       },
-                      child: const Icon(Icons.add_card),
-                    )
-                  ],
-                ),
-              )
-            : Center(child: CircularProgressIndicator()),
+                      fallback: (context) =>
+                          const Center(child: CircularProgressIndicator())),
+                  const SizedBox(
+                    height: 8.0,
+                  ),
+                  const Text(
+                    'most recent ads ',
+                    style: TextStyle(
+                        fontSize: 15.0,
+                        fontWeight: FontWeight.w800,
+                        fontStyle: FontStyle.italic),
+                  ),
+                  const SizedBox(
+                    height: 10.0,
+                  ),
+                  ConditionalBuilder(
+                    condition: AppCubit.get(context).posts.length > 0 &&
+                        AppCubit.get(context).userModel != null,
+                    builder: (context) => Stack(
+                      alignment: AlignmentDirectional.bottomEnd,
+                      children: [
+                        ListView.separated(
+                          physics: const BouncingScrollPhysics(),
+                          shrinkWrap: true,
+                          itemBuilder: (context, index) => InkWell(
+                              onTap: (() {
+                                navigateTo(
+                                    context,
+                                    Ads_Details(
+                                        model: AppCubit.get(context)
+                                            .posts[index]));
+                              }),
+                              child: BuildPost(
+                                  AppCubit.get(context).posts[index],
+                                  context,
+                                  index)),
+                          separatorBuilder: (context, index) => const SizedBox(
+                            height: 10,
+                          ),
+                          itemCount: AppCubit.get(context).posts.length,
+                        ),
+                      ],
+                    ),
+                    fallback: (context) =>
+                        AppCubit.get(context).posts.length == 0
+                            ? Align(
+                                alignment: Alignment.center,
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: const [
+                                    Image(
+                                      image: NetworkImage(
+                                          'https://correspondentsoftheworld.com/images/elements/clear/undraw_Content_structure_re_ebkv_clear.png'),
+                                      height: 300,
+                                      width: 380,
+                                      fit: BoxFit.cover,
+                                    ),
+                                    SizedBox(
+                                      height: 6.0,
+                                    ),
+                                    Text(
+                                      ' you have no posts  ',
+                                      style: TextStyle(
+                                          fontSize: 15.0,
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors.grey),
+                                    ),
+                                  ],
+                                ),
+                              )
+                            : const Center(child: CircularProgressIndicator()),
+                  ),
+                ]),
+          ),
+        ),
       );
     });
   }
 
-  Widget BuildCarusal(BuildContext context) => ListView(
-        children: [
-          SizedBox(
-            height: 200,
-            width: double.infinity,
-            child: CarouselSlider(
-              items: const [
-                Image(
-                  image: NetworkImage(
-                    'https://img.freepik.com/free-photo/3d-rendering-large-modern-contemporary-house-wood-concrete-early-evening_190619-1492.jpg?w=1380',
-                  ),
-                ),
-                Image(
-                  image: NetworkImage(
-                    'https://img.freepik.com/free-photo/3d-rendering-large-modern-contemporary-house-wood-concrete_190619-1484.jpg?w=1380',
-                  ),
-                ),
-                Image(
-                  image: NetworkImage(
-                    'https://img.freepik.com/free-photo/business-man-create-design-modern-building-real-estate_35761-316.jpg?w=1380',
-                  ),
-                ),
-                Image(
-                  image: NetworkImage(
-                    'https://img.freepik.com/free-photo/making-money-with-property-real-estate-investment_35761-380.jpg?w=1380',
-                  ),
-                ),
-              ],
-              options: CarouselOptions(
-                height: 250.0,
-                initialPage: 0,
-                viewportFraction: 1.0,
-                enableInfiniteScroll: true,
-                reverse: false,
-                autoPlay: true,
-                autoPlayInterval: const Duration(seconds: 3),
-                autoPlayAnimationDuration: const Duration(seconds: 1),
-                autoPlayCurve: Curves.fastOutSlowIn,
-                scrollDirection: Axis.horizontal,
-                enlargeCenterPage: true,
-              ),
-            ),
-          ),
-        ],
-      );
-
   Widget BuildCategoryItems(CategoryDataModel? categoryDataModel) {
     return Padding(
-      padding: const EdgeInsets.all(10.0),
-      child: Column(
-        children: [
-          Row(
+        padding: EdgeInsets.only(right: appPadding / 3),
+        child: Container(
+          padding: EdgeInsets.symmetric(horizontal: appPadding / 2),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(20),
+          ),
+          child: Column(
             children: [
-              Image(
-                width: 100,
-                height: 80,
-                image: NetworkImage('${categoryDataModel!.categoryImage}'),
-                fit: BoxFit.cover,
+              CircleAvatar(
+                radius: 25.0,
+                backgroundImage:
+                    NetworkImage('${categoryDataModel!.categoryImage}'),
               ),
               const SizedBox(
                 width: 8.0,
@@ -168,24 +194,152 @@ class HomeScreen extends StatelessWidget {
               Text(
                 '${categoryDataModel.categoryName}',
                 style: const TextStyle(
-                  fontSize: 17.0,
+                  fontSize: 12.0,
                 ),
               ),
-              const Spacer(),
-              IconButton(
-                  onPressed: () {}, icon: const Icon(Icons.arrow_forward_ios)),
             ],
           ),
-        ],
-      ),
-    );
+        ));
   }
 
   Widget BuildPost(
     PostModel model,
     context,
     index,
-  ) =>
+  ) {
+    Size size = MediaQuery.of(context).size;
+    return Expanded(
+      child: Card(
+        clipBehavior: Clip.antiAliasWithSaveLayer,
+        elevation: 5.0,
+        child: Padding(
+          padding: EdgeInsets.symmetric(
+              horizontal: appPadding, vertical: appPadding / 2),
+          child: Container(
+            height: 300,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Stack(
+                  children: [
+                    ClipRRect(
+                      borderRadius: BorderRadius.circular(20),
+                      child: Container(
+                        width: 400.0,
+                        height: 200.0,
+                        child: PageView.builder(
+                          controller: AdsImages,
+                          scrollDirection: Axis.horizontal,
+                          itemBuilder: (context, index) => Image(
+                            image: NetworkImage('${model.postImage![index]}'),
+                            width: 400.0,
+                            height: 100.0,
+                          ),
+                          itemCount: model.postImage!.length,
+                        ),
+                      ),
+                    ),
+                    Positioned(
+                      right: appPadding / 2,
+                      top: appPadding / 2,
+                      child: Container(
+                        decoration: BoxDecoration(
+                            color: white,
+                            borderRadius: BorderRadius.circular(15)),
+                        child: IconButton(
+                          icon: AppCubit.get(context).favorites.length == 0
+                              ? const Icon(
+                                  Icons.favorite_rounded,
+                                )
+                              : const Icon(
+                                  Icons.favorite_rounded,
+                                  color: Colors.red,
+                                ),
+                          onPressed: () {
+                            AppCubit.get(context).favorites.length == 0
+                                ? AppCubit.get(context).addtofav(
+                                    AppCubit.get(context).posts[index],
+                                    AppCubit.get(context).postsId[index],
+                                  )
+                                : showToast(
+                                    text: 'aleardy added',
+                                    state: ToastStates.WARNING);
+                          },
+                        ),
+                      ),
+                    )
+                  ],
+                ),
+                Row(
+                  children: [
+                    Text(
+                      '${model.place}',
+                      style: const TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    const SizedBox(
+                      width: 10,
+                    ),
+                    Expanded(
+                      child: Text(
+                        '${model.place}',
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle(
+                            fontSize: 15, color: black.withOpacity(0.4)),
+                      ),
+                    ),
+                  ],
+                ),
+                Row(
+                  children: [
+                    Text(
+                      '${model.no_of_room} bedrooms / ',
+                      style: const TextStyle(
+                        fontSize: 15,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                    Text(
+                      '${model.no_of_bathroom} bathrooms / ',
+                      style: const TextStyle(
+                        fontSize: 15,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                    Text(
+                      '${model.area} sqft',
+                      style: const TextStyle(
+                        fontSize: 15,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  ],
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Icon(Icons.price_check_rounded),
+                    Text(
+                      '${model.price} Eg',
+                      style: const TextStyle(
+                        fontSize: 15,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  ],
+                )
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  /*
       Card(
         clipBehavior: Clip.antiAliasWithSaveLayer,
         elevation: 5.0,
@@ -253,9 +407,25 @@ class HomeScreen extends StatelessWidget {
               ),
               Stack(
                 children: [
-                  Image(
+                  Container(
+                    width: 300.0,
+                    height: 200.0,
+                    child: PageView.builder(
+                      controller: AdsImages,
+                      scrollDirection: Axis.horizontal,
+                      itemBuilder: (context, index) => Image(
+                        image: NetworkImage('${model.postImage![index]}'),
+                        width: 200.0,
+                        height: 120.0,
+                      ),
+                      itemCount: model.postImage!.length,
+                    ),
+                  ),
+
+                  /* Image(
                     image: NetworkImage('${model.postImage}'),
                   ),
+                  */
                   /*
                   Align(
                     alignment: Alignment.topLeft,
@@ -360,10 +530,8 @@ class HomeScreen extends StatelessWidget {
                                     AppCubit.get(context).postsId[index],
                                   );
                                 },
-                                icon: Icon(Icons.favorite,
-                                    color: AppCubit.get(context).isfav
-                                        ? Colors.blue
-                                        : Colors.grey)),
+                                icon: const Icon(Icons.favorite,
+                                    color: Colors.grey)),
                             IconButton(
                                 onPressed: () {
                                   AppCubit.get(context).deletPost(
@@ -381,6 +549,6 @@ class HomeScreen extends StatelessWidget {
               ]),
             ],
           ),
-        ),
-      );
+        ),*/
+
 }

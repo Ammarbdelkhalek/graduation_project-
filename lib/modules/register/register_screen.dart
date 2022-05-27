@@ -2,9 +2,11 @@ import 'package:conditional_builder_null_safety/conditional_builder_null_safety.
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:realestateapp/layout/layout_screen.dart';
+import 'package:realestateapp/modules/login/login_screen.dart';
 import 'package:realestateapp/modules/register/cubit/cubit.dart';
 import 'package:realestateapp/modules/register/cubit/states.dart';
 import 'package:realestateapp/shared/components/components.dart';
+import 'package:realestateapp/shared/formvalidator.dart';
 import 'package:realestateapp/shared/network/local/cache_helper.dart';
 
 import '../../shared/components/headerwidget.dart';
@@ -36,123 +38,145 @@ class RegisterScreen extends StatelessWidget {
         },
         builder: (context, state) {
           return Scaffold(
-              body: Padding(
-                  padding: const EdgeInsets.all(20.0),
-                  child: SingleChildScrollView(
-                      child: Stack(children: [
-                    Container(
-                      height: 150,
-                      width: double.infinity,
-                      child: const HeaderWidget(
-                          150, false, Icons.person_add_alt_1_rounded),
-                    ),
-                    Container(
-                      margin: const EdgeInsets.fromLTRB(20, 40, 20, 10),
-                      padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
-                      alignment: Alignment.center,
-                      child: Column(children: [
-                        Form(
-                          key: formKey,
-                          child: Column(
+            body: Stack(
+              alignment: AlignmentDirectional.center,
+              children: [
+                const Image(
+                  image: AssetImage('assets/images/image5.jpg'),
+                  height: double.infinity,
+                  width: double.infinity,
+                  fit: BoxFit.fill,
+                ),
+                Container(
+                  alignment: AlignmentDirectional.center,
+                  width: 310,
+                  height: 550,
+                  color: Colors.black54.withOpacity(0.5),
+                  child: Padding(
+                    padding: const EdgeInsets.all(20.0),
+                    child: SingleChildScrollView(
+                      child: Form(
+                        key: formKey,
+                        autovalidateMode: AutovalidateMode.always,
+                        child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              GestureDetector(
-                                child: Stack(
-                                  children: [
-                                    Container(
-                                      padding: const EdgeInsets.all(10),
-                                      decoration: BoxDecoration(
-                                        borderRadius:
-                                            BorderRadius.circular(100),
-                                        border: Border.all(
-                                            width: 5, color: Colors.white),
-                                        color: Colors.white,
-                                        boxShadow: const [
-                                          BoxShadow(
-                                            color: Colors.black12,
-                                            blurRadius: 20,
-                                            offset: Offset(5, 5),
-                                          ),
-                                        ],
-                                      ),
-                                      child: Icon(
-                                        Icons.person,
-                                        color: Colors.grey.shade300,
-                                        size: 80.0,
-                                      ),
-                                    ),
-                                    Container(
-                                      padding: const EdgeInsets.fromLTRB(
-                                          80, 80, 0, 0),
-                                      child: Icon(
-                                        Icons.add_circle,
-                                        color: Colors.grey.shade700,
-                                        size: 25.0,
-                                      ),
-                                    ),
-                                  ],
+                              const Center(
+                                child: Text(
+                                  'Register',
+                                  style: TextStyle(
+                                      fontSize: 24,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.white),
                                 ),
                               ),
                               const SizedBox(
-                                height: 30,
+                                height: 15.0,
                               ),
-                              defaultFormField(
-                                controller: nameController,
-                                type: TextInputType.name,
-                                validate: (value) {
-                                  if (value!.isEmpty) {
-                                    return 'Please Enter Your name';
-                                  }
-                                },
-                                label: 'Name',
-                                prefix: Icons.person,
+                              const Text(
+                                'Register now to buy or rent any real estste easily',
+                                style: TextStyle(
+                                  color: Colors.grey,
+                                  fontSize: 14,
+                                ),
                               ),
-                              const SizedBox(
-                                height: 30.0,
+                              SizedBox(
+                                height:
+                                    MediaQuery.of(context).size.height * 0.05,
                               ),
-                              defaultFormField(
-                                controller: emailController,
-                                type: TextInputType.emailAddress,
-                                validate: (value) {
-                                  if (value!.isEmpty) {
-                                    return 'Please Enter Your Email Address';
-                                  }
-                                },
-                                label: 'Email Address',
-                                prefix: Icons.email,
+                              Container(
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(50),
+                                  color: Colors.black45,
+                                ),
+                                child: defaultFormField(
+                                  style: const TextStyle(color: Colors.white),
+                                  controller: nameController,
+                                  type: TextInputType.name,
+                                  validate: FormFieldValidate.fullNameValidator,
+                                  label: 'full Name',
+                                  labelStyle: const TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 13,
+                                  ),
+                                  prefix: Icons.person,
+                                  color: Colors.white,
+                                ),
+                              ),
+                              SizedBox(
+                                height:
+                                    MediaQuery.of(context).size.height * 0.03,
+                              ),
+                              Container(
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(50),
+                                  color: Colors.black45,
+                                ),
+                                child: defaultFormField(
+                                  style: const TextStyle(color: Colors.white),
+                                  controller: emailController,
+                                  type: TextInputType.emailAddress,
+                                  validate: FormFieldValidate.emailValidator,
+                                  label: 'Email Address',
+                                  labelStyle: const TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 13,
+                                  ),
+                                  prefix: Icons.email,
+                                  color: Colors.white,
+                                ),
+                              ),
+                              SizedBox(
+                                height:
+                                    MediaQuery.of(context).size.height * 0.05,
+                              ),
+                              Container(
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(50),
+                                  color: Colors.black45,
+                                ),
+                                child: defaultFormField(
+                                    style: const TextStyle(color: Colors.white),
+                                    isPassword:
+                                        RegisterCubit.get(context).isPassword,
+                                    controller: passwordController,
+                                    type: TextInputType.visiblePassword,
+                                    validate:
+                                        FormFieldValidate.passwordValidator,
+                                    label: 'Password',
+                                    labelStyle: const TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 13,
+                                    ),
+                                    prefix: Icons.lock,
+                                    color: Colors.white,
+                                    suffix: RegisterCubit.get(context).suffix,
+                                    suffixpressed: () {
+                                      RegisterCubit.get(context)
+                                          .ChangePasswordVisibility();
+                                    }),
                               ),
                               const SizedBox(
                                 height: 20.0,
                               ),
-                              defaultFormField(
-                                  isPassword:
-                                      RegisterCubit.get(context).isPassword,
-                                  controller: passwordController,
-                                  type: TextInputType.visiblePassword,
-                                  validate: (value) {
-                                    if (value!.isEmpty) {
-                                      return 'Please Enter Your Password';
-                                    }
-                                  },
-                                  label: 'Password',
-                                  prefix: Icons.lock,
-                                  suffix: RegisterCubit.get(context).suffix,
-                                  suffixpressed: () {
-                                    RegisterCubit.get(context)
-                                        .ChangePasswordVisibility();
-                                  }),
-                              const SizedBox(
-                                height: 20.0,
-                              ),
-                              defaultFormField(
-                                controller: phoneController,
-                                type: TextInputType.phone,
-                                validate: (value) {
-                                  if (value!.isEmpty) {
-                                    return 'Please Enter Your Phone';
-                                  }
-                                },
-                                label: 'Phone',
-                                prefix: Icons.phone,
+                              Container(
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(50),
+                                  color: Colors.black45,
+                                ),
+                                child: defaultFormField(
+                                  style: const TextStyle(color: Colors.white),
+                                  controller: phoneController,
+                                  type: TextInputType.phone,
+                                  validate: FormFieldValidate.phoneValidator,
+                                  label: 'Phone',
+                                  labelStyle: const TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 13,
+                                  ),
+                                  prefix: Icons.phone,
+                                  color: Colors.white,
+                                ),
                               ),
                               const SizedBox(
                                 height: 20.0,
@@ -175,12 +199,42 @@ class RegisterScreen extends StatelessWidget {
                                 fallback: (context) => const Center(
                                     child: CircularProgressIndicator()),
                               ),
-                            ],
-                          ),
-                        ),
-                      ]),
+                              SizedBox(
+                                height:
+                                    MediaQuery.of(context).size.height * 0.05,
+                              ),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  const Text(
+                                    'Already have an account?',
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 17.0,
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                                  TextButton(
+                                    onPressed: () {
+                                      navigateTo(context, LoginScreen());
+                                    },
+                                    child: const Text(
+                                      'Login',
+                                      style: TextStyle(
+                                        color: Colors.amber,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ]),
+                      ),
                     ),
-                  ]))));
+                  ),
+                )
+              ],
+            ),
+          );
         },
       ),
     );

@@ -1,7 +1,7 @@
 import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:geocoding/geocoding.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:material_floating_search_bar/material_floating_search_bar.dart';
 import 'package:realestateapp/modules/cubit/cubit.dart';
@@ -11,7 +11,7 @@ class MapScreen extends StatelessWidget {
   MapScreen({Key? key}) : super(key: key);
   Completer<GoogleMapController> _controller = Completer();
   FloatingSearchBarController controller = FloatingSearchBarController();
-
+  var location;
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<AppCubit, AppStates>(
@@ -19,6 +19,20 @@ class MapScreen extends StatelessWidget {
       builder: (context, state) {
         AppCubit.get(context).getlatAndlang();
         AppCubit.get(context).getpermission(context);
+        var lat = AppCubit.get(context).lat;
+        var long = AppCubit.get(context).long;
+        Set<Marker> myMarker = {
+          Marker(
+            draggable: true,
+            markerId: MarkerId('1'),
+            infoWindow: InfoWindow(
+                title: 'second ',
+                onTap: () {
+                  print("first marker ");
+                }),
+            position: const LatLng(30.056370, 31.110270),
+          ),
+        };
         return Scaffold(
           appBar: AppBar(
             title: const Text('your location '),
@@ -39,6 +53,11 @@ class MapScreen extends StatelessWidget {
                         width: 400,
                         child: GoogleMap(
                           mapType: MapType.normal,
+                          markers: myMarker,
+                          onTap: (latlang) {
+                            myMarker.add(Marker(
+                                markerId: MarkerId("3"), position: latlang));
+                          },
                           myLocationEnabled: true,
                           initialCameraPosition:
                               AppCubit.get(context).kGooglePlex!,
@@ -48,14 +67,21 @@ class MapScreen extends StatelessWidget {
                         ),
                       ),
                 MaterialButton(
-                  onPressed: () {
-                    AppCubit.get(context).getlatAndlang();
+                  onPressed: () async {
+                    location =
+                        AppCubit.get(context).getlatAndlang().then((value) {
+                      value = location;
+                    });
+                    List<Placemark> placemarks = await placemarkFromCoordinates(
+                        AppCubit.get(context).lat, AppCubit.get(context).long);
+
+                    print(placemarks[0].street);
                   },
-                  child: const Text('your location'),
+                  child: const Text('your current location'),
                 )
               ],
             ),
-            buildFloatingSearchBar(context),
+            // buildFloatingSearchBar(context),
           ]),
         );
       },

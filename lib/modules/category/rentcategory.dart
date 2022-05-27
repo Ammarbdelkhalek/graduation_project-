@@ -11,12 +11,14 @@ import 'package:realestateapp/modules/cubit/cubit.dart';
 import 'package:realestateapp/modules/cubit/states.dart';
 import 'package:realestateapp/modules/home/adsdetails.dart';
 import 'package:realestateapp/shared/components/components.dart';
+import 'package:realestateapp/shared/components/constant.dart';
 
 class rentcategory extends StatelessWidget {
   int index = 0;
 
   rentcategory(this.categoryDataModel, {Key? key}) : super(key: key);
   CategoryDataModel? categoryDataModel;
+  var categoryADSController = PageController();
   @override
   Widget build(
     BuildContext context,
@@ -107,177 +109,136 @@ class rentcategory extends StatelessWidget {
     PostModel model,
     context,
     index,
-  ) =>
-      Card(
+  ) {
+    Size size = MediaQuery.of(context).size;
+    return Expanded(
+      child: Card(
         clipBehavior: Clip.antiAliasWithSaveLayer,
         elevation: 5.0,
-        margin: const EdgeInsets.symmetric(
-          horizontal: 8.0,
-        ),
         child: Padding(
-          padding: const EdgeInsets.all(10.0),
-          child: Column(
-            children: [
-              Row(
-                children: [
-                  CircleAvatar(
-                    backgroundImage: NetworkImage(
-                      '${model.image}',
-                    ),
-                  ),
-                  const SizedBox(
-                    width: 10,
-                  ),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Row(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                '${model.name}',
-                              ),
-                              const Icon(
-                                Icons.check_circle,
-                                size: 14,
-                                color: Colors.blue,
-                              ),
-                            ]),
-                        const Text(
-                          '1m',
-                          style: TextStyle(
-                            fontSize: 10,
-                            color: Colors.grey,
+          padding: EdgeInsets.symmetric(
+              horizontal: appPadding, vertical: appPadding / 2),
+          child: Container(
+            height: 300,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Stack(
+                  children: [
+                    ClipRRect(
+                      borderRadius: BorderRadius.circular(20),
+                      child: Container(
+                        width: 400.0,
+                        height: 200.0,
+                        child: PageView.builder(
+                          controller: categoryADSController,
+                          scrollDirection: Axis.horizontal,
+                          itemBuilder: (context, index) => Image(
+                            image: NetworkImage('${model.postImage![index]}'),
+                            width: 400.0,
+                            height: 100.0,
                           ),
+                          itemCount: model.postImage!.length,
                         ),
-                        const SizedBox(
-                          height: 5,
-                        ),
-                      ],
+                      ),
                     ),
-                  ),
-                ],
-              ),
-              Container(
-                width: double.infinity,
-                height: 1.0,
-                color: Colors.grey[300],
-              ),
-              const SizedBox(
-                height: 5,
-              ),
-              const Padding(
-                padding: EdgeInsets.symmetric(vertical: 8),
-                child: SizedBox(
-                  width: double.infinity,
+                    Positioned(
+                      right: appPadding / 2,
+                      top: appPadding / 2,
+                      child: Container(
+                        decoration: BoxDecoration(
+                            color: white,
+                            borderRadius: BorderRadius.circular(15)),
+                        child: IconButton(
+                          icon: AppCubit.get(context).favorites.length == 0
+                              ? const Icon(
+                                  Icons.favorite_rounded,
+                                )
+                              : const Icon(
+                                  Icons.favorite_rounded,
+                                  color: Colors.red,
+                                ),
+                          onPressed: () {
+                            AppCubit.get(context).favorites.length == 0
+                                ? AppCubit.get(context).addtofav(
+                                    AppCubit.get(context).posts[index],
+                                    AppCubit.get(context).postsId[index],
+                                  )
+                                : showToast(
+                                    text: 'aleardy added',
+                                    state: ToastStates.WARNING);
+                          },
+                        ),
+                      ),
+                    )
+                  ],
                 ),
-              ),
-              Stack(
-                alignment: AlignmentDirectional.bottomStart,
-                children: [
-                  Image(
-                    image: NetworkImage('${model.postImage}'),
-                  ),
-                  Row(
-                    children: [
-                      Text(
-                        '${model.no_of_room}',
-                        style: const TextStyle(
-                          color: Colors.white,
-                        ),
+                Row(
+                  children: [
+                    Text(
+                      '${model.place}',
+                      style: const TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
                       ),
-                      const Icon(
-                        Icons.king_bed_outlined,
-                        color: Colors.white,
-                      ),
-                      const SizedBox(
-                        width: 30,
-                      ),
-                      Text(
-                        '${model.no_of_bathroom}',
-                        style: const TextStyle(
-                          color: Colors.white,
-                        ),
-                      ),
-                      const Icon(
-                        Icons.bathtub_outlined,
-                        color: Colors.white,
-                      ),
-                      const SizedBox(
-                        width: 30,
-                      ),
-                      Text(
-                        '${model.area}',
-                        style: const TextStyle(
-                          color: Colors.white,
-                        ),
-                      ),
-                      const Text(
-                        'm',
+                    ),
+                    const SizedBox(
+                      width: 10,
+                    ),
+                    Expanded(
+                      child: Text(
+                        '${model.place}',
+                        overflow: TextOverflow.ellipsis,
                         style: TextStyle(
-                          color: Colors.white,
-                        ),
-                      )
-                    ],
-                  ),
-                ],
-              ),
-              Row(children: [
-                Expanded(
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 5),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Row(
-                          children: [
-                            const Icon(Icons.house_outlined),
-                            Text('${model.namePost}'),
-                          ],
-                        ),
-                        Row(
-                          children: [
-                            const Icon(Icons.description),
-                            Text('${model.description}'),
-                          ],
-                        ),
-                        Row(
-                          children: [
-                            const Icon(Icons.place),
-                            Text('${model.place}'),
-                          ],
-                        ),
-                        Row(
-                          children: [
-                            const Icon(Icons.price_change_outlined),
-                            Text('${model.price}'),
-                            const SizedBox(
-                              width: 12.0,
-                            ),
-                            const Icon(Icons.category),
-                            Text('${model.category}'),
-                            const Spacer(),
-                            IconButton(
-                                onPressed: () {
-                                  AppCubit.get(context).addtofav(
-                                      AppCubit.get(context).posts[index],
-                                      AppCubit.get(context).postsId[index]);
-                                },
-                                icon: Icon(Icons.favorite,
-                                    color:
-                                        AppCubit.get(context).favorites == null
-                                            ? Colors.blue
-                                            : Colors.grey)),
-                          ],
-                        ),
-                      ],
+                            fontSize: 15, color: black.withOpacity(0.4)),
+                      ),
                     ),
-                  ),
+                  ],
                 ),
-              ]),
-            ],
+                Row(
+                  children: [
+                    Text(
+                      '${model.no_of_room} bedrooms / ',
+                      style: const TextStyle(
+                        fontSize: 15,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                    Text(
+                      '${model.no_of_bathroom} bathrooms / ',
+                      style: const TextStyle(
+                        fontSize: 15,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                    Text(
+                      '${model.area} sqft',
+                      style: const TextStyle(
+                        fontSize: 15,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  ],
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Icon(Icons.price_check_rounded),
+                    Text(
+                      '${model.price} Eg',
+                      style: const TextStyle(
+                        fontSize: 15,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  ],
+                )
+              ],
+            ),
           ),
         ),
-      );
+      ),
+    );
+  }
 }

@@ -3,9 +3,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:realestateapp/models/user_model.dart';
 import 'package:realestateapp/modules/cubit/cubit.dart';
 import 'package:realestateapp/modules/cubit/states.dart';
+import 'package:realestateapp/modules/setting/bundle.dart';
 import 'package:realestateapp/modules/setting/setting_screen.dart';
 import 'package:realestateapp/modules/setting/userprofile.dart';
-
 import '../../shared/components/components.dart';
 
 class useraccount extends StatefulWidget {
@@ -90,7 +90,9 @@ class _useraccountState extends State<useraccount> {
                 ),
                 myDivider(),
                 InkWell(
-                  onTap: () {},
+                  onTap: () {
+                    navigateTo(context, Oubundle());
+                  },
                   child: Container(
                     color: Colors.white,
                     padding: const EdgeInsets.all(15),
@@ -98,10 +100,10 @@ class _useraccountState extends State<useraccount> {
                       children: const [
                         Icon(
                           Icons.location_on_outlined,
-                          color: Colors.green,
+                          color: Colors.blue,
                         ),
                         Text(
-                          'Addresses',
+                          'bundles',
                           style: TextStyle(
                               fontWeight: FontWeight.bold, fontSize: 18),
                         ),

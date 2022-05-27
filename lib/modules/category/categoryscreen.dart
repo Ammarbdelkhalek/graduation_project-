@@ -7,78 +7,82 @@ import 'package:realestateapp/modules/category/rentcategory.dart';
 import 'package:realestateapp/modules/cubit/cubit.dart';
 import 'package:realestateapp/modules/cubit/states.dart';
 import 'package:realestateapp/shared/components/components.dart';
-
 import '../../models/category_model.dart';
 
 class Categoryscreen extends StatelessWidget {
   Categoryscreen({Key? key}) : super(key: key);
   CategoryDataModel? categoryDataModel;
+  var carousalController = CarouselController();
   @override
   Widget build(BuildContext context) {
+    AppCubit.get(context).getCategoryData();
     return BlocConsumer<AppCubit, AppStates>(
         listener: (context, state) {},
         builder: (context, state) {
-          return
-              /*SingleChildScrollView(
-              child: Column(children: [
-            Padding(
-              padding: const EdgeInsets.only(left: 10, right: 10),
-              child: SizedBox(
-                width: double.infinity,
-                height: 200,
-                child: BuildCarusal(context),
+          return Scaffold(
+            body: SingleChildScrollView(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  ConditionalBuilder(
+                      condition: AppCubit.get(context).categories.length > 0,
+                      builder: (context) {
+                        return ListView.separated(
+                          scrollDirection: Axis.vertical,
+                          itemBuilder: (context, index) => InkWell(
+                              onTap: (() {
+                                navigateTo(
+                                    context,
+                                    rentcategory(AppCubit.get(context)
+                                        .categories[index]));
+                              }),
+                              child: BuildCategoryItems(
+                                  AppCubit.get(context).categories[index])),
+                          separatorBuilder: (context, index) => myDivider(),
+                          itemCount: AppCubit.get(context).categories.length,
+                        );
+                      },
+                      fallback: (context) =>
+                          const Center(child: CircularProgressIndicator())),
+                ],
               ),
-            ),*/
-              ConditionalBuilder(
-                  condition: AppCubit.get(context).categories.length > 0,
-                  builder: (context) {
-                    return ListView.separated(
-                      itemBuilder: (context, index) => InkWell(
-                          onTap: (() {
-                            navigateTo(
-                                context,
-                                rentcategory(
-                                    AppCubit.get(context).categories[index]));
-                          }),
-                          child: BuildCategoryItems(
-                              AppCubit.get(context).categories[index])),
-                      separatorBuilder: (context, index) => myDivider(),
-                      itemCount: AppCubit.get(context).categories.length,
-                    );
-                  },
-                  fallback: (context) =>
-                      const Center(child: CircularProgressIndicator()));
+            ),
+          );
         });
   }
 
   Widget BuildCategoryItems(CategoryDataModel? categoryDataModel) {
     return Padding(
       padding: const EdgeInsets.all(10.0),
-      child: Column(
-        children: [
-          Row(
-            children: [
-              Image(
-                width: 100,
-                height: 80,
-                image: NetworkImage('${categoryDataModel!.categoryImage}'),
-                fit: BoxFit.cover,
-              ),
-              const SizedBox(
-                width: 8.0,
-              ),
-              Text(
-                '${categoryDataModel.categoryName}',
-                style: const TextStyle(
-                  fontSize: 17.0,
+      child: Expanded(
+        child: Column(
+          children: [
+            Row(
+              children: [
+                Image(
+                  width: 100,
+                  height: 80,
+                  image: NetworkImage('${categoryDataModel!.categoryImage}'),
+                  fit: BoxFit.cover,
                 ),
-              ),
-              const Spacer(),
-              IconButton(
-                  onPressed: () {}, icon: const Icon(Icons.arrow_forward_ios)),
-            ],
-          ),
-        ],
+                const SizedBox(
+                  width: 8.0,
+                ),
+                Text(
+                  '${categoryDataModel.categoryName}',
+                  style: const TextStyle(
+                    fontSize: 17.0,
+                  ),
+                ),
+                const Spacer(),
+                IconButton(
+                    onPressed: () {},
+                    icon: const Icon(Icons.arrow_forward_ios)),
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }

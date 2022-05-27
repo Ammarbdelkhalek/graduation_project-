@@ -12,6 +12,9 @@ import 'package:realestateapp/modules/login/login_screen.dart';
 import 'package:realestateapp/modules/map/map_screen.dart';
 import 'package:realestateapp/modules/new_post/userLocation.dart';
 import 'package:realestateapp/modules/onboarding_screen.dart';
+import 'package:realestateapp/modules/search/filtering.dart';
+import 'package:realestateapp/modules/search/search_screen.dart';
+import 'package:realestateapp/modules/setting/drawer.dart';
 import 'package:realestateapp/modules/setting/myaccount.dart';
 import 'package:realestateapp/modules/setting/setting_screen.dart';
 import 'package:realestateapp/modules/setting/userprofile.dart';
@@ -25,7 +28,6 @@ void main() async {
   await Firebase.initializeApp(
       // options: DefaultFirebaseOptions.currentPlatform,
       );
-
   await CacheHelper.init();
 
   bool? isDark = CacheHelper.getData(key: 'isDark');
@@ -35,9 +37,7 @@ void main() async {
   uid = CacheHelper.getData(key: 'uid');
   bool? onboarding = CacheHelper.getData(key: 'onBoarding');
   print(uid);
-
   // print(uid);
-
   if (onboarding != null) {
     if (uid != null) {
       widget = LayoutScreen();
@@ -72,7 +72,9 @@ class MyApp extends StatelessWidget {
         ..changeAppMode(
           themeMode: isDark,
         )
-        ..getCategoryData(),
+        ..getCategoryData()
+        ..getBundle()
+        ..getAllUsers(),
       child: BlocConsumer<AppCubit, AppStates>(
         listener: (context, state) {},
         builder: (context, state) {
@@ -83,8 +85,12 @@ class MyApp extends StatelessWidget {
             themeMode:
                 AppCubit.get(context).isDark ? ThemeMode.light : ThemeMode.dark,
             home: AnimatedSplashScreen(
-              splash: Icons.home_outlined,
-              nextScreen: MapScreen(),
+              splash: const Image(
+                image: AssetImage('assets/images/image4.jpg'),
+              ),
+              nextScreen: startWidget!,
+              backgroundColor: Colors.brown,
+              duration: 2500,
               centered: true,
               splashIconSize: 100,
               splashTransition: SplashTransition.fadeTransition,

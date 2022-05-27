@@ -1,13 +1,13 @@
 class AgoraManager {
   static String get appId {
-    return "243cf7f07af040bcb8b74770501593f8";
+    return "ceca321bb8a04c0db9c2b75444316eba";
   }
 
   static String get token {
-    return "006243cf7f07af040bcb8b74770501593f8IADSw8noiGYl/CJRcHkbSPgXN5Mm/QM3bN/3sQr4O7QBiebxuQsAAAAAEAC5YzmxEnRVYgEAAQASdFVi";
+    return "006ceca321bb8a04c0db9c2b75444316ebaIABGmT05nSSqJ1oglXz2R034JHamJmAWUNp2Zfab5sqA1ArCxmsAAAAAEABFYWa03AOQYgEAAQDbA5Bi";
   }
 
   static String get channelName {
-    return "Channel2";
+    return "channel1";
   }
 }

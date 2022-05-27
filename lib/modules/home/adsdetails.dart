@@ -10,6 +10,7 @@ import 'package:realestateapp/modules/cubit/states.dart';
 import 'package:realestateapp/modules/setting/userprofile.dart';
 import 'package:realestateapp/shared/components/components.dart';
 import 'package:realestateapp/shared/components/constant.dart';
+import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class Ads_Details extends StatelessWidget {
@@ -18,6 +19,7 @@ class Ads_Details extends StatelessWidget {
     Key? key,
     required this.model,
   }) : super(key: key);
+  var ADSController = PageController();
 
   @override
   Widget build(BuildContext context) {
@@ -25,6 +27,7 @@ class Ads_Details extends StatelessWidget {
       listener: (context, state) {},
       builder: (context, state) {
         var usermodel = AppCubit.get(context).userModel;
+        var postmodel = AppCubit.get(context).postModel;
 
         return Scaffold(
           appBar: AppBar(
@@ -50,13 +53,12 @@ class Ads_Details extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         MaterialButton(
-                            onPressed: () {
-                              var index;
+                            onPressed: ({currentindex}) {
+                              var index = 0;
                               navigateTo(
                                   context,
                                   ChatDetailsScreen(
-                                    userModel:
-                                        AppCubit.get(context).users[index],
+                                    userModel: usermodel,
                                   ));
                             },
                             child: Row(
@@ -106,9 +108,41 @@ class Ads_Details extends StatelessWidget {
     return Padding(
         padding: const EdgeInsets.all(12.0),
         child: Column(children: [
-          Image(
-            image: NetworkImage('${model.postImage}'),
-            fit: BoxFit.cover,
+          Stack(
+            alignment: AlignmentDirectional.bottomCenter,
+            children: [
+              Container(
+                padding: EdgeInsets.symmetric(horizontal: appPadding / 2),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(20),
+                  color: Colors.white,
+                ),
+                width: double.infinity,
+                height: 300.0,
+                child: PageView.builder(
+                  controller: ADSController,
+                  scrollDirection: Axis.horizontal,
+                  itemBuilder: (context, index) => Image(
+                    image: NetworkImage('${model.postImage![index]}'),
+                    width: double.infinity,
+                    height: 120.0,
+                  ),
+                  itemCount: model.postImage!.length,
+                ),
+              ),
+              SmoothPageIndicator(
+                controller: ADSController,
+                count: model.postImage!.length,
+                effect: const ExpandingDotsEffect(
+                  dotColor: Colors.grey,
+                  dotHeight: 10,
+                  expansionFactor: 4,
+                  dotWidth: 10,
+                  spacing: 5.0,
+                  activeDotColor: Colors.lightBlue,
+                ),
+              ),
+            ],
           ),
           Row(children: [
             const Icon(
@@ -190,26 +224,32 @@ class Ads_Details extends StatelessWidget {
             ),
           ]),
           myDivider(),
-          Row(children: [
-            const Icon(
-              Icons.description_outlined,
-              color: Colors.black,
-            ),
-            const Text(
-              ' description',
-              maxLines: 6,
-              style: TextStyle(
-                color: Colors.black,
-              ),
-            ),
-            Spacer(),
-            Text(
-              '${model.description}',
-              style: const TextStyle(
-                color: Colors.black,
-              ),
-            ),
-          ]),
+          Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Text(
+                  ' description',
+                  maxLines: 6,
+                  style: TextStyle(
+                    color: Colors.black,
+                  ),
+                ),
+                const SizedBox(
+                  height: 6.0,
+                ),
+                Container(
+                  width: double.infinity,
+                  height: 90.0,
+                  child: Text(
+                    '${model.description}',
+                    maxLines: 15,
+                    style: const TextStyle(
+                      color: Colors.black,
+                    ),
+                  ),
+                ),
+              ]),
           myDivider(),
           Row(children: [
             const Icon(
@@ -270,35 +310,6 @@ class Ads_Details extends StatelessWidget {
               ),
             ),
           ]),
-          InkWell(
-              onTap: () {},
-              child: Row(children: [
-                CircleAvatar(
-                  backgroundImage: NetworkImage(
-                    '${model.image}',
-                  ),
-                ),
-                const SizedBox(
-                  width: 10,
-                ),
-                Expanded(
-                    child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                      Row(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              '${model.name}',
-                            ),
-                            const Icon(
-                              Icons.check_circle,
-                              size: 14,
-                              color: Colors.blue,
-                            ),
-                          ]),
-                    ]))
-              ]))
         ]));
   }
 }
