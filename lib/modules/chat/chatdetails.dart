@@ -23,45 +23,49 @@ class ChatDetailsScreen extends StatelessWidget {
     return Builder(
       builder: (BuildContext context) {
         AppCubit.get(context).getMessages(receiverId: userModel!.uid!);
+        AppCubit.get(context).getAllUsers();
+
         return BlocConsumer<AppCubit, AppStates>(
           listener: (context, state) {},
           builder: (context, state) {
             return Scaffold(
               appBar: AppBar(
                 titleSpacing: 0,
-                title: Row(
-                  children: [
-                    CircleAvatar(
-                      backgroundImage: NetworkImage(
-                        '${userModel!.image}',
-                      ),
-                    ),
-                    const SizedBox(
-                      width: 15,
-                    ),
-                    Text(
-                      '${userModel!.name}',
-                      style: const TextStyle(
-                        fontSize: 12,
-                      ),
-                    ),
-                    Row(
-                      children: [
-                        MaterialButton(
-                          onPressed: () {
-                            navigateTo(context, videoCall());
-                          },
-                          child: const Icon(Icons.video_call_outlined),
+                title: Expanded(
+                  child: Row(
+                    children: [
+                      CircleAvatar(
+                        backgroundImage: NetworkImage(
+                          '${userModel!.image}',
                         ),
-                        MaterialButton(
-                          onPressed: () {
-                            navigateTo(context, audioCall());
-                          },
-                          child: const Icon(Icons.phone),
+                      ),
+                      const SizedBox(
+                        width: 15,
+                      ),
+                      Text(
+                        '${userModel!.name}',
+                        style: const TextStyle(
+                          fontSize: 12,
                         ),
-                      ],
-                    ),
-                  ],
+                      ),
+                      Row(
+                        children: [
+                          MaterialButton(
+                            onPressed: () {
+                              navigateTo(context, videoCall());
+                            },
+                            child: const Icon(Icons.video_call_outlined),
+                          ),
+                          MaterialButton(
+                            onPressed: () {
+                              navigateTo(context, audioCall());
+                            },
+                            child: const Icon(Icons.phone),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
                 ),
               ),
               body: Padding(
@@ -119,6 +123,11 @@ class ChatDetailsScreen extends StatelessWidget {
                                       text: messageController.text,
                                       dateTime: DateTime.now().toString());
                                   messageController.clear();
+                                  AppCubit.get(context).sendNotification(
+                                      token: userModel!.token!,
+                                      senderName: userModel!.name!,
+                                      messageText: "${userModel!.name}" +
+                                          messageController.text);
                                 },
                                 color: Colors.white,
                                 iconSize: 18,
@@ -143,12 +152,12 @@ class ChatDetailsScreen extends StatelessWidget {
         child: Container(
           decoration: BoxDecoration(
               color: Colors.grey[300],
-              borderRadius: BorderRadiusDirectional.only(
+              borderRadius: const BorderRadiusDirectional.only(
                 topStart: Radius.circular(20.0),
                 topEnd: Radius.circular(20.0),
                 bottomEnd: Radius.circular(20.0),
               )),
-          padding: EdgeInsets.symmetric(
+          padding: const EdgeInsets.symmetric(
             vertical: 10,
             horizontal: 15,
           ),
@@ -163,12 +172,12 @@ class ChatDetailsScreen extends StatelessWidget {
         child: Container(
           decoration: BoxDecoration(
               color: Colors.blue[100],
-              borderRadius: BorderRadiusDirectional.only(
+              borderRadius: const BorderRadiusDirectional.only(
                 topStart: Radius.circular(20.0),
                 topEnd: Radius.circular(20.0),
                 bottomStart: Radius.circular(20.0),
               )),
-          padding: EdgeInsets.symmetric(
+          padding: const EdgeInsets.symmetric(
             vertical: 10,
             horizontal: 15,
           ),

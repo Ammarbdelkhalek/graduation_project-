@@ -1,6 +1,7 @@
 import 'package:animated_splash_screen/animated_splash_screen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -9,25 +10,42 @@ import 'package:realestateapp/models/user_model.dart';
 import 'package:realestateapp/modules/cubit/cubit.dart';
 import 'package:realestateapp/modules/cubit/states.dart';
 import 'package:realestateapp/modules/login/login_screen.dart';
-import 'package:realestateapp/modules/map/map_screen.dart';
-import 'package:realestateapp/modules/new_post/userLocation.dart';
 import 'package:realestateapp/modules/onboarding_screen.dart';
 import 'package:realestateapp/modules/search/filtering.dart';
-import 'package:realestateapp/modules/search/search_screen.dart';
-import 'package:realestateapp/modules/setting/drawer.dart';
-import 'package:realestateapp/modules/setting/myaccount.dart';
-import 'package:realestateapp/modules/setting/setting_screen.dart';
-import 'package:realestateapp/modules/setting/userprofile.dart';
-import 'package:realestateapp/modules/videoandphoneCall/videoCallScreen.dart';
 import 'package:realestateapp/shared/components/constant.dart';
 import 'package:realestateapp/shared/network/local/cache_helper.dart';
+import 'package:realestateapp/shared/network/remote/Diohelper.dart';
 import 'package:realestateapp/shared/styles/themes.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:easy_localization/easy_localization.dart';
+
+Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+  // If you're going to use other Firebase services in the background, such as Firestore,
+  // make sure you call `initializeApp` before using other Firebase services.
+  await Firebase.initializeApp();
+
+  print("Handling a background message: ${message.messageId}");
+}
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await EasyLocalization.ensureInitialized();
   await Firebase.initializeApp(
       // options: DefaultFirebaseOptions.currentPlatform,
+
       );
+
+  // var Token = await FirebaseMessaging.instance.getToken();
+  // print(Token);
+
+  FirebaseMessaging.onMessage.listen((event) {
+    print(event.data.toString());
+  });
+  FirebaseMessaging.onMessageOpenedApp.listen((event) {
+    print(event.data.toString());
+  });
+  FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
+  Diohelper.init();
   await CacheHelper.init();
 
   bool? isDark = CacheHelper.getData(key: 'isDark');
@@ -48,9 +66,15 @@ void main() async {
     widget = OnBoardingScreen();
   }
 
-  runApp(MyApp(
-    startWidget: widget,
-    isDark: isDark,
+  runApp(EasyLocalization(
+    supportedLocales: [Locale('en', 'US'), Locale('ar', 'EG')],
+    path: 'assets/translations',
+    saveLocale: true, // <-- change the path of the translation files
+    fallbackLocale: const Locale('ar', 'EG'),
+    child: MyApp(
+      startWidget: widget,
+      isDark: isDark,
+    ),
   ));
 }
 
@@ -75,6 +99,7 @@ class MyApp extends StatelessWidget {
         ..getCategoryData()
         ..getBundle()
         ..getAllUsers(),
+      // ..getUserToken(),
       child: BlocConsumer<AppCubit, AppStates>(
         listener: (context, state) {},
         builder: (context, state) {
@@ -86,7 +111,7 @@ class MyApp extends StatelessWidget {
                 AppCubit.get(context).isDark ? ThemeMode.light : ThemeMode.dark,
             home: AnimatedSplashScreen(
               splash: const Image(
-                image: AssetImage('assets/images/image4.jpg'),
+                image: AssetImage('assets/images/applogo.png'),
               ),
               nextScreen: startWidget!,
               backgroundColor: Colors.brown,
@@ -95,6 +120,9 @@ class MyApp extends StatelessWidget {
               splashIconSize: 100,
               splashTransition: SplashTransition.fadeTransition,
             ),
+            localizationsDelegates: context.localizationDelegates,
+            supportedLocales: context.supportedLocales,
+            locale: context.locale,
           );
         },
       ),

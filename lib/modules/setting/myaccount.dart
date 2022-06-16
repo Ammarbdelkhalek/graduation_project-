@@ -1,3 +1,5 @@
+import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:realestateapp/models/user_model.dart';
@@ -58,8 +60,8 @@ class _useraccountState extends State<useraccount> {
                 ),
                 Container(
                   padding: const EdgeInsets.all(15),
-                  child: const Text(
-                    'MY ACCOUNT',
+                  child: Text(
+                    'MY ACCOUNT'.tr().toString(),
                     style: TextStyle(color: Colors.grey, fontSize: 15),
                   ),
                 ),
@@ -72,18 +74,18 @@ class _useraccountState extends State<useraccount> {
                     color: Colors.white,
                     padding: const EdgeInsets.all(15),
                     child: Row(
-                      children: const [
-                        Icon(
+                      children: [
+                        const Icon(
                           Icons.adf_scanner,
                           color: Colors.green,
                         ),
                         Text(
-                          'your ads ',
-                          style: TextStyle(
+                          'your ads '.tr().toString(),
+                          style: const TextStyle(
                               fontWeight: FontWeight.bold, fontSize: 18),
                         ),
-                        Spacer(),
-                        Icon(Icons.arrow_forward_ios_rounded),
+                        const Spacer(),
+                        const Icon(Icons.arrow_forward_ios_rounded),
                       ],
                     ),
                   ),
@@ -97,18 +99,18 @@ class _useraccountState extends State<useraccount> {
                     color: Colors.white,
                     padding: const EdgeInsets.all(15),
                     child: Row(
-                      children: const [
-                        Icon(
+                      children: [
+                        const Icon(
                           Icons.location_on_outlined,
                           color: Colors.blue,
                         ),
                         Text(
-                          'bundles',
-                          style: TextStyle(
+                          'bundles'.tr().toString(),
+                          style: const TextStyle(
                               fontWeight: FontWeight.bold, fontSize: 18),
                         ),
-                        Spacer(),
-                        Icon(Icons.arrow_forward_ios_rounded),
+                        const Spacer(),
+                        const Icon(Icons.arrow_forward_ios_rounded),
                       ],
                     ),
                   ),
@@ -122,18 +124,18 @@ class _useraccountState extends State<useraccount> {
                     color: Colors.white,
                     padding: const EdgeInsets.all(15),
                     child: Row(
-                      children: const [
-                        Icon(
+                      children: [
+                        const Icon(
                           Icons.person_outline,
                           color: Colors.green,
                         ),
                         Text(
-                          'Profile',
-                          style: TextStyle(
+                          'Profile'.tr().toString(),
+                          style: const TextStyle(
                               fontWeight: FontWeight.bold, fontSize: 18),
                         ),
-                        Spacer(),
-                        Icon(Icons.arrow_forward_ios_rounded),
+                        const Spacer(),
+                        const Icon(Icons.arrow_forward_ios_rounded),
                       ],
                     ),
                   ),
@@ -141,9 +143,9 @@ class _useraccountState extends State<useraccount> {
                 myDivider(),
                 Container(
                     padding: const EdgeInsets.all(15),
-                    child: const Text(
-                      'SETTINGS',
-                      style: TextStyle(color: Colors.grey, fontSize: 15),
+                    child: Text(
+                      'SETTINGS'.tr().toString(),
+                      style: const TextStyle(color: Colors.grey, fontSize: 15),
                     )),
                 InkWell(
                   onTap: () {},
@@ -157,9 +159,9 @@ class _useraccountState extends State<useraccount> {
                           color: Colors.green,
                         ),
 
-                        const Text(
-                          'Dark Mode',
-                          style: TextStyle(
+                        Text(
+                          'Dark Mode'.tr().toString(),
+                          style: const TextStyle(
                               fontWeight: FontWeight.bold, fontSize: 18),
                         ),
                         const Spacer(),
@@ -184,19 +186,19 @@ class _useraccountState extends State<useraccount> {
                     color: Colors.white,
                     padding: const EdgeInsets.all(15),
                     child: Row(
-                      children: const [
-                        Icon(
+                      children: [
+                        const Icon(
                           Icons.map_outlined,
                           color: Colors.green,
                         ),
                         Text(
-                          'Country',
-                          style: TextStyle(
+                          'Country'.tr().toString(),
+                          style: const TextStyle(
                               fontWeight: FontWeight.bold, fontSize: 18),
                         ),
-                        Spacer(),
-                        Text('Egypt'),
-                        Icon(Icons.arrow_forward_ios_rounded),
+                        const Spacer(),
+                        Text('Egypt'.tr().toString()),
+                        const Icon(Icons.arrow_forward_ios_rounded),
                       ],
                     ),
                   ),
@@ -207,29 +209,64 @@ class _useraccountState extends State<useraccount> {
                   child: Container(
                     padding: const EdgeInsets.all(15),
                     color: Colors.white,
-                    child: Row(
-                      children: const [
-                        Icon(
-                          Icons.flag_outlined,
-                          color: Colors.green,
-                        ),
-                        Text(
-                          'Language',
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold, fontSize: 18),
-                        ),
-                        Spacer(),
-                        Text('English'),
-                        Icon(Icons.arrow_forward_ios_rounded),
-                      ],
+                    child: InkWell(
+                      onTap: () {
+                        showModalBottomSheet(
+                            context: context,
+                            shape: const RoundedRectangleBorder(
+                              borderRadius: BorderRadius.vertical(
+                                top: Radius.circular(30),
+                              ),
+                            ),
+                            builder: (context) => Container(
+                                height: 170,
+                                child: Column(children: <Widget>[
+                                  ListTile(
+                                    leading: const Icon(
+                                      Icons.abc_sharp,
+                                    ),
+                                    title: Text('English'.tr().toString()),
+                                    onTap: () {
+                                      context.setLocale(Locale('en', 'US'));
+                                      Navigator.pop(context);
+                                    },
+                                  ),
+                                  ListTile(
+                                    leading: const Icon(
+                                      Icons.language,
+                                    ),
+                                    title: const Text('arabic'),
+                                    onTap: () {
+                                      context.setLocale(Locale('ar', 'EG'));
+                                      Navigator.pop(context);
+                                    },
+                                  ),
+                                ])));
+                      },
+                      child: Row(
+                        children: [
+                          const Icon(
+                            Icons.flag_outlined,
+                            color: Colors.green,
+                          ),
+                          Text(
+                            'Language'.tr().toString(),
+                            style: const TextStyle(
+                                fontWeight: FontWeight.bold, fontSize: 18),
+                          ),
+                          const Spacer(),
+                          Text('English'.tr().toString()),
+                          const Icon(Icons.arrow_forward_ios_rounded),
+                        ],
+                      ),
                     ),
                   ),
                 ),
                 Container(
                     padding: const EdgeInsets.all(15),
-                    child: const Text(
-                      'REACH OUT TO US',
-                      style: TextStyle(color: Colors.grey, fontSize: 15),
+                    child: Text(
+                      'REACH OUT TO US'.tr().toString(),
+                      style: const TextStyle(color: Colors.grey, fontSize: 15),
                     )),
                 InkWell(
                   onTap: () {},
@@ -237,18 +274,18 @@ class _useraccountState extends State<useraccount> {
                     color: Colors.white,
                     padding: const EdgeInsets.all(15),
                     child: Row(
-                      children: const [
-                        Icon(
+                      children: [
+                        const Icon(
                           Icons.info_outline_rounded,
                           color: Colors.green,
                         ),
                         Text(
-                          'FAQs',
-                          style: TextStyle(
+                          'FAQs'.tr().toString(),
+                          style: const TextStyle(
                               fontWeight: FontWeight.bold, fontSize: 18),
                         ),
-                        Spacer(),
-                        Icon(Icons.arrow_forward_ios_rounded),
+                        const Spacer(),
+                        const Icon(Icons.arrow_forward_ios_rounded),
                       ],
                     ),
                   ),
@@ -260,18 +297,18 @@ class _useraccountState extends State<useraccount> {
                     padding: EdgeInsets.all(15),
                     color: Colors.white,
                     child: Row(
-                      children: const [
-                        Icon(
+                      children: [
+                        const Icon(
                           Icons.phone_in_talk_outlined,
                           color: Colors.green,
                         ),
                         Text(
-                          'Contact Us',
-                          style: TextStyle(
+                          'Contact Us'.tr().toString(),
+                          style: const TextStyle(
                               fontWeight: FontWeight.bold, fontSize: 18),
                         ),
-                        Spacer(),
-                        Icon(Icons.arrow_forward_ios_rounded),
+                        const Spacer(),
+                        const Icon(Icons.arrow_forward_ios_rounded),
                       ],
                     ),
                   ),
@@ -291,14 +328,14 @@ class _useraccountState extends State<useraccount> {
                     },
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
-                      children: const [
-                        Icon(Icons.power_settings_new),
-                        SizedBox(
+                      children: [
+                        const Icon(Icons.power_settings_new),
+                        const SizedBox(
                           width: 10,
                         ),
                         Text(
-                          'SignOut',
-                          style: TextStyle(fontSize: 18),
+                          'SignOut'.tr().toString(),
+                          style: const TextStyle(fontSize: 18),
                         )
                       ],
                     ),

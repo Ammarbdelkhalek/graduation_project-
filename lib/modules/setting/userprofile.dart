@@ -11,6 +11,7 @@ import 'package:realestateapp/modules/editPost/EditPost.dart';
 import 'package:realestateapp/modules/home/adsdetails.dart';
 import 'package:realestateapp/shared/components/constant.dart';
 import '../../shared/components/components.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 class User_Profile extends StatelessWidget {
   User_Profile(this.postModel, {Key? key}) : super(key: key);
@@ -73,7 +74,7 @@ class User_Profile extends StatelessWidget {
                                   height: 6.0,
                                 ),
                                 Text(
-                                  ' discover new    ',
+                                  ' discover new ',
                                   style: TextStyle(
                                       fontSize: 15.0,
                                       fontWeight: FontWeight.bold,
@@ -98,7 +99,7 @@ class User_Profile extends StatelessWidget {
         clipBehavior: Clip.antiAliasWithSaveLayer,
         elevation: 5.0,
         child: Padding(
-          padding: EdgeInsets.symmetric(
+          padding: const EdgeInsets.symmetric(
               horizontal: appPadding, vertical: appPadding / 2),
           child: Container(
             height: 300,
@@ -166,10 +167,12 @@ class User_Profile extends StatelessWidget {
                                 height: 170,
                                 child: Column(children: <Widget>[
                                   ListTile(
-                                    leading: Icon(
+                                    leading: const Icon(
                                       Icons.edit,
                                     ),
-                                    title: Text('Edit'),
+                                    title: Text(
+                                      'Edit',
+                                    ),
                                     onTap: () {
                                       navigateTo(
                                           context,
@@ -179,7 +182,7 @@ class User_Profile extends StatelessWidget {
                                     },
                                   ),
                                   ListTile(
-                                    leading: Icon(
+                                    leading: const Icon(
                                       Icons.delete,
                                     ),
                                     title: Text('Delete'),
@@ -194,7 +197,7 @@ class User_Profile extends StatelessWidget {
                                     leading: const Icon(
                                       Icons.close,
                                     ),
-                                    title: const Text('Close'),
+                                    title: Text('Close'),
                                     onTap: () {
                                       Navigator.pop(context);
                                     },

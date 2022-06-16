@@ -19,3 +19,7 @@ const Color darkBlue = Color.fromRGBO(19, 26, 44, 1.0);
 //default app padding
 
 const double appPadding = 30.0;
+
+String baseUrl = "https://maps.googleapis.com/maps/api/place/autocomplete/json";
+
+String mapkey = 'AIzaSyB8ouG6DHqKcBayUzndcNoI4AsRHm4xWS0';

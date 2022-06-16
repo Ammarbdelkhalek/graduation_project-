@@ -9,8 +9,6 @@ import 'package:realestateapp/shared/components/components.dart';
 import 'package:realestateapp/shared/formvalidator.dart';
 import 'package:realestateapp/shared/network/local/cache_helper.dart';
 
-import '../../shared/components/headerwidget.dart';
-
 class RegisterScreen extends StatelessWidget {
   var formKey = GlobalKey<FormState>();
   var emailController = TextEditingController();

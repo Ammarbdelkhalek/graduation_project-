@@ -12,9 +12,12 @@ import 'package:realestateapp/modules/category/rentcategory.dart';
 import 'package:realestateapp/modules/cubit/cubit.dart';
 import 'package:realestateapp/modules/cubit/states.dart';
 import 'package:realestateapp/modules/home/adsdetails.dart';
+
 import 'package:realestateapp/modules/new_post/new_post.dart';
 import 'package:realestateapp/shared/components/components.dart';
 import 'package:realestateapp/shared/components/constant.dart';
+import 'package:realestateapp/shared/components/constant.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 class HomeScreen extends StatelessWidget {
   HomeScreen({Key? key}) : super(key: key);
@@ -25,7 +28,8 @@ class HomeScreen extends StatelessWidget {
     return BlocConsumer<AppCubit, AppStates>(listener: (context, state) {
       if (state is AppAddToFavoritesSuccessState) {
         showToast(
-            text: 'faviourite added successfuly ', state: ToastStates.SUCCESS);
+            text: 'faviourite added successfuly '.tr().toString(),
+            state: ToastStates.SUCCESS);
       }
     }, builder: (context, state) {
       return Scaffold(
@@ -98,8 +102,8 @@ class HomeScreen extends StatelessWidget {
                   const SizedBox(
                     height: 8.0,
                   ),
-                  const Text(
-                    'most recent ads ',
+                  Text(
+                    "most recent ads ".tr().toString(),
                     style: TextStyle(
                         fontSize: 15.0,
                         fontWeight: FontWeight.w800,
@@ -143,20 +147,20 @@ class HomeScreen extends StatelessWidget {
                                 child: Column(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: const [
-                                    Image(
+                                  children: [
+                                    const Image(
                                       image: NetworkImage(
                                           'https://correspondentsoftheworld.com/images/elements/clear/undraw_Content_structure_re_ebkv_clear.png'),
                                       height: 300,
                                       width: 380,
                                       fit: BoxFit.cover,
                                     ),
-                                    SizedBox(
+                                    const SizedBox(
                                       height: 6.0,
                                     ),
                                     Text(
-                                      ' you have no posts  ',
-                                      style: TextStyle(
+                                      ' you have no posts  '.tr().toString(),
+                                      style: const TextStyle(
                                           fontSize: 15.0,
                                           fontWeight: FontWeight.bold,
                                           color: Colors.grey),
@@ -259,7 +263,6 @@ class HomeScreen extends StatelessWidget {
                             AppCubit.get(context).favorites.length == 0
                                 ? AppCubit.get(context).addtofav(
                                     AppCubit.get(context).posts[index],
-                                    AppCubit.get(context).postsId[index],
                                   )
                                 : showToast(
                                     text: 'aleardy added',

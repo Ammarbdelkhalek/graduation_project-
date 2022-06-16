@@ -40,7 +40,7 @@ class EditPost extends StatelessWidget {
 
         NamePostController.text = postmodel!.namePost!;
         DescriptionController.text = postmodel!.description!;
-        PlaceController.text = postmodel!.place!;
+        // PlaceController.text = postmodel!.place!;
         no_of_roomsController.text = postmodel!.no_of_room!;
         no_of_bathroomController.text = postmodel!.no_of_bathroom!;
         AreaController.text = postmodel!.area!;

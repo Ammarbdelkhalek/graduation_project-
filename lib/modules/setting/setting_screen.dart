@@ -5,6 +5,7 @@ import 'package:realestateapp/modules/cubit/cubit.dart';
 import 'package:realestateapp/modules/cubit/states.dart';
 import 'package:realestateapp/modules/videoandphoneCall/videoCallScreen.dart';
 import 'package:realestateapp/shared/components/components.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 class profilesetting extends StatelessWidget {
   profilesetting({Key? key}) : super(key: key);
@@ -26,7 +27,7 @@ class profilesetting extends StatelessWidget {
 
         return Scaffold(
           appBar: AppBar(
-            title: const Text('account setting'),
+            title: Text('account setting '),
           ),
           body: SingleChildScrollView(
             child: Padding(
@@ -124,7 +125,7 @@ class profilesetting extends StatelessWidget {
                                   name: nameController.text,
                                   phone: phoneController.text);
                             },
-                            child: const Text(
+                            child: Text(
                               'Upload Profile Data',
                             ),
                           ),
@@ -141,23 +142,13 @@ class profilesetting extends StatelessWidget {
                                     name: nameController.text,
                                     phone: phoneController.text);
                               },
-                              child: const Text(
+                              child: Text(
                                 'Upload Profile Image',
                               ),
                             ),
                           ),
                         ],
                       ),
-                    const SizedBox(
-                      height: 20,
-                    ),
-                    defaultButton(
-                      function: () {
-                        AppCubit.get(context).currentIndex = 0;
-                        AppCubit.get(context).signOut(context);
-                      },
-                      text: 'Logout',
-                    ),
                   ],
                 ),
               ),

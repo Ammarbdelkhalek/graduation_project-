@@ -9,7 +9,7 @@ import 'package:realestateapp/modules/new_post/new_post.dart';
 import 'package:realestateapp/modules/search/filtering.dart';
 import 'package:realestateapp/modules/search/search_screen.dart';
 import 'package:realestateapp/modules/setting/drawer.dart';
-
+import 'package:easy_localization/easy_localization.dart';
 import '../shared/components/components.dart';
 
 class LayoutScreen extends StatefulWidget {
@@ -42,13 +42,15 @@ class _LayoutScreenState extends State<LayoutScreen> {
                 onPressed: ({currentindex}) {
                   var index = 0;
                   currentindex = index;
+                  cubit.searchADS == null;
                   navigateTo(context, SearchScreen(cubit.posts[index]));
                 },
                 icon: Icon(Icons.search),
               )
             ],
           ),
-          drawer: Stack(children:[AnimatedContainer(
+          drawer: Stack(children: [
+            AnimatedContainer(
                 transform: Matrix4.translationValues(xOffset, yOffset, 0)
                   ..scale(isDrawerOpen ? 0.85 : 1.00)
                   ..rotateZ(isDrawerOpen ? -50 : 0),
@@ -59,54 +61,47 @@ class _LayoutScreenState extends State<LayoutScreen> {
                   borderRadius: BorderRadius.circular(40),
                 ),
                 child: SingleChildScrollView(
-                    child: Column(
-                  children: <Widget>[
-                    SizedBox(
-                      height: 50,
-                    ),
-                    Container(
-                      margin: EdgeInsets.symmetric(horizontal: 20),
-                      child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: <Widget>[
-                            isDrawerOpen
-                                ? GestureDetector(
-                                    child: const Icon(
-                                      Icons.arrow_back_ios_outlined,
-                                      color: Colors.white,
-                                    ),
-                                    onTap: () {
-                                      setState(() {
-                                        xOffset = 0;
-                                        yOffset = 0;
-                                        isDrawerOpen = false;
-                                      });
-                                    },
-                                  )
-                                : GestureDetector(
-                                    child: const Icon(
-                                      Icons.menu,
-                                      color: Colors.white,
-                                    ),
-                                    onTap: () {
-                                      setState(() {
-                                        xOffset = 290;
-                                        yOffset = 80;
-                                        isDrawerOpen = true;
-                                      });
-                                    },
+                    child: Column(children: <Widget>[
+                  SizedBox(
+                    height: 50,
+                  ),
+                  Container(
+                    margin: EdgeInsets.symmetric(horizontal: 20),
+                    child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: <Widget>[
+                          isDrawerOpen
+                              ? GestureDetector(
+                                  child: const Icon(
+                                    Icons.arrow_back_ios_outlined,
+                                    color: Colors.white,
                                   ),
-                          ]),
-                    ),]
-
-            
-                          
-            
-                 
-                ))),
-                const drawer_setting(),
-          ]
-          ),
+                                  onTap: () {
+                                    setState(() {
+                                      xOffset = 0;
+                                      yOffset = 0;
+                                      isDrawerOpen = false;
+                                    });
+                                  },
+                                )
+                              : GestureDetector(
+                                  child: const Icon(
+                                    Icons.menu,
+                                    color: Colors.white,
+                                  ),
+                                  onTap: () {
+                                    setState(() {
+                                      xOffset = 290;
+                                      yOffset = 80;
+                                      isDrawerOpen = true;
+                                    });
+                                  },
+                                ),
+                        ]),
+                  ),
+                ]))),
+            const drawer_setting(),
+          ]),
           floatingActionButton: Padding(
             padding: const EdgeInsets.all(10.0),
             child: FloatingActionButton(
@@ -122,30 +117,30 @@ class _LayoutScreenState extends State<LayoutScreen> {
               cubit.ChangeBottomNav(index);
             },
             currentIndex: cubit.currentIndex,
-            items: const [
+            items: [
               BottomNavigationBarItem(
-                icon: Icon(Icons.home),
-                label: 'Home',
+                icon: const Icon(Icons.home),
+                label: 'Home'.tr().toString(),
               ),
               BottomNavigationBarItem(
-                icon: Icon(Icons.category_outlined),
-                label: 'category',
+                icon: const Icon(Icons.category_outlined),
+                label: 'category'.tr().toString(),
               ),
               BottomNavigationBarItem(
-                icon: Icon(Icons.home_repair_service),
-                label: 'services',
+                icon: const Icon(Icons.home_repair_service),
+                label: 'services'.tr().toString(),
               ),
               BottomNavigationBarItem(
-                icon: Icon(Icons.favorite),
-                label: 'Favourite',
+                icon: const Icon(Icons.favorite),
+                label: 'Favourite'.tr().toString(),
               ),
               BottomNavigationBarItem(
-                icon: Icon(Icons.message),
-                label: 'Chat',
+                icon: const Icon(Icons.message),
+                label: 'Chat'.tr().toString(),
               ),
               BottomNavigationBarItem(
-                icon: Icon(Icons.settings),
-                label: 'Setting',
+                icon: const Icon(Icons.settings),
+                label: 'Setting'.tr().toString(),
               ),
             ],
           ),

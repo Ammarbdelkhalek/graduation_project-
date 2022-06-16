@@ -1,4 +1,5 @@
 import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -58,7 +59,8 @@ class Ads_Details extends StatelessWidget {
                               navigateTo(
                                   context,
                                   ChatDetailsScreen(
-                                    userModel: usermodel,
+                                    userModel:
+                                        AppCubit.get(context).users[index],
                                   ));
                             },
                             child: Row(
@@ -149,8 +151,8 @@ class Ads_Details extends StatelessWidget {
               Icons.king_bed_outlined,
               color: Colors.black,
             ),
-            const Text(
-              ' number of room',
+            Text(
+              ' number of room'.tr().toString(),
               style: TextStyle(
                 color: Colors.black,
               ),
@@ -169,8 +171,8 @@ class Ads_Details extends StatelessWidget {
               Icons.bathtub_outlined,
               color: Colors.black,
             ),
-            const Text(
-              ' number of bathroom',
+            Text(
+              ' number of bathroom'.tr().toString(),
               style: TextStyle(
                 color: Colors.black,
               ),
@@ -189,8 +191,8 @@ class Ads_Details extends StatelessWidget {
               Icons.king_bed_outlined,
               color: Colors.black,
             ),
-            const Text(
-              ' area',
+            Text(
+              ' area'.tr().toString(),
               style: TextStyle(
                 color: Colors.black,
               ),
@@ -228,8 +230,8 @@ class Ads_Details extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text(
-                  ' description',
+                Text(
+                  ' description'.tr().toString(),
                   maxLines: 6,
                   style: TextStyle(
                     color: Colors.black,
@@ -256,8 +258,8 @@ class Ads_Details extends StatelessWidget {
               Icons.gps_fixed_rounded,
               color: Colors.black,
             ),
-            const Text(
-              ' location',
+            Text(
+              ' location'.tr().toString(),
               style: TextStyle(
                 color: Colors.black,
               ),
@@ -276,8 +278,8 @@ class Ads_Details extends StatelessWidget {
               Icons.price_change_rounded,
               color: Colors.black,
             ),
-            const Text(
-              'the price',
+            Text(
+              'the price'.tr().toString(),
               style: TextStyle(
                 color: Colors.black,
               ),
@@ -296,8 +298,8 @@ class Ads_Details extends StatelessWidget {
               Icons.category_outlined,
               color: Colors.black,
             ),
-            const Text(
-              ' category type ',
+            Text(
+              ' category type '.tr().toString(),
               style: TextStyle(
                 color: Colors.black,
               ),

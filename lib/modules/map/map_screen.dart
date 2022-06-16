@@ -76,8 +76,10 @@ class MapScreen extends StatelessWidget {
                         AppCubit.get(context).lat, AppCubit.get(context).long);
 
                     print(placemarks[0].street);
+
+                    Navigator.pop(context);
                   },
-                  child: const Text('your current location'),
+                  child: const Text('confirm the location'),
                 )
               ],
             ),

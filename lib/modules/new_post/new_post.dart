@@ -1,7 +1,9 @@
 import 'dart:io';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:geocoding/geocoding.dart';
 import 'package:intl/intl.dart';
 import 'package:realestateapp/layout/layout_screen.dart';
 import 'package:realestateapp/models/BundleModel.dart';
@@ -46,7 +48,8 @@ class _NewPostState extends State<NewPost> {
       listener: (context, state) {
         if (state is AppCreatePostSuccessState) {
           showToast(
-              text: 'post created successfuly', state: ToastStates.SUCCESS);
+              text: 'post created successfuly'.tr().toString(),
+              state: ToastStates.SUCCESS);
           AppCubit.get(context).getPosts();
           navigateTo(context, LayoutScreen());
         }
@@ -56,7 +59,7 @@ class _NewPostState extends State<NewPost> {
         phonecontroller.text = userModel!.phone!;
         return Scaffold(
           appBar: AppBar(
-            title: const Text('New Post'),
+            title: Text('New Post'.tr().toString()),
           ),
           body: Padding(
             padding: const EdgeInsets.all(10.0),
@@ -98,9 +101,9 @@ class _NewPostState extends State<NewPost> {
                                       color: Colors.blue,
                                     ),
                                   ]),
-                              const Text(
-                                'now',
-                                style: TextStyle(
+                              Text(
+                                'now'.tr().toString(),
+                                style: const TextStyle(
                                   fontSize: 8,
                                   color: Colors.blue,
                                 ),
@@ -137,7 +140,9 @@ class _NewPostState extends State<NewPost> {
                                   const EdgeInsets.fromLTRB(10, 20, 10, 20),
                               filled: true,
                               fillColor: Colors.grey[200],
-                              hintText: 'select type  like rent or Buy ',
+                              hintText: 'select type  like rent or Buy '
+                                  .tr()
+                                  .toString(),
                             ),
                           ),
                           const SizedBox(
@@ -148,10 +153,12 @@ class _NewPostState extends State<NewPost> {
                             type: TextInputType.text,
                             validate: (value) {
                               if (value!.isEmpty) {
-                                return 'Please Enter Name of Advertisment';
+                                return 'Please Enter Name of Advertisment'
+                                    .tr()
+                                    .toString();
                               }
                             },
-                            label: 'Name',
+                            label: 'Name'.tr().toString(),
                             prefix: Icons.drive_file_rename_outline,
                           ),
                           const SizedBox(
@@ -161,10 +168,10 @@ class _NewPostState extends State<NewPost> {
                             controller: DescriptionController,
                             keyboardType: TextInputType.multiline,
                             maxLines: null,
-                            decoration: const InputDecoration(
-                                prefixIcon: Icon(Icons.description),
-                                hintText: 'describtion',
-                                border: OutlineInputBorder()),
+                            decoration: InputDecoration(
+                                prefixIcon: const Icon(Icons.description),
+                                hintText: 'describtion'.tr().toString(),
+                                border: const OutlineInputBorder()),
                           ),
                           /*
                           defaultFormField(
@@ -200,7 +207,8 @@ class _NewPostState extends State<NewPost> {
                                   const EdgeInsets.fromLTRB(10, 20, 10, 20),
                               filled: true,
                               fillColor: Colors.grey[200],
-                              hintText: 'select your catergory ',
+                              hintText:
+                                  'select your catergory '.tr().toString(),
                             ),
                           ),
                           const SizedBox(
@@ -211,16 +219,18 @@ class _NewPostState extends State<NewPost> {
                           ),
                           defaultFormField(
                             controller: PlaceController,
+                            onChange: (location) {},
                             ontap: () {
+                              navigateTo(context, MapScreen());
                               AppCubit.get(context).getlatAndlang();
                             },
                             type: TextInputType.text,
                             validate: (value) {
                               if (value!.isEmpty) {
-                                return 'Please Enter place';
+                                return 'Please Enter place'.tr().toString();
                               }
                             },
-                            label: 'select the location',
+                            label: 'select the location'.tr().toString(),
                             prefix: Icons.place,
                           ),
                           const SizedBox(
@@ -231,10 +241,12 @@ class _NewPostState extends State<NewPost> {
                             type: TextInputType.text,
                             validate: (value) {
                               if (value!.isEmpty) {
-                                return 'Please Enter no_of_rooms';
+                                return 'Please Enter no_of_rooms'
+                                    .tr()
+                                    .toString();
                               }
                             },
-                            label: 'Number of Rooms',
+                            label: 'Number of Rooms'.tr().toString(),
                             prefix: Icons.king_bed_outlined,
                           ),
                           const SizedBox(
@@ -245,10 +257,12 @@ class _NewPostState extends State<NewPost> {
                             type: TextInputType.text,
                             validate: (value) {
                               if (value!.isEmpty) {
-                                return 'Please Enter no_of_bathrooms';
+                                return 'Please Enter no_of_bathrooms'
+                                    .tr()
+                                    .toString();
                               }
                             },
-                            label: 'Number of Bathrooms',
+                            label: 'Number of Bathrooms'.tr().toString(),
                             prefix: Icons.bathtub_outlined,
                           ),
                           const SizedBox(
@@ -259,16 +273,16 @@ class _NewPostState extends State<NewPost> {
                             type: TextInputType.text,
                             validate: (value) {
                               if (value!.isEmpty) {
-                                return 'Please Enter Area';
+                                return 'Please Enter Area'.tr().toString();
                               }
                             },
-                            label: 'Area',
+                            label: 'Area'.tr().toString(),
                             prefix: Icons.space_bar_outlined,
                           ),
                           const SizedBox(
                             height: 10,
                           ),
-                          Text('negotaiate'),
+                          Text('negotaiate'.tr().toString()),
                           Checkbox(
                               value: isnogiate,
                               onChanged: (value) {
@@ -276,7 +290,7 @@ class _NewPostState extends State<NewPost> {
                                   isnogiate = value!;
                                 });
                               }),
-                          SizedBox(
+                          const SizedBox(
                             height: 10,
                           ),
                           defaultFormField(
@@ -284,10 +298,10 @@ class _NewPostState extends State<NewPost> {
                             type: TextInputType.text,
                             validate: (value) {
                               if (value!.isEmpty) {
-                                return 'Please Enter Price';
+                                return 'Please Enter Price'.tr().toString();
                               }
                             },
-                            label: 'Price',
+                            label: 'Price'.tr().toString(),
                             prefix: Icons.price_change_outlined,
                           ),
                           const SizedBox(
@@ -298,10 +312,12 @@ class _NewPostState extends State<NewPost> {
                             type: TextInputType.phone,
                             validate: (value) {
                               if (value!.isEmpty) {
-                                return 'phone number is reqierd ';
+                                return 'phone number is reqierd '
+                                    .tr()
+                                    .toString();
                               }
                             },
-                            label: 'phone ',
+                            label: 'phone '.tr().toString(),
                             prefix: Icons.price_change_outlined,
                           ),
                           const SizedBox(
@@ -324,7 +340,9 @@ class _NewPostState extends State<NewPost> {
                               filled: true,
                               fillColor: Colors.grey[200],
                               hintText:
-                                  'select your bundel like  gold or silver ',
+                                  'select your bundel like  gold or silver '
+                                      .tr()
+                                      .toString(),
                             ),
                           ),
                           TextButton(
@@ -332,13 +350,13 @@ class _NewPostState extends State<NewPost> {
                               AppCubit.get(context).getImages();
                             },
                             child: Row(
-                              children: const [
-                                Icon(Icons.photo_library_outlined),
-                                SizedBox(
+                              children: [
+                                const Icon(Icons.photo_library_outlined),
+                                const SizedBox(
                                   width: 10,
                                 ),
                                 Text(
-                                  'Add Photo',
+                                  'Add Photo'.tr().toString(),
                                 ),
                               ],
                             ),
@@ -393,8 +411,8 @@ class _NewPostState extends State<NewPost> {
                           }
                         }
                       },
-                      child: const Text(
-                        'Add Post',
+                      child: Text(
+                        'Add Post'.tr().toString(),
                       ),
                     ),
                   ],

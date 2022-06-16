@@ -185,3 +185,11 @@ class AppGetBundelErrorState extends AppStates {
 }
 
 class BundelListChangeState extends AppStates {}
+
+class GetTokenLoadingState extends AppStates {}
+
+class GetTokenSuccessState extends AppStates {}
+
+class SendNotificationSuccessState extends AppStates {}
+
+class PickedChatImageSuccessState extends AppStates {}

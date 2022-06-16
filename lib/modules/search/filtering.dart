@@ -38,8 +38,15 @@ class _filter_pageState extends State<filter_page> {
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<AppCubit, AppStates>(
-      listener: (context, index) {},
-      builder: (context, index) {
+      listener: (context, state) {
+        /* if (state is AppGetFilterADSSuccessState) {
+          int index=0;
+          navigateTo(
+              context, Filter_Result(AppCubit.get(context).posts[index]));
+        }
+        */
+      },
+      builder: (context, state) {
         var postmodel = AppCubit.get(context).postModel;
         return DefaultTabController(
           length: 2,
@@ -137,6 +144,7 @@ class _filter_pageState extends State<filter_page> {
                           const SizedBox(
                             height: 10,
                           ),
+                          /*
                           Text('select your prober area'),
                           Slider(
                               value: AreaValue,
@@ -148,6 +156,7 @@ class _filter_pageState extends State<filter_page> {
                                   AreaValue = value;
                                 });
                               }),
+                              */
                           const SizedBox(
                             height: 10,
                           ),
@@ -174,14 +183,17 @@ class _filter_pageState extends State<filter_page> {
                               color: Colors.grey,
                               child: MaterialButton(
                                 onPressed: () {
-                                  AppCubit.get(context).filter_search(
-                                      place: PlaceController.text,
-                                      category:
-                                          AppCubit.get(context).currentvalue!,
-                                      area: AreaValue.toString(),
-                                      price: PriceController.text);
-                                  price:
-                                  currentvalue.toString();
+                                  // AppCubit.get(context).filter_search(
+                                  //   place: PlaceController.text,
+                                  //   no_bath: no_of_bathroomController.text,
+                                  //   no_rooms: no_of_roomsController.text,
+                                  //   category:
+                                  //       AppCubit.get(context).currentvalue!,
+                                  //   // area: AreaValue.toString(),
+                                  //   // price: PriceController.text
+                                  // );
+                                  // price:
+                                  //currentvalue.toString();
                                 },
                                 child: const Text('search'),
                               ),

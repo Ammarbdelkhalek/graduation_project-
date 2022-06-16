@@ -67,7 +67,7 @@ class FavouriteScreen extends StatelessWidget {
         clipBehavior: Clip.antiAliasWithSaveLayer,
         elevation: 5.0,
         child: Padding(
-          padding: EdgeInsets.symmetric(
+          padding: const EdgeInsets.symmetric(
               horizontal: appPadding, vertical: appPadding / 2),
           child: Container(
             height: 300,
@@ -110,10 +110,12 @@ class FavouriteScreen extends StatelessWidget {
                                   color: Colors.red,
                                 ),
                           onPressed: () {
+                            AppCubit.get(context).addtofav(
+                              AppCubit.get(context).posts[index],
+                            );
                             AppCubit.get(context).favorites.length == 0
                                 ? AppCubit.get(context).addtofav(
                                     AppCubit.get(context).posts[index],
-                                    AppCubit.get(context).postsId[index],
                                   )
                                 : showToast(
                                     text: 'aleardy added',
@@ -185,8 +187,7 @@ class FavouriteScreen extends StatelessWidget {
                     ),
                     MaterialButton(
                       onPressed: () {
-                        AppCubit.get(context).deletefavorite(
-                            AppCubit.get(context).postsId[index]);
+                        AppCubit.get(context).deletefavorite();
                       },
                       child: Text('delete',
                           style: TextStyle(color: Colors.grey[300])),

@@ -19,36 +19,25 @@ class Categoryscreen extends StatelessWidget {
     return BlocConsumer<AppCubit, AppStates>(
         listener: (context, state) {},
         builder: (context, state) {
-          return Scaffold(
-            body: SingleChildScrollView(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  ConditionalBuilder(
-                      condition: AppCubit.get(context).categories.length > 0,
-                      builder: (context) {
-                        return ListView.separated(
-                          scrollDirection: Axis.vertical,
-                          itemBuilder: (context, index) => InkWell(
-                              onTap: (() {
-                                navigateTo(
-                                    context,
-                                    rentcategory(AppCubit.get(context)
-                                        .categories[index]));
-                              }),
-                              child: BuildCategoryItems(
-                                  AppCubit.get(context).categories[index])),
-                          separatorBuilder: (context, index) => myDivider(),
-                          itemCount: AppCubit.get(context).categories.length,
-                        );
-                      },
-                      fallback: (context) =>
-                          const Center(child: CircularProgressIndicator())),
-                ],
-              ),
-            ),
-          );
+          return ConditionalBuilder(
+              condition: AppCubit.get(context).categories.length > 0,
+              builder: (context) {
+                return ListView.separated(
+                  itemBuilder: (context, index) => InkWell(
+                      onTap: (() {
+                        navigateTo(
+                            context,
+                            rentcategory(
+                                AppCubit.get(context).categories[index]));
+                      }),
+                      child: BuildCategoryItems(
+                          AppCubit.get(context).categories[index])),
+                  separatorBuilder: (context, index) => myDivider(),
+                  itemCount: AppCubit.get(context).categories.length,
+                );
+              },
+              fallback: (context) =>
+                  const Center(child: CircularProgressIndicator()));
         });
   }
 

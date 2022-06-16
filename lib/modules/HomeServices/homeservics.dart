@@ -1,4 +1,5 @@
 import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
@@ -176,61 +177,63 @@ class AppServices extends StatelessWidget {
       onTap: () {
         navigateTo(context, webview_page(model!.Url!));
       },
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.end,
-        crossAxisAlignment: CrossAxisAlignment.end,
-        children: [
-          Padding(
-            padding: EdgeInsets.only(right: appPadding / 3),
-            child: Container(
-              padding: EdgeInsets.symmetric(horizontal: appPadding / 2),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(20),
-                color: Colors.white,
-              ),
-              width: double.infinity,
-              height: 130.0,
-              // color: Colors.grey[300],
-              child: Expanded(
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  children: [
-                    Image.network(
-                      '${model!.image}',
-                      width: 100,
-                      height: 160,
-                    ),
-                    const SizedBox(width: 8.0),
-                    Column(
-                      children: [
-                        Text(' ${model.companyName}  '),
-                        const SizedBox(height: 8.0),
-                        Text(' ${model.serviceType} '),
-                        const SizedBox(height: 8.0),
-                        Text(
-                          '  ${model.location}',
-                          style: const TextStyle(fontSize: 10.0),
-                        ),
-                        const SizedBox(height: 10.0),
-                        RatingBarIndicator(
-                          rating: model.rate!,
-                          itemBuilder: (context, index) => const Icon(
-                            Icons.star,
-                            color: Colors.amber,
+      child: Expanded(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.end,
+          crossAxisAlignment: CrossAxisAlignment.end,
+          children: [
+            Padding(
+              padding: EdgeInsets.only(right: appPadding / 3),
+              child: Container(
+                padding: EdgeInsets.symmetric(horizontal: appPadding / 2),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(20),
+                  color: Colors.white,
+                ),
+                width: double.infinity,
+                height: 130.0,
+                // color: Colors.grey[300],
+                child: Expanded(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                      Image.network(
+                        '${model!.image}',
+                        width: 100,
+                        height: 160,
+                      ),
+                      const SizedBox(width: 8.0),
+                      Column(
+                        children: [
+                          Text(' ${model.companyName}  '.tr().toString()),
+                          const SizedBox(height: 8.0),
+                          Text(' ${model.serviceType} '),
+                          const SizedBox(height: 8.0),
+                          Text(
+                            '  ${model.location}',
+                            style: const TextStyle(fontSize: 10.0),
                           ),
-                          itemCount: 5,
-                          itemSize: 20.0,
-                          direction: Axis.horizontal,
-                        ),
-                      ],
-                    )
-                  ],
+                          const SizedBox(height: 10.0),
+                          RatingBarIndicator(
+                            rating: model.rate!,
+                            itemBuilder: (context, index) => const Icon(
+                              Icons.star,
+                              color: Colors.amber,
+                            ),
+                            itemCount: 5,
+                            itemSize: 20.0,
+                            direction: Axis.horizontal,
+                          ),
+                        ],
+                      )
+                    ],
+                  ),
                 ),
               ),
-            ),
-          )
-        ],
+            )
+          ],
+        ),
       ),
     );
   }
