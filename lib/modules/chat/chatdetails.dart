@@ -13,6 +13,8 @@ import 'package:realestateapp/shared/components/components.dart';
 class ChatDetailsScreen extends StatelessWidget {
   var messageController = TextEditingController();
   UserModel? userModel;
+  MessageModel ?messageModel;
+
 
   ChatDetailsScreen({
     this.userModel,
@@ -47,22 +49,6 @@ class ChatDetailsScreen extends StatelessWidget {
                         style: const TextStyle(
                           fontSize: 12,
                         ),
-                      ),
-                      Row(
-                        children: [
-                          MaterialButton(
-                            onPressed: () {
-                              navigateTo(context, videoCall());
-                            },
-                            child: const Icon(Icons.video_call_outlined),
-                          ),
-                          MaterialButton(
-                            onPressed: () {
-                              navigateTo(context, audioCall());
-                            },
-                            child: const Icon(Icons.phone),
-                          ),
-                        ],
                       ),
                     ],
                   ),
@@ -99,7 +85,7 @@ class ChatDetailsScreen extends StatelessWidget {
                       child: Row(
                         children: [
                           Expanded(
-                            child: TextFormField(
+                            child: TextField(
                               controller: messageController,
                               decoration: const InputDecoration(
                                 border: InputBorder.none,
@@ -123,11 +109,8 @@ class ChatDetailsScreen extends StatelessWidget {
                                       text: messageController.text,
                                       dateTime: DateTime.now().toString());
                                   messageController.clear();
-                                  AppCubit.get(context).sendNotification(
-                                      token: userModel!.token!,
-                                      senderName: userModel!.name!,
-                                      messageText: "${userModel!.name}" +
-                                          messageController.text);
+
+                                  AppCubit.get(context).sendNotification(userModel!,messageModel!);
                                 },
                                 color: Colors.white,
                                 iconSize: 18,

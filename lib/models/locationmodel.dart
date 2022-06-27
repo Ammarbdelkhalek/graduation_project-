@@ -1,11 +1,11 @@
 class LocationModel {
-  late String? place;
+  late String? placeID;
   late String? describtion;
 
-  LocationModel({this.place, this.describtion});
+  LocationModel({this.placeID, this.describtion});
 
   LocationModel.fromJson(Map<String, dynamic> json) {
-    place = json['place'];
-    describtion = json['describtion'];
+    placeID = json['place_id'];
+    describtion = json['description'];
   }
 }

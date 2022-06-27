@@ -40,7 +40,7 @@ class LoginScreen extends StatelessWidget {
                     context,
                     LayoutScreen(),
                   ),
-                  AppCubit.get(context).getfaviourite(),
+                  // AppCubit.get(context).getfaviourite(),
                   AppCubit.get(context).getUserAds(),
                   AppCubit.get(context).getUserData(),
                 });
@@ -52,7 +52,8 @@ class LoginScreen extends StatelessWidget {
               alignment: AlignmentDirectional.center,
               children: [
                 const Image(
-                  image: AssetImage('assets/images/image5.jpg'),
+                  image:
+                  AssetImage('assets/images/login.jpg'),
                   height: double.infinity,
                   width: double.infinity,
                   fit: BoxFit.fill,
@@ -61,7 +62,10 @@ class LoginScreen extends StatelessWidget {
                   alignment: AlignmentDirectional.center,
                   width: 310,
                   height: 500,
-                  color: Colors.black54.withOpacity(0.5),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(20),
+                    color: Colors.black54.withOpacity(0.4),
+                  ),
                   //     decoration: BoxDecoration(backgroundBlendMode: BlendMode.darken),
                   child: Padding(
                     padding: const EdgeInsets.all(20.0),
@@ -138,13 +142,11 @@ class LoginScreen extends StatelessWidget {
                                     if (value!.isEmpty) {
                                       return 'Please Enter Your Password';
                                     }
-                                    /*
-                                    String pattern =
-                                        r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#\$&*~]).{8,}$';
-                                    if (!RegExp(pattern).hasMatch(value)) {
-                                      return 'invalid password format';
-                                    }
-                                     */
+                                    // String pattern =
+                                    //     r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#\$&*~]).{8,}$';
+                                    // if (!RegExp(pattern).hasMatch(value)) {
+                                    //   return 'invalid password format';
+                                    // }
                                   },
                                   onSubmit: (value) {
                                     if (formKey.currentState!.validate()) {
@@ -194,7 +196,7 @@ class LoginScreen extends StatelessWidget {
                                 const Text(
                                   'Don\'t have an account ?',
                                   style: TextStyle(
-                                    color: Colors.grey,
+                                    color: Colors.white,
                                     fontSize: 10,
                                   ),
                                 ),
@@ -207,7 +209,7 @@ class LoginScreen extends StatelessWidget {
                                   },
                                   child: const Text(
                                     'Register',
-                                    style: TextStyle(color: Colors.white),
+                                    style: TextStyle(color: Colors.greenAccent),
                                   ),
                                 ),
                               ],
@@ -233,7 +235,7 @@ class LoginScreen extends StatelessWidget {
                                   child: const Text(
                                     'forget password',
                                     style: TextStyle(
-                                      color: Colors.amber,
+                                      color: Colors.greenAccent,
                                     ),
                                   ),
                                 ),

@@ -7,8 +7,8 @@ import 'package:material_floating_search_bar/material_floating_search_bar.dart';
 import 'package:realestateapp/modules/cubit/cubit.dart';
 import 'package:realestateapp/modules/cubit/states.dart';
 
-class MapScreen extends StatelessWidget {
-  MapScreen({Key? key}) : super(key: key);
+class Mapsscreen extends StatelessWidget {
+  Mapsscreen({Key? key}) : super(key: key);
   Completer<GoogleMapController> _controller = Completer();
   FloatingSearchBarController controller = FloatingSearchBarController();
   var location;

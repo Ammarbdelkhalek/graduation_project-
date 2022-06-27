@@ -10,11 +10,15 @@ import 'package:realestateapp/models/user_model.dart';
 import 'package:realestateapp/modules/cubit/cubit.dart';
 import 'package:realestateapp/modules/cubit/states.dart';
 import 'package:realestateapp/modules/login/login_screen.dart';
+import 'package:realestateapp/modules/map/map.dart';
+import 'package:realestateapp/modules/map/mapCubit/mapcubit.dart';
 import 'package:realestateapp/modules/onboarding_screen.dart';
+import 'package:realestateapp/modules/repository/mapRepository.dart';
 import 'package:realestateapp/modules/search/filtering.dart';
 import 'package:realestateapp/shared/components/constant.dart';
 import 'package:realestateapp/shared/network/local/cache_helper.dart';
 import 'package:realestateapp/shared/network/remote/Diohelper.dart';
+import 'package:realestateapp/shared/network/remote/notification_Dio.dart';
 import 'package:realestateapp/shared/styles/themes.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -45,7 +49,8 @@ void main() async {
     print(event.data.toString());
   });
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
-  Diohelper.init();
+  Diohelper.PlacesWebservices();
+  notificationHelper.init();
   await CacheHelper.init();
 
   bool? isDark = CacheHelper.getData(key: 'isDark');
@@ -54,6 +59,7 @@ void main() async {
 
   uid = CacheHelper.getData(key: 'uid');
   bool? onboarding = CacheHelper.getData(key: 'onBoarding');
+
   print(uid);
   // print(uid);
   if (onboarding != null) {
@@ -89,17 +95,24 @@ class MyApp extends StatelessWidget {
   Widget build(
     BuildContext context,
   ) {
-    return BlocProvider(
-      create: (BuildContext context) => AppCubit()
-        ..getUserData()
-        ..getPosts()
-        ..changeAppMode(
-          themeMode: isDark,
-        )
-        ..getCategoryData()
-        ..getBundle()
-        ..getAllUsers(),
-      // ..getUserToken(),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create: (BuildContext context) => AppCubit()
+            ..getUserData()
+            ..getPosts()
+            ..changeAppMode(
+              themeMode: isDark,
+            )
+            ..getCategoryData()
+            ..getBundle()
+            ..getAllUsers()
+            ..getUserToken(),
+        ),
+        BlocProvider(
+            create: (BuildContext context) =>
+                MapCubit(MapsRepository(Diohelper()))),
+      ],
       child: BlocConsumer<AppCubit, AppStates>(
         listener: (context, state) {},
         builder: (context, state) {
@@ -111,10 +124,10 @@ class MyApp extends StatelessWidget {
                 AppCubit.get(context).isDark ? ThemeMode.light : ThemeMode.dark,
             home: AnimatedSplashScreen(
               splash: const Image(
-                image: AssetImage('assets/images/applogo.png'),
+                image: AssetImage('assets/images/12.png'),
               ),
               nextScreen: startWidget!,
-              backgroundColor: Colors.brown,
+              backgroundColor: Colors.greenAccent,
               duration: 2500,
               centered: true,
               splashIconSize: 100,

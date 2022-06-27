@@ -5,6 +5,7 @@ import 'package:realestateapp/models/post_model.dart';
 import 'package:realestateapp/modules/cubit/cubit.dart';
 import 'package:realestateapp/modules/cubit/states.dart';
 import 'package:realestateapp/modules/home/adsdetails.dart';
+import 'package:realestateapp/shared/components/constant.dart';
 
 import '../../shared/components/components.dart';
 
@@ -19,60 +20,76 @@ class Filter_Result extends StatelessWidget {
       listener: (context, state) {},
       builder: (context, state) {
         var postmodel = AppCubit.get(context).postModel;
-        return ConditionalBuilder(
-            condition: AppCubit.get(context).searchADS.length > 0,
-            builder: (context) => Stack(
-                  alignment: AlignmentDirectional.bottomEnd,
-                  children: [
-                    ListView.separated(
-                      physics: const BouncingScrollPhysics(),
-                      shrinkWrap: true,
-                      itemBuilder: (context, index) => InkWell(
-                          onTap: (() {
-                            navigateTo(
-                                context,
-                                Ads_Details(
-                                    model: AppCubit.get(context).posts[index]));
-                          }),
-                          child: BuildPost(
-                              AppCubit.get(context).searchADS[index],
-                              context,
-                              index)),
-                      separatorBuilder: (context, index) => const SizedBox(
-                        height: 10,
+        return Scaffold(
+          appBar: AppBar(
+            title: Text('Your Search Results '),
+            leading: MaterialButton(
+              onPressed: () => Navigator.pop(context),
+              child: const Icon(Icons.arrow_back),
+            ),
+          ),
+          body: Column(
+            children: [
+              ConditionalBuilder(
+                  condition: AppCubit.get(context).filterAds.isNotEmpty,
+                  builder: (context) => Stack(
+                        alignment: AlignmentDirectional.bottomEnd,
+                        children: [
+                          ListView.separated(
+                            physics: const BouncingScrollPhysics(),
+                            shrinkWrap: true,
+                            itemBuilder: (context, index) => InkWell(
+                                onTap: (() {
+                                  navigateTo(
+                                      context,
+                                      Ads_Details(
+                                          model: AppCubit.get(context)
+                                              .posts[index]));
+                                }),
+                                child: BuildPost(
+                                    AppCubit.get(context).filterAds[index],
+                                    context,
+                                    index)),
+                            separatorBuilder: (context, index) =>
+                                const SizedBox(
+                              height: 10,
+                            ),
+                            itemCount: AppCubit.get(context).filterAds.length,
+                          ),
+                        ],
                       ),
-                      itemCount: AppCubit.get(context).searchADS.length,
-                    ),
-                  ],
-                ),
-            fallback: (context) => AppCubit.get(context).searchADS.length == 0
-                ? Align(
-                    alignment: Alignment.center,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: const [
-                        Image(
-                          image: NetworkImage(
-                              'https://correspondentsoftheworld.com/images/elements/clear/undraw_Content_structure_re_ebkv_clear.png'),
-                          height: 300,
-                          width: 380,
-                          fit: BoxFit.cover,
-                        ),
-                        SizedBox(
-                          height: 6.0,
-                        ),
-                        Text(
-                          ' you have no posts  ',
-                          style: TextStyle(
-                              fontSize: 15.0,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.grey),
-                        ),
-                      ],
-                    ),
-                  )
-                : CircularProgressIndicator());
+                  fallback: (context) =>
+                      AppCubit.get(context).filterAds.length == 0
+                          ? Align(
+                              alignment: Alignment.center,
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: const [
+                                  Image(
+                                    image: NetworkImage(
+                                        'https://correspondentsoftheworld.com/images/elements/clear/undraw_Content_structure_re_ebkv_clear.png'),
+                                    height: 300,
+                                    width: 380,
+                                    fit: BoxFit.cover,
+                                  ),
+                                  SizedBox(
+                                    height: 6.0,
+                                  ),
+                                  Text(
+                                    ' No Result Matched ',
+                                    style: TextStyle(
+                                        fontSize: 15.0,
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.grey),
+                                  ),
+                                ],
+                              ),
+                            )
+                          : CircularProgressIndicator()),
+            ],
+          ),
+        );
       },
     );
   }
@@ -81,216 +98,107 @@ class Filter_Result extends StatelessWidget {
     PostModel model,
     context,
     index,
-  ) =>
-      Card(
+  ) {
+    Size size = MediaQuery.of(context).size;
+    return Expanded(
+      child: Card(
         clipBehavior: Clip.antiAliasWithSaveLayer,
         elevation: 5.0,
-        margin: const EdgeInsets.symmetric(
-          horizontal: 8.0,
-        ),
         child: Padding(
-          padding: const EdgeInsets.all(10.0),
-          child: Column(
-            children: [
-              Row(
-                children: [
-                  CircleAvatar(
-                    backgroundImage: NetworkImage(
-                      '${model.image}',
-                    ),
-                  ),
-                  const SizedBox(
-                    width: 10,
-                  ),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Row(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                '${model.name}',
-                              ),
-                              const Icon(
-                                Icons.check_circle,
-                                size: 14,
-                                color: Colors.blue,
-                              ),
-                            ]),
-                        Text(
-                          '${model.date}',
-                          style: const TextStyle(
-                            fontSize: 10,
-                            color: Colors.grey,
+          padding: const EdgeInsets.symmetric(
+              horizontal: appPadding, vertical: appPadding / 2),
+          child: Container(
+            height: 300,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Stack(
+                  children: [
+                    ClipRRect(
+                      borderRadius: BorderRadius.circular(20),
+                      child: Container(
+                        width: 400.0,
+                        height: 200.0,
+                        child: PageView.builder(
+                          controller: AdsImages,
+                          scrollDirection: Axis.horizontal,
+                          itemBuilder: (context, index) => Image(
+                            image: NetworkImage('${model.postImage![index]}'),
+                            width: 400.0,
+                            height: 100.0,
                           ),
+                          itemCount: model.postImage!.length,
                         ),
-                        const SizedBox(
-                          height: 5,
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-              Container(
-                width: double.infinity,
-                height: 1.0,
-                color: Colors.grey[300],
-              ),
-              const SizedBox(
-                height: 5,
-              ),
-              const Padding(
-                padding: EdgeInsets.symmetric(vertical: 8),
-                child: SizedBox(
-                  width: double.infinity,
-                ),
-              ),
-              Stack(
-                children: [
-                  Container(
-                    width: 300.0,
-                    height: 200.0,
-                    child: PageView.builder(
-                      controller: AdsImages,
-                      scrollDirection: Axis.horizontal,
-                      itemBuilder: (context, index) => Image(
-                        image: NetworkImage('${model.postImage![index]}'),
-                        width: 200.0,
-                        height: 120.0,
                       ),
-                      itemCount: model.postImage!.length,
                     ),
-                  ),
-
-                  /* Image(
-                    image: NetworkImage('${model.postImage}'),
-                  ),
-                  */
-                  /*
-                  Align(
-                    alignment: Alignment.topLeft,
-                    child: Container(
-                      color: Colors.blue,
-                      width: 60.0,
-                      height: 25.0,
-                      child: Text('${model.category}'),
-                    ),
-                  ),
-                  */
-                  Align(
-                    alignment: Alignment.bottomLeft,
-                    child: Row(
-                      children: [
-                        Text(
-                          '${model.no_of_room}',
-                          style: const TextStyle(
-                            color: Colors.white,
-                          ),
-                        ),
-                        const Icon(
-                          Icons.king_bed_outlined,
-                          color: Colors.white,
-                        ),
-                        const SizedBox(
-                          width: 30,
-                        ),
-                        Text(
-                          '${model.no_of_bathroom}',
-                          style: const TextStyle(
-                            color: Colors.white,
-                          ),
-                        ),
-                        const Icon(
-                          Icons.bathtub_outlined,
-                          color: Colors.white,
-                        ),
-                        const SizedBox(
-                          width: 30,
-                        ),
-                        Text(
-                          '${model.area}',
-                          style: const TextStyle(
-                            color: Colors.white,
-                          ),
-                        ),
-                        const Text(
-                          'm',
-                          style: TextStyle(
-                            color: Colors.white,
-                          ),
-                        )
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-              Row(children: [
-                Expanded(
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 5),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Row(
-                          children: [
-                            const Icon(Icons.house_outlined),
-                            Text('${model.namePost}'),
-                          ],
-                        ),
-                        Row(
-                          children: [
-                            const Icon(Icons.description),
-                            Text(
-                              '${model.description}',
-                              maxLines: 5,
-                              overflow: TextOverflow.ellipsis,
-                            ),
-                          ],
-                        ),
-                        Row(
-                          children: [
-                            const Icon(Icons.place),
-                            Text('${model.place}'),
-                          ],
-                        ),
-                        Row(
-                          children: [
-                            const Icon(Icons.price_change_rounded),
-                            Text('${model.price}'),
-                            const SizedBox(
-                              width: 12.0,
-                            ),
-                            const Icon(Icons.category),
-                            Text('${model.category}'),
-                            const Spacer(),
-                            IconButton(
-                                onPressed: () {
-                                  AppCubit.get(context).addtofav(
-                                    AppCubit.get(context).posts[index],
-                                    AppCubit.get(context).postsId[index],
-                                  );
-                                },
-                                icon: const Icon(Icons.favorite,
-                                    color: Colors.grey)),
-                            IconButton(
-                                onPressed: () {
-                                  AppCubit.get(context).deletPost(
-                                      AppCubit.get(context).postsId[index]);
-                                },
-                                icon: const Icon(
-                                  Icons.delete,
-                                )),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ),
+                  ],
                 ),
-              ]),
-            ],
+                Row(
+                  children: [
+                    Text(
+                      '${model.place}',
+                      style: const TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    const SizedBox(
+                      width: 10,
+                    ),
+                    Expanded(
+                      child: Text(
+                        '${model.place}',
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle(
+                            fontSize: 15, color: black.withOpacity(0.4)),
+                      ),
+                    ),
+                  ],
+                ),
+                Row(
+                  children: [
+                    Text(
+                      '${model.no_of_room} Bedrooms / ',
+                      style: const TextStyle(
+                        fontSize: 15,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                    Text(
+                      '${model.no_of_bathroom} Bathrooms / ',
+                      style: const TextStyle(
+                        fontSize: 15,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                    Text(
+                      '${model.area} sqft',
+                      style: const TextStyle(
+                        fontSize: 15,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  ],
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Icon(Icons.price_check_rounded),
+                    Text(
+                      '${model.price} Eg',
+                      style: const TextStyle(
+                        fontSize: 15,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  ],
+                )
+              ],
+            ),
           ),
         ),
-      );
+      ),
+    );
+  }
 }

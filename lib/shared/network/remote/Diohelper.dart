@@ -1,39 +1,60 @@
 import 'package:dio/dio.dart';
+import 'package:realestateapp/models/locationmodel.dart';
 import 'package:realestateapp/shared/components/constant.dart';
 
 class Diohelper {
-  static late Dio dio = Dio();
-  static init() {
-    dio = Dio(BaseOptions(
-      baseUrl: 'https://fcm.googleapis.com/fcm/send',
-      //https://newsapi.org/
+  static Dio dio = Dio();
+
+  static PlacesWebservices() {
+    BaseOptions options = BaseOptions(
+      baseUrl: 'https://maps.googleapis.com/maps/api/place/autocomplete/json',
+      connectTimeout: 20 * 1000,
+      receiveTimeout: 20 * 1000,
       receiveDataWhenStatusError: true,
-    ));
+    );
   }
 
-  static Future<Response> postnotificationData({
-    required Map<String, dynamic> data,
-  }) async {
-    dio.options.headers = {
-      'Content-Type': 'application/json',
-      'Authorization':
-          'key=AAAAIQasDlw:APA91bGztG0B0_SjHChpqs7MW20S9vdOx_wiiKgraU74OuLMCfr0cWzz4xdU-_6qoMjcS0r1anxYsFT8wcOQfPQB8lRcXuu_Y6q4xvgBlFayjRsaESud4TuBAF2zylqLqwOmIXXoVxua',
-    };
-    return await dio.post('https://fcm.googleapis.com/fcm/send', data: data);
-  }
-  /*
-  static Future<List<dynamic>> placeAutocomplete({
+  static Future<List<dynamic>> fetchSuggestionplace({
     String? place,
     String? sessiontoken,
   }) async {
-    Response response = await dio.get(baseUrl, queryParameters: {
-      'input ': place,
-      'type ': 'address',
-      'components ': 'country:eg',
-      'key': mapkey,
-      'sessiontoken': sessiontoken,
-    });
-    return response.data['predictions'];
+    try {
+      Response response = await dio.get(
+        'https://maps.googleapis.com/maps/api/place/autocomplete/json',
+        queryParameters: {
+          'input': place,
+          'types': 'address',
+          'components': 'country:eg',
+          'key': 'AIzaSyB8ouG6DHqKcBayUzndcNoI4AsRHm4xWS0',
+          'sessiontoken': sessiontoken
+        },
+      );
+      print(response.data['predictions']);
+      print(response.statusCode);
+      return response.data['predictions'];
+    } catch (error) {
+      print(error.toString());
+      return [];
+    }
   }
-  */
+
+  Future<dynamic> getPlaceLocation(String placeId, String sessionToken) async {
+    try {
+      Response response = await dio.get(
+        'https://maps.googleapis.com/maps/api/place/autocomplete/json',
+        queryParameters: {
+          'place_id': placeId,
+          'fields': 'geometry',
+          'key': 'AIzaSyB8ouG6DHqKcBayUzndcNoI4AsRHm4xWS0',
+          'sessiontoken': sessionToken
+        },
+      );
+     print(response.data);
+      return response.data;
+
+    } catch (error) {
+      return Future.error("Place location error : ",
+          StackTrace.fromString(('this is its trace')));
+    }
+  }
 }

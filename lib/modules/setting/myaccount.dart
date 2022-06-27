@@ -2,6 +2,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hexcolor/hexcolor.dart';
 import 'package:realestateapp/models/user_model.dart';
 import 'package:realestateapp/modules/cubit/cubit.dart';
 import 'package:realestateapp/modules/cubit/states.dart';
@@ -35,7 +36,7 @@ class _useraccountState extends State<useraccount> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Container(
-                  color: Colors.white,
+                  color: AppCubit.get(context).isDark? Colors.white : HexColor('#333739'),
                   width: double.infinity,
                   padding:
                       const EdgeInsets.symmetric(horizontal: 15, vertical: 20),
@@ -59,10 +60,16 @@ class _useraccountState extends State<useraccount> {
                   ),
                 ),
                 Container(
+                  width: double.infinity,
+                  color: AppCubit.get(context).isDark? Colors.grey[300] : Colors.grey[500],
                   padding: const EdgeInsets.all(15),
                   child: Text(
                     'MY ACCOUNT'.tr().toString(),
-                    style: TextStyle(color: Colors.grey, fontSize: 15),
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                        color:AppCubit.get(context).isDark? Colors.grey : Colors.white,
+                        fontSize: 15,
+                    ),
                   ),
                 ),
                 InkWell(
@@ -71,13 +78,13 @@ class _useraccountState extends State<useraccount> {
                         context, User_Profile(AppCubit.get(context).posts[0]));
                   },
                   child: Container(
-                    color: Colors.white,
+                    color: AppCubit.get(context).isDark? Colors.white : HexColor('#333739'),
                     padding: const EdgeInsets.all(15),
                     child: Row(
                       children: [
                         const Icon(
                           Icons.adf_scanner,
-                          color: Colors.green,
+                          color: Colors.greenAccent,
                         ),
                         Text(
                           'your ads '.tr().toString(),
@@ -90,22 +97,26 @@ class _useraccountState extends State<useraccount> {
                     ),
                   ),
                 ),
-                myDivider(),
+                Container(
+                  width: double.infinity,
+                  height: 18,
+                  color: AppCubit.get(context).isDark? Colors.grey[300] : Colors.grey[500],
+                ),
                 InkWell(
                   onTap: () {
                     navigateTo(context, Oubundle());
                   },
                   child: Container(
-                    color: Colors.white,
+                    color: AppCubit.get(context).isDark? Colors.white : HexColor('#333739'),
                     padding: const EdgeInsets.all(15),
                     child: Row(
                       children: [
                         const Icon(
                           Icons.location_on_outlined,
-                          color: Colors.blue,
+                          color: Colors.greenAccent,
                         ),
                         Text(
-                          'bundles'.tr().toString(),
+                          'Bundles'.tr().toString(),
                           style: const TextStyle(
                               fontWeight: FontWeight.bold, fontSize: 18),
                         ),
@@ -115,19 +126,23 @@ class _useraccountState extends State<useraccount> {
                     ),
                   ),
                 ),
-                myDivider(),
+                Container(
+                  width: double.infinity,
+                  height: 18,
+                  color: AppCubit.get(context).isDark? Colors.grey[300] : Colors.grey[500],
+                ),
                 InkWell(
                   onTap: () {
                     navigateTo(context, profilesetting());
                   },
                   child: Container(
-                    color: Colors.white,
+                    color: AppCubit.get(context).isDark? Colors.white : HexColor('#333739'),
                     padding: const EdgeInsets.all(15),
                     child: Row(
                       children: [
                         const Icon(
                           Icons.person_outline,
-                          color: Colors.green,
+                          color: Colors.greenAccent,
                         ),
                         Text(
                           'Profile'.tr().toString(),
@@ -140,17 +155,22 @@ class _useraccountState extends State<useraccount> {
                     ),
                   ),
                 ),
-                myDivider(),
                 Container(
+                    width: double.infinity,
+                    color: AppCubit.get(context).isDark? Colors.grey[300] : Colors.grey[500],
                     padding: const EdgeInsets.all(15),
                     child: Text(
                       'SETTINGS'.tr().toString(),
-                      style: const TextStyle(color: Colors.grey, fontSize: 15),
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                         color:AppCubit.get(context).isDark? Colors.grey : Colors.white,
+                          fontSize: 15,
+                      ),
                     )),
                 InkWell(
                   onTap: () {},
                   child: Container(
-                    color: Colors.white,
+                    color: AppCubit.get(context).isDark? Colors.white : HexColor('#333739'),
                     padding: const EdgeInsets.all(15),
                     child: Row(
                       children: [
@@ -179,11 +199,15 @@ class _useraccountState extends State<useraccount> {
                     ),
                   ),
                 ),
-                myDivider(),
+                Container(
+                  width: double.infinity,
+                  height: 18,
+                  color: AppCubit.get(context).isDark? Colors.grey[300] : Colors.grey[500],
+                ),
                 InkWell(
                   onTap: () {},
                   child: Container(
-                    color: Colors.white,
+                    color: AppCubit.get(context).isDark? Colors.white : HexColor('#333739'),
                     padding: const EdgeInsets.all(15),
                     child: Row(
                       children: [
@@ -203,12 +227,16 @@ class _useraccountState extends State<useraccount> {
                     ),
                   ),
                 ),
-                myDivider(),
+                Container(
+                  width: double.infinity,
+                  height: 18,
+                  color: AppCubit.get(context).isDark? Colors.grey[300] : Colors.grey[500],
+                ),
                 InkWell(
                   onTap: () {},
                   child: Container(
                     padding: const EdgeInsets.all(15),
-                    color: Colors.white,
+                    color: AppCubit.get(context).isDark? Colors.white : HexColor('#333739'),
                     child: InkWell(
                       onTap: () {
                         showModalBottomSheet(
@@ -263,15 +291,21 @@ class _useraccountState extends State<useraccount> {
                   ),
                 ),
                 Container(
+                    width: double.infinity,
+                    color: AppCubit.get(context).isDark? Colors.grey[300] : Colors.grey[500],
                     padding: const EdgeInsets.all(15),
                     child: Text(
-                      'REACH OUT TO US'.tr().toString(),
-                      style: const TextStyle(color: Colors.grey, fontSize: 15),
+                      'REACH US'.tr().toString(),
+                      style: TextStyle(
+                          color: AppCubit.get(context).isDark? Colors.grey : Colors.white,
+                          fontSize: 15,
+                        fontWeight: FontWeight.bold,
+                      ),
                     )),
                 InkWell(
                   onTap: () {},
                   child: Container(
-                    color: Colors.white,
+                    color: AppCubit.get(context).isDark? Colors.white : HexColor('#333739'),
                     padding: const EdgeInsets.all(15),
                     child: Row(
                       children: [
@@ -290,12 +324,16 @@ class _useraccountState extends State<useraccount> {
                     ),
                   ),
                 ),
-                myDivider(),
+                Container(
+                  width: double.infinity,
+                  height: 18,
+                  color: AppCubit.get(context).isDark? Colors.grey[300] : Colors.grey[500],
+                ),
                 InkWell(
                   onTap: () {},
                   child: Container(
                     padding: EdgeInsets.all(15),
-                    color: Colors.white,
+                    color: AppCubit.get(context).isDark? Colors.white : HexColor('#333739'),
                     child: Row(
                       children: [
                         const Icon(
@@ -313,11 +351,13 @@ class _useraccountState extends State<useraccount> {
                     ),
                   ),
                 ),
-                const SizedBox(
-                  height: 15,
+                Container(
+                  width: double.infinity,
+                  height: 18,
+                  color: AppCubit.get(context).isDark? Colors.grey[300] : Colors.grey[500],
                 ),
                 Container(
-                  color: Colors.white,
+                  color: AppCubit.get(context).isDark? Colors.white : HexColor('#333739'),
                   width: double.infinity,
                   padding: const EdgeInsets.all(10),
                   height: 60,

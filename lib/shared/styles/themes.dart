@@ -1,35 +1,46 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:hexcolor/hexcolor.dart';
-import 'package:realestateapp/shared/styles/colors.dart';
 
+import 'colors.dart';
 ThemeData darkTheme = ThemeData(
-  primarySwatch: defaultColor,
-  scaffoldBackgroundColor: HexColor('333739'),
+  colorScheme: const ColorScheme.dark(),
+  textSelectionTheme: const TextSelectionThemeData(
+    cursorColor: defaultColor,
+    selectionColor:  defaultColor,
+    selectionHandleColor:  defaultColor,
+  ),
+  primaryColor: defaultColor,
+  //primarySwatch: defaultColor,
+  scaffoldBackgroundColor: HexColor('#333739'),
   appBarTheme: AppBarTheme(
+
+    foregroundColor: Colors.white,
     titleSpacing: 20.0,
     backwardsCompatibility: false,
     systemOverlayStyle: SystemUiOverlayStyle(
-      statusBarColor: HexColor('333739'),
+      statusBarColor: HexColor('#333739'),
       statusBarIconBrightness: Brightness.light,
     ),
-    backgroundColor: HexColor('333739'),
-    elevation: 0.0,
+    elevation:20.0,
+    color: HexColor('#333739'),
     titleTextStyle: const TextStyle(
-      color: Colors.white,
+      decorationColor: Colors.white,
       fontSize: 20.0,
       fontWeight: FontWeight.bold,
     ),
-    iconTheme: const IconThemeData(
-      color: Colors.white,
-    ),
   ),
+  progressIndicatorTheme: const ProgressIndicatorThemeData(color: Colors.greenAccent),
+    tabBarTheme: TabBarTheme(
+        unselectedLabelColor: Colors.greenAccent,
+      labelColor: Colors.white,
+    ),
   bottomNavigationBarTheme: BottomNavigationBarThemeData(
     type: BottomNavigationBarType.fixed,
     selectedItemColor: defaultColor,
-    unselectedItemColor: Colors.grey,
-    elevation: 20.0,
-    backgroundColor: HexColor('333739'),
+    unselectedItemColor: Colors.white,
+    elevation: 10.0,
+    backgroundColor: HexColor('#333739'),
   ),
   textTheme: const TextTheme(
     bodyText1: TextStyle(
@@ -39,11 +50,25 @@ ThemeData darkTheme = ThemeData(
     ),
   ),
   fontFamily: 'Jannah',
+  floatingActionButtonTheme: const FloatingActionButtonThemeData(
+    backgroundColor: defaultColor,
+    foregroundColor: Colors.white,
+  ),
+  cardColor: HexColor('#333739'),
+  inputDecorationTheme: const InputDecorationTheme(
+    labelStyle: TextStyle(color: Colors.white),
+    iconColor: Colors.white,
+  ),
 );
 
 ThemeData lightTheme = ThemeData(
-  primarySwatch: defaultColor,
-  scaffoldBackgroundColor: Colors.white,
+  textSelectionTheme: const TextSelectionThemeData(
+    cursorColor: defaultColor,
+    selectionColor: defaultColor,
+    selectionHandleColor: defaultColor,
+  ),
+  // primarySwatch: defaultColor,
+  primaryColor: defaultColor,
   appBarTheme: const AppBarTheme(
     titleSpacing: 20.0,
     backwardsCompatibility: false,
@@ -62,6 +87,7 @@ ThemeData lightTheme = ThemeData(
       color: Colors.black,
     ),
   ),
+  progressIndicatorTheme: const ProgressIndicatorThemeData(color: Colors.greenAccent),
   bottomNavigationBarTheme: const BottomNavigationBarThemeData(
     type: BottomNavigationBarType.fixed,
     selectedItemColor: defaultColor,
@@ -77,4 +103,7 @@ ThemeData lightTheme = ThemeData(
     ),
   ),
   fontFamily: 'Jannah',
+  floatingActionButtonTheme: const FloatingActionButtonThemeData(
+    backgroundColor: defaultColor,
+  ),
 );

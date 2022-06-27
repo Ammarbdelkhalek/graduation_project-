@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:realestateapp/shared/styles/colors.dart';
 
 void navigateTo(context, Widget) => Navigator.push(
       context,
@@ -48,22 +49,25 @@ Widget defaultFormField({
         ),
         suffixIcon: suffix != null
             ? IconButton(
-                onPressed: suffixpressed,
-                icon: Icon(
-                  suffix,
-                  color: color,
-                ))
+            onPressed: suffixpressed,
+            icon: Icon(
+              suffix,
+              color: color,
+            ))
             : null,
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(30),
-        ),
+
+        border: OutlineInputBorder(borderSide: const BorderSide(width: 3, color: defaultColor),borderRadius: BorderRadius.circular(30),),
+        enabledBorder: OutlineInputBorder(borderSide: const BorderSide(width: 3, color: defaultColor),borderRadius: BorderRadius.circular(30),),
+        focusedBorder: OutlineInputBorder(borderSide: const BorderSide(width: 3, color: defaultColor),borderRadius: BorderRadius.circular(30),),
+        errorBorder: OutlineInputBorder(borderSide: const BorderSide(width: 3 , color: Colors.red,), borderRadius: BorderRadius.circular(30),),
       ),
       style: style,
-    );
 
+    );
 Widget defaultButton({
   double width = double.infinity,
-  Color background = Colors.blue,
+  final Border? buttonStyle,
+  Color background = Colors.greenAccent,
   required VoidCallback function,
   required String text,
   bool? isUpperCase,
@@ -85,10 +89,14 @@ Widget defaultButton({
 Widget defaultTextButton({
   required VoidCallback function,
   required String text,
+  ButtonStyle? buttonStyle,
 }) =>
     TextButton(
       onPressed: function,
-      child: Text(text.toUpperCase()),
+      child: Text(
+        text.toUpperCase(),
+        style: const TextStyle(color: Colors.greenAccent),
+      ),
     );
 
 void showToast({
@@ -150,6 +158,34 @@ List<Widget> carouselSliderImages = [
   ),
 ];
 
+
+class TextWidget extends StatelessWidget {
+  TextWidget({
+    Key? key,
+    required this.text,
+    required this.color,
+    required this.textSize,
+    this.isTitle = false,
+    this.maxLines = 10,
+  }) : super(key: key);
+  final String text;
+  final Color color;
+  final double textSize;
+  bool isTitle;
+  int maxLines = 10;
+  @override
+  Widget build(BuildContext context) {
+    return Text(
+      text,
+      maxLines: maxLines,
+      style: TextStyle(
+          overflow: TextOverflow.ellipsis,
+          color: color,
+          fontSize: textSize,
+          fontWeight: isTitle ? FontWeight.bold : FontWeight.normal),
+    );
+  }
+}
 
 /*
   List<XFile> postimages = [];

@@ -46,7 +46,7 @@ class FavouriteScreen extends StatelessWidget {
                           height: 6.0,
                         ),
                         Text(
-                          ' you have no faviourite  ',
+                          ' You Have No favorites  ',
                           style: TextStyle(
                               fontSize: 15.0,
                               fontWeight: FontWeight.bold,
@@ -93,37 +93,37 @@ class FavouriteScreen extends StatelessWidget {
                         ),
                       ),
                     ),
-                    Positioned(
-                      right: appPadding / 2,
-                      top: appPadding / 2,
-                      child: Container(
-                        decoration: BoxDecoration(
-                            color: white,
-                            borderRadius: BorderRadius.circular(15)),
-                        child: IconButton(
-                          icon: AppCubit.get(context).favorites.length == 0
-                              ? const Icon(
-                                  Icons.favorite_rounded,
-                                )
-                              : const Icon(
-                                  Icons.favorite_rounded,
-                                  color: Colors.red,
-                                ),
-                          onPressed: () {
-                            AppCubit.get(context).addtofav(
-                              AppCubit.get(context).posts[index],
-                            );
-                            AppCubit.get(context).favorites.length == 0
-                                ? AppCubit.get(context).addtofav(
-                                    AppCubit.get(context).posts[index],
-                                  )
-                                : showToast(
-                                    text: 'aleardy added',
-                                    state: ToastStates.WARNING);
-                          },
-                        ),
-                      ),
-                    )
+                    // Positioned(
+                    //   right: appPadding / 2,
+                    //   top: appPadding / 2,
+                    //   child: Container(
+                    //         )
+                    //           : const Icon(
+                    //               Icons.favorite_rounded,
+                    //               color: Colors.red,
+                    //             ),
+                    //       onPre decoration: BoxDecoration(
+                    //         color: white,
+                    //         borderRadius: BorderRadius.circular(15)),
+                    //     child: IconButton(
+                    //       icon: AppCubit.get(context).favorites.length == 0
+                    //           ? const Icon(
+                    //         Icons.favorite_rounded,
+                    //         ssed: () {
+                    //         AppCubit.get(context).addtofav(
+                    //           AppCubit.get(context).posts[index],
+                    //         );
+                    //         AppCubit.get(context).favorites.length == 0
+                    //             ? AppCubit.get(context).addtofav(
+                    //                 AppCubit.get(context).posts[index],
+                    //               )
+                    //             : showToast(
+                    //                 text: 'aleardy added',
+                    //                 state: ToastStates.WARNING);
+                    //       },
+                    //     ),
+                    //   ),
+                    // )
                   ],
                 ),
                 Row(
@@ -187,10 +187,11 @@ class FavouriteScreen extends StatelessWidget {
                     ),
                     MaterialButton(
                       onPressed: () {
-                        AppCubit.get(context).deletefavorite();
+                        AppCubit.get(context)
+                            .deletefavorite(AppCubit.get(context).favID[index]);
                       },
                       child: Text('delete',
-                          style: TextStyle(color: Colors.grey[300])),
+                          style: TextStyle(color: Colors.grey[200])),
                     )
                   ],
                 )

@@ -14,29 +14,58 @@ import 'package:realestateapp/shared/components/constant.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-class Ads_Details extends StatelessWidget {
+class Ads_Details extends StatefulWidget {
   PostModel? model;
+
   Ads_Details({
     Key? key,
     required this.model,
   }) : super(key: key);
-  var ADSController = PageController();
 
   @override
-  Widget build(BuildContext context) {
+  State<Ads_Details> createState() => _Ads_DetailsState();
+}
+
+class _Ads_DetailsState extends State<Ads_Details> {
+  UserModel? usermodel;
+
+  var ADSController = PageController();
+
+  void chatwithOwner(context) {
+    if (AppCubit.get(context).users == usermodel!.uid) {
+      for (var i = 0; i > AppCubit.get(context).users.length; i++) {
+        print(AppCubit.get(context).users[i]);
+        navigateTo(context,
+            ChatDetailsScreen(userModel: AppCubit.get(context).users[i]));
+
+        print('=================================');
+        print('successs');
+      }
+    }
+  }
+
+  @override
+  Widget build(
+    BuildContext context,
+  ) {
     return BlocConsumer<AppCubit, AppStates>(
-      listener: (context, state) {},
+      listener: (context, state) {
+        if (state is AppAddToFavoritesSuccessState) {
+          showToast(
+              text: 'favorite added successfully '.tr().toString(),
+              state: ToastStates.SUCCESS);
+        }
+      },
       builder: (context, state) {
         var usermodel = AppCubit.get(context).userModel;
         var postmodel = AppCubit.get(context).postModel;
 
         return Scaffold(
           appBar: AppBar(
-            title: Text('ads details'),
+            title: Text('Ads Details'.tr().toString()),
             leading: IconButton(
               icon: const Icon(
                 Icons.arrow_back,
-                color: Colors.black,
               ),
               onPressed: () {
                 Navigator.pop(context);
@@ -47,26 +76,23 @@ class Ads_Details extends StatelessWidget {
             child: Stack(children: [
               Column(
                 children: [
-                  builditems(model!, usermodel!, context),
+                  builditems(widget.model!, usermodel!, context),
                   Align(
                     alignment: Alignment.bottomCenter,
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         MaterialButton(
-                            onPressed: ({currentindex}) {
-                              var index = 0;
-                              navigateTo(
-                                  context,
-                                  ChatDetailsScreen(
-                                    userModel:
-                                        AppCubit.get(context).users[index],
-                                  ));
+                            onPressed: () {
+                              // navigateTo(context,
+                              //     ChatDetailsScreen(userModel: usermodel));
+                              //  },
+                              chatwithOwner(context);
                             },
                             child: Row(
-                              children: const [
+                              children:  [
                                 Icon(Icons.chat),
-                                Text('chat now '),
+                                Text(' Chat now '.tr().toString()) ,
                               ],
                             )),
                         const SizedBox(
@@ -78,9 +104,9 @@ class Ads_Details extends StatelessWidget {
                                 AppCubit.get(context).userModel!.phone!);
                           },
                           child: Row(
-                            children: const [
+                            children:  [
                               Icon(Icons.whatsapp),
-                              Text('whats app')
+                              Text(' whatsapp'.tr().toString()),
                             ],
                           ),
                         ),
@@ -132,6 +158,34 @@ class Ads_Details extends StatelessWidget {
                   itemCount: model.postImage!.length,
                 ),
               ),
+              Positioned(
+                right: appPadding / 2,
+                top: appPadding / 2,
+                child: Container(
+                    decoration: BoxDecoration(
+                        color: white, borderRadius: BorderRadius.circular(15)),
+                    child: IconButton(
+                      icon: AppCubit.get(context).favorites.length == 0
+                          ? const Icon(
+                              Icons.favorite_rounded,
+                            )
+                     :  const Icon(
+                        Icons.favorite_rounded,
+                        color: Colors.red,
+                      ),
+                      onPressed: () {
+                        var index =0;
+                        AppCubit.get(context).favorites.length == 0
+                            ? AppCubit.get(context).addtofav(
+                                AppCubit.get(context).posts[index],
+                                AppCubit.get(context).postsId[index],
+                              )  //the errro cause of null index  should br solved
+                            : showToast(
+                                text: 'Aleardy Added'.tr().toString(),
+                                state: ToastStates.WARNING);
+                      },
+                    )),
+              ),
               SmoothPageIndicator(
                 controller: ADSController,
                 count: model.postImage!.length,
@@ -141,88 +195,88 @@ class Ads_Details extends StatelessWidget {
                   expansionFactor: 4,
                   dotWidth: 10,
                   spacing: 5.0,
-                  activeDotColor: Colors.lightBlue,
+                  activeDotColor: Colors.greenAccent,
                 ),
               ),
             ],
           ),
+          const SizedBox(
+            height: 8.0,
+          ),
+          Column(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              TextButton(
+                  onPressed: () {},
+                  child: const Text(
+                    'Report',
+                    style: TextStyle(
+                        fontSize: 15.0,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.redAccent),
+                  ))
+            ],
+          ),
+          Row(children: [
+            Text(
+              ' Type '.tr().toString(),
+            ),
+            const Spacer(),
+            Text(
+              '${model.type}',
+            ),
+          ]),
+          myDivider(),
           Row(children: [
             const Icon(
               Icons.king_bed_outlined,
-              color: Colors.black,
             ),
             Text(
-              ' number of room'.tr().toString(),
-              style: TextStyle(
-                color: Colors.black,
-              ),
+              ' Number of room'.tr().toString(),
             ),
             const Spacer(),
             Text(
               '${model.no_of_room}',
-              style: const TextStyle(
-                color: Colors.black,
-              ),
             ),
           ]),
           myDivider(),
           Row(children: [
             const Icon(
               Icons.bathtub_outlined,
-              color: Colors.black,
             ),
             Text(
-              ' number of bathroom'.tr().toString(),
-              style: TextStyle(
-                color: Colors.black,
-              ),
+              ' Number of bathroom'.tr().toString(),
             ),
             const Spacer(),
             Text(
               '${model.no_of_bathroom}',
-              style: const TextStyle(
-                color: Colors.black,
-              ),
             ),
           ]),
           myDivider(),
           Row(children: [
             const Icon(
               Icons.king_bed_outlined,
-              color: Colors.black,
             ),
             Text(
-              ' area'.tr().toString(),
-              style: TextStyle(
-                color: Colors.black,
-              ),
+              ' Area'.tr().toString(),
             ),
             const Spacer(),
             Text(
               '${model.area}',
-              style: const TextStyle(
-                color: Colors.black,
-              ),
             ),
           ]),
           myDivider(),
           Row(children: [
             const Icon(
               Icons.house_outlined,
-              color: Colors.black,
             ),
             const Text(
-              ' name',
-              style: TextStyle(
-                color: Colors.black,
-              ),
+              ' Name',
+
             ),
-            Spacer(),
+            const Spacer(),
             Text(
               '${model.namePost}',
-              style: const TextStyle(
-                color: Colors.black,
-              ),
             ),
           ]),
           myDivider(),
@@ -231,11 +285,8 @@ class Ads_Details extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  ' description'.tr().toString(),
+                  ' Description'.tr().toString(),
                   maxLines: 6,
-                  style: TextStyle(
-                    color: Colors.black,
-                  ),
                 ),
                 const SizedBox(
                   height: 6.0,
@@ -246,9 +297,6 @@ class Ads_Details extends StatelessWidget {
                   child: Text(
                     '${model.description}',
                     maxLines: 15,
-                    style: const TextStyle(
-                      color: Colors.black,
-                    ),
                   ),
                 ),
               ]),
@@ -256,60 +304,39 @@ class Ads_Details extends StatelessWidget {
           Row(children: [
             const Icon(
               Icons.gps_fixed_rounded,
-              color: Colors.black,
             ),
             Text(
               ' location'.tr().toString(),
-              style: TextStyle(
-                color: Colors.black,
-              ),
             ),
             Spacer(),
             Text(
               '${model.place}',
-              style: const TextStyle(
-                color: Colors.black,
-              ),
             ),
           ]),
           myDivider(),
           Row(children: [
             const Icon(
               Icons.price_change_rounded,
-              color: Colors.black,
             ),
             Text(
-              'the price'.tr().toString(),
-              style: TextStyle(
-                color: Colors.black,
-              ),
+              ' Price'.tr().toString(),
             ),
             const Spacer(),
             Text(
               '${model.price}',
-              style: const TextStyle(
-                color: Colors.black,
-              ),
             ),
           ]),
           myDivider(),
           Row(children: [
             const Icon(
               Icons.category_outlined,
-              color: Colors.black,
             ),
             Text(
-              ' category type '.tr().toString(),
-              style: TextStyle(
-                color: Colors.black,
-              ),
+              ' Category Type '.tr().toString(),
             ),
-            Spacer(),
+            const Spacer(),
             Text(
               '${model.category}',
-              style: const TextStyle(
-                color: Colors.black,
-              ),
             ),
           ]),
         ]));

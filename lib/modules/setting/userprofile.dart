@@ -28,7 +28,7 @@ class User_Profile extends StatelessWidget {
 
           return Scaffold(
               appBar: AppBar(
-                title: Text('your ads'),
+                title: Text('Your Ads'),
               ),
               body: ConditionalBuilder(
                 condition: AppCubit.get(context).userposts.length > 0 &&
@@ -74,7 +74,7 @@ class User_Profile extends StatelessWidget {
                                   height: 6.0,
                                 ),
                                 Text(
-                                  ' discover new ',
+                                  'Discover New ',
                                   style: TextStyle(
                                       fontSize: 15.0,
                                       fontWeight: FontWeight.bold,
@@ -133,81 +133,62 @@ class User_Profile extends StatelessWidget {
                             color: white,
                             borderRadius: BorderRadius.circular(15)),
                         child: IconButton(
-                          icon: AppCubit.get(context).favorites.length == 0
-                              ? const Icon(
-                                  Icons.favorite_rounded,
-                                )
-                              : const Icon(
-                                  Icons.favorite_rounded,
-                                  color: Colors.red,
-                                ),
+                          icon: const Icon(
+                            Icons.more_horiz,
+                          ),
                           onPressed: () {
-                            AppCubit.get(context).favorites.length == 0
-                                ? AppCubit.get(context).addtofav(
-                                    AppCubit.get(context).posts[index],
-                                    AppCubit.get(context).postsId[index],
-                                  )
-                                : showToast(
-                                    text: 'aleardy added',
-                                    state: ToastStates.WARNING);
+                            showModalBottomSheet(
+                                context: context,
+                                shape: const RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.vertical(
+                                    top: Radius.circular(30),
+                                  ),
+                                ),
+                                builder: (context) => Container(
+                                    height: 170,
+                                    child: Column(children: <Widget>[
+                                      ListTile(
+                                        leading: const Icon(
+                                          Icons.edit,
+                                        ),
+                                        title: Text(
+                                          'Edit',
+                                        ),
+                                        onTap: () {
+                                          navigateTo(
+                                              context,
+                                              EditPost(
+                                                postmodel: model,
+                                              ));
+                                        },
+                                      ),
+                                      ListTile(
+                                        leading: const Icon(
+                                          Icons.delete,
+                                        ),
+                                        title: Text('Delete'),
+                                        onTap: () {
+                                          AppCubit.get(context).deletPost(
+                                              AppCubit.get(context)
+                                                  .postsId[index]);
+                                          navigateTo(context, LayoutScreen());
+                                          print('Deleted');
+                                        },
+                                      ),
+                                      ListTile(
+                                        leading: const Icon(
+                                          Icons.close,
+                                        ),
+                                        title: Text('Close'),
+                                        onTap: () {
+                                          Navigator.pop(context);
+                                        },
+                                      ),
+                                    ])));
                           },
                         ),
                       ),
                     ),
-                    IconButton(
-                      onPressed: () {
-                        showModalBottomSheet(
-                            context: context,
-                            shape: const RoundedRectangleBorder(
-                              borderRadius: BorderRadius.vertical(
-                                top: Radius.circular(30),
-                              ),
-                            ),
-                            builder: (context) => Container(
-                                height: 170,
-                                child: Column(children: <Widget>[
-                                  ListTile(
-                                    leading: const Icon(
-                                      Icons.edit,
-                                    ),
-                                    title: Text(
-                                      'Edit',
-                                    ),
-                                    onTap: () {
-                                      navigateTo(
-                                          context,
-                                          EditPost(
-                                            postmodel: model,
-                                          ));
-                                    },
-                                  ),
-                                  ListTile(
-                                    leading: const Icon(
-                                      Icons.delete,
-                                    ),
-                                    title: Text('Delete'),
-                                    onTap: () {
-                                      AppCubit.get(context).deletPost(
-                                          AppCubit.get(context).postsId[index]);
-                                      navigateTo(context, LayoutScreen());
-                                      print('Deleted');
-                                    },
-                                  ),
-                                  ListTile(
-                                    leading: const Icon(
-                                      Icons.close,
-                                    ),
-                                    title: Text('Close'),
-                                    onTap: () {
-                                      Navigator.pop(context);
-                                    },
-                                  ),
-                                ])));
-                      },
-                      icon: const Icon(
-                        Icons.more_horiz,
-                      ),
-                    )
                   ],
                 ),
                 Row(

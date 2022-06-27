@@ -13,7 +13,7 @@ class Oubundle extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('our Bundel'),
+        title: Text('Our Bundles'),
         leading: MaterialButton(
           onPressed: () {
             Navigator.pop(context);
@@ -56,7 +56,7 @@ class Oubundle extends StatelessWidget {
                               height: 6.0,
                             ),
                             Text(
-                              ' you have no posts  ',
+                              ' you have no Posts  ',
                               style: TextStyle(
                                   fontSize: 15.0,
                                   fontWeight: FontWeight.bold,
@@ -98,8 +98,8 @@ class Oubundle extends StatelessWidget {
               children: [
                 Text(' ${model!.bundleName}  '),
                 const SizedBox(width: 8.0),
-                const Text(' duration  '),
-                Text(' ${model.bundleDuration}  days '),
+                const Text(' Duration  '),
+                Text(' ${model.bundleDuration}  Days '),
               ],
             ),
           ),

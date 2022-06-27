@@ -9,29 +9,36 @@ class FavoriteDataModel {
   String? no_of_bathroom;
   String? area;
   List? postImage;
-  String? wishListId;
   String? date;
   String? price;
   String? category;
   String? postid;
+  bool? isfav;
+  bool? isnegotiate;
+  String? type;
+  String? bundel;
+  List? services;
 
-  FavoriteDataModel({
-    this.name,
-    this.uid,
-    this.image,
-    this.namePost,
-    this.description,
-    this.place,
-    this.no_of_room,
-    this.no_of_bathroom,
-    this.area,
-    this.postImage,
-    this.price,
-    this.date,
-    this.category,
-    this.postid,
-  });
-
+  FavoriteDataModel(
+      {this.name,
+      this.uid,
+      this.image,
+      this.namePost,
+      this.description,
+      this.place,
+      this.no_of_room,
+      this.no_of_bathroom,
+      this.area,
+      this.postImage,
+      this.price,
+      this.date,
+      this.category,
+      this.postid,
+      this.isfav,
+      this.bundel,
+      this.type,
+      this.isnegotiate,
+      this.services});
   FavoriteDataModel.fromJson(Map<String, dynamic> json) {
     name = json['name'];
     uid = json['uid'];
@@ -47,6 +54,11 @@ class FavoriteDataModel {
     date = json['date'];
     category = json['category'];
     postid = json['postid'];
+    isfav = json['isfav'];
+    bundel = json['bundel'];
+    type = json['type'];
+    isnegotiate = json['isnegatiated'];
+    services = json['services'];
   }
 
   Map<String, dynamic> toMap() {
@@ -65,6 +77,11 @@ class FavoriteDataModel {
       'date': date,
       'category': category,
       'postid': postid,
+      'isfav': isfav,
+      'bundel': bundel,
+      'isnegotiate': isnegotiate,
+      'type': type,
+      'services': services
     };
   }
 }

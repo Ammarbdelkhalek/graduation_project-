@@ -27,7 +27,7 @@ class profilesetting extends StatelessWidget {
 
         return Scaffold(
           appBar: AppBar(
-            title: Text('account setting '),
+            title: Text('Account settings '),
           ),
           body: SingleChildScrollView(
             child: Padding(

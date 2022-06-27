@@ -39,8 +39,9 @@ class RegisterScreen extends StatelessWidget {
             body: Stack(
               alignment: AlignmentDirectional.center,
               children: [
+
                 const Image(
-                  image: AssetImage('assets/images/image5.jpg'),
+                  image: AssetImage('assets/images/login.jpg'),
                   height: double.infinity,
                   width: double.infinity,
                   fit: BoxFit.fill,
@@ -139,8 +140,16 @@ class RegisterScreen extends StatelessWidget {
                                         RegisterCubit.get(context).isPassword,
                                     controller: passwordController,
                                     type: TextInputType.visiblePassword,
-                                    validate:
-                                        FormFieldValidate.passwordValidator,
+                                    validate: (value) {
+                                      if (value!.isEmpty) {
+                                        return 'Please Enter Your Password';
+                                      }
+                                      String pattern =
+                                          r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#\$&*~]).{8,}$';
+                                      if (!RegExp(pattern).hasMatch(value)) {
+                                        return 'invalid password format';
+                                      }
+                                    },
                                     label: 'Password',
                                     labelStyle: const TextStyle(
                                       color: Colors.white,
@@ -219,7 +228,7 @@ class RegisterScreen extends StatelessWidget {
                                     child: const Text(
                                       'Login',
                                       style: TextStyle(
-                                        color: Colors.amber,
+                                        color: Colors.orangeAccent,
                                       ),
                                     ),
                                   ),

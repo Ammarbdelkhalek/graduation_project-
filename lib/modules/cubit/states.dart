@@ -193,3 +193,5 @@ class GetTokenSuccessState extends AppStates {}
 class SendNotificationSuccessState extends AppStates {}
 
 class PickedChatImageSuccessState extends AppStates {}
+
+class Removeonclick extends AppStates {}

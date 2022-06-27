@@ -10,8 +10,9 @@ import 'package:realestateapp/models/BundleModel.dart';
 import 'package:realestateapp/modules/cubit/cubit.dart';
 import 'package:realestateapp/modules/cubit/states.dart';
 import 'package:realestateapp/modules/home/home_screen.dart';
+import 'package:realestateapp/modules/map/map.dart';
 import 'package:realestateapp/modules/map/map_screen.dart';
-import 'package:realestateapp/modules/new_post/userLocation.dart';
+
 import 'package:realestateapp/shared/components/components.dart';
 
 import '../../shared/components/constant.dart';
@@ -48,9 +49,11 @@ class _NewPostState extends State<NewPost> {
       listener: (context, state) {
         if (state is AppCreatePostSuccessState) {
           showToast(
-              text: 'post created successfuly'.tr().toString(),
+              text: 'post created successfully'.tr().toString(),
               state: ToastStates.SUCCESS);
-          AppCubit.get(context).getPosts();
+
+
+
           navigateTo(context, LayoutScreen());
         }
       },
@@ -140,7 +143,7 @@ class _NewPostState extends State<NewPost> {
                                   const EdgeInsets.fromLTRB(10, 20, 10, 20),
                               filled: true,
                               fillColor: Colors.grey[200],
-                              hintText: 'select type  like rent or Buy '
+                              hintText: 'Select type like Rent or Buy '
                                   .tr()
                                   .toString(),
                             ),
@@ -153,7 +156,7 @@ class _NewPostState extends State<NewPost> {
                             type: TextInputType.text,
                             validate: (value) {
                               if (value!.isEmpty) {
-                                return 'Please Enter Name of Advertisment'
+                                return 'Please Enter Name of Advertisement'
                                     .tr()
                                     .toString();
                               }
@@ -170,7 +173,7 @@ class _NewPostState extends State<NewPost> {
                             maxLines: null,
                             decoration: InputDecoration(
                                 prefixIcon: const Icon(Icons.description),
-                                hintText: 'describtion'.tr().toString(),
+                                hintText: 'Description'.tr().toString(),
                                 border: const OutlineInputBorder()),
                           ),
                           /*
@@ -208,7 +211,7 @@ class _NewPostState extends State<NewPost> {
                               filled: true,
                               fillColor: Colors.grey[200],
                               hintText:
-                                  'select your catergory '.tr().toString(),
+                                  'Select your category '.tr().toString(),
                             ),
                           ),
                           const SizedBox(
@@ -222,7 +225,6 @@ class _NewPostState extends State<NewPost> {
                             onChange: (location) {},
                             ontap: () {
                               navigateTo(context, MapScreen());
-                              AppCubit.get(context).getlatAndlang();
                             },
                             type: TextInputType.text,
                             validate: (value) {
@@ -230,7 +232,7 @@ class _NewPostState extends State<NewPost> {
                                 return 'Please Enter place'.tr().toString();
                               }
                             },
-                            label: 'select the location'.tr().toString(),
+                            label: 'Select the location'.tr().toString(),
                             prefix: Icons.place,
                           ),
                           const SizedBox(
@@ -241,7 +243,7 @@ class _NewPostState extends State<NewPost> {
                             type: TextInputType.text,
                             validate: (value) {
                               if (value!.isEmpty) {
-                                return 'Please Enter no_of_rooms'
+                                return 'Please Enter no of rooms'
                                     .tr()
                                     .toString();
                               }
@@ -257,7 +259,7 @@ class _NewPostState extends State<NewPost> {
                             type: TextInputType.text,
                             validate: (value) {
                               if (value!.isEmpty) {
-                                return 'Please Enter no_of_bathrooms'
+                                return 'Please Enter no of bathrooms'
                                     .tr()
                                     .toString();
                               }
@@ -282,7 +284,7 @@ class _NewPostState extends State<NewPost> {
                           const SizedBox(
                             height: 10,
                           ),
-                          Text('negotaiate'.tr().toString()),
+                          Text('Negotiability'.tr().toString()),
                           Checkbox(
                               value: isnogiate,
                               onChanged: (value) {
@@ -312,12 +314,12 @@ class _NewPostState extends State<NewPost> {
                             type: TextInputType.phone,
                             validate: (value) {
                               if (value!.isEmpty) {
-                                return 'phone number is reqierd '
+                                return 'Phone number is Required '
                                     .tr()
                                     .toString();
                               }
                             },
-                            label: 'phone '.tr().toString(),
+                            label: 'Phone '.tr().toString(),
                             prefix: Icons.price_change_outlined,
                           ),
                           const SizedBox(
@@ -340,7 +342,7 @@ class _NewPostState extends State<NewPost> {
                               filled: true,
                               fillColor: Colors.grey[200],
                               hintText:
-                                  'select your bundel like  gold or silver '
+                                  'Select your Bundle like  Gold or Silver '
                                       .tr()
                                       .toString(),
                             ),

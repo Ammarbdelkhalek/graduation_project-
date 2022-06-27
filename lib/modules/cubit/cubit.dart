@@ -7,6 +7,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_launch/flutter_launch.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:form_field_validator/form_field_validator.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
@@ -27,6 +28,8 @@ import 'package:realestateapp/modules/setting/myaccount.dart';
 import 'package:realestateapp/shared/components/components.dart';
 import 'package:realestateapp/shared/components/constant.dart';
 import 'package:realestateapp/shared/network/local/cache_helper.dart';
+import 'package:realestateapp/shared/network/remote/notification_Dio.dart';
+import 'package:uuid/uuid.dart';
 import '../../models/category_model.dart';
 import '../../models/chatmodel.dart';
 import '../../models/faviouritemodel.dart';
@@ -208,6 +211,7 @@ class AppCubit extends Cubit<AppStates> {
       emit(PostImagePickedErrorState());
     }
   }
+
 /*
   void UploadNewPost({
     required String namePost,
@@ -304,6 +308,7 @@ class AppCubit extends Cubit<AppStates> {
   List<PostModel> posts = [];
   List<String> postsId = [];
   PostModel? postModel;
+
   void getPosts() {
     posts = [];
     emit(AppGetPostsLoadingState());
@@ -312,6 +317,7 @@ class AppCubit extends Cubit<AppStates> {
         .orderBy('date', descending: true)
         .snapshots()
         .listen((event) {
+      posts = [];
       event.docs.forEach((element) {
         print(element.id);
         postsId.add(element.id);
@@ -332,7 +338,7 @@ class AppCubit extends Cubit<AppStates> {
         .then((value) {
       emit(AppRemoveFrompostsSuccessState());
       userposts = [];
-      getUserAds();
+      getPosts();
       print('delete sucssed');
       print('===================================================');
     }).catchError((error) {
@@ -347,6 +353,7 @@ class AppCubit extends Cubit<AppStates> {
   List<String> drobdownlist = [];
   CategoryDataModel? categoryDataModel;
   List<CategoryDataModel> categories = [];
+
   void getCategoryData() {
     categories = [];
     drobdownlist = [];
@@ -368,12 +375,89 @@ class AppCubit extends Cubit<AppStates> {
     });
   }
 
+  // Map<String, FavoriteDataModel> wishlist = {};
+  // Map<String, FavoriteDataModel> get getWishlistItems {
+  //   return wishlist;
+  // }
+
+  //  Future<void> addtoWishList({
+  //   required String? postid,
+  //   BuildContext? context,
+  // }) async {
+  //   final wislistId = const Uuid().v4();
+  //   try {
+  //     FirebaseFirestore.instance
+  //         .collection('users')
+  //         .doc(FirebaseAuth.instance.currentUser!.uid)
+  //         .update({
+  //       'userWish': FieldValue.arrayUnion([
+  //         {
+  //           'WishlistID': wislistId,
+  //           'postID': postid,
+  //         }
+  //       ])
+  //     });
+  //     await Fluttertoast.showToast(
+  //         msg: 'itemshas been added to your wishList ',
+  //         toastLength: Toast.LENGTH_SHORT,
+  //         gravity: ToastGravity.CENTER);
+  //   } catch (error) {
+  //     showToast(text: error.toString(), state: ToastStates.ERROR);
+  //   }
+  // }
+
+  // final usercollection = FirebaseFirestore.instance.collection('users');
+  // Future<void> fetchWishlist() async {
+  //   final DocumentSnapshot userDoc =
+  //       await usercollection.doc(FirebaseAuth.instance.currentUser!.uid).get();
+  //   if (userDoc == null) {
+  //     return;
+  //   }
+  //   final leng = userDoc.get('userWish').length;
+  //   for (var i = 0; i < leng; i++) {
+  //     wishlist.putIfAbsent(
+  //         userDoc.get('userWish')[i]['WishlistID'],
+  //         () => FavoriteDataModel(
+  //               postid: userDoc.get('userWish')[i]['postid'],
+  //               wishListId: userDoc.get('userWish')[i]['WishlistID'],
+  //             ));
+  //   }
+  //   emit(AppgetToFavoritesSuccessState());
+  // }
+
+  // Future<void> removeoneItem({
+  //   required String postid,
+  //   required String wishListId,
+  // }) async {
+  //   await usercollection.doc(FirebaseAuth.instance.currentUser!.uid).update({
+  //     'userWish': FieldValue.arrayRemove([
+  //       {'postid': postid, 'WishlistID': wishListId}
+  //     ])
+  //   });
+  //   wishlist.remove(postid);
+  //   await fetchWishlist();
+
+  //   emit(AppRemoveFromFavoritesSuccessState());
+  // }
+
+  // Future<void> removeonclick() async {
+  //   await usercollection.doc(FirebaseAuth.instance.currentUser!.uid).update({
+  //     'userWish': [],
+  //   });
+  //   wishlist.clear();
+  //   emit(Removeonclick());
+  // }
+
+  // void clearlocalWishlist() {
+  //   wishlist.clear();
+  //   emit(Removeonclick());
+  // }
+
   FavoriteDataModel? model;
   List<FavoriteDataModel> favorites = [];
+  List<String> favID = [];
 
-  void addtofav(
-    PostModel model,
-  ) {
+  void addtofav(PostModel model, String postid) {
     final FirebaseAuth auth = FirebaseAuth.instance;
     var currentUser = auth.currentUser;
     FavoriteDataModel favoriteDataModel = FavoriteDataModel(
@@ -411,11 +495,13 @@ class AppCubit extends Cubit<AppStates> {
         .collection('favorite')
         .doc(FirebaseAuth.instance.currentUser!.uid)
         .collection('items')
+        .orderBy('date', descending: true)
         .snapshots()
         .listen((event) {
       event.docs.forEach((element) {
         favorites.add(FavoriteDataModel.fromJson(element.data()));
         model = FavoriteDataModel.fromJson(element.data());
+        favID.add(element.id);
 
         print(element.data());
       });
@@ -426,18 +512,22 @@ class AppCubit extends Cubit<AppStates> {
     emit(AppgetToFavoritesErrorState(error: Error.safeToString(Error)));
   }
 
-  void deletefavorite() {
+  void deletefavorite(String favid) {
     favorites = [];
     FirebaseFirestore.instance
         .collection('favorite')
         .doc(FirebaseAuth.instance.currentUser!.uid)
         .collection('items')
-        .doc()
+        .doc(favid)
         .delete()
         .then((value) {
       emit(AppRemoveFromFavoritesSuccessState());
-      getfaviourite();
-      favorites = [];
+      print(
+          '===================================================================');
+
+      print(
+          '===================================================================');
+
       print(
           '===================================================================');
       print('deleted sucessfuly');
@@ -450,6 +540,7 @@ class AppCubit extends Cubit<AppStates> {
           '===================================================================');
     });
   }
+
   // message function
 
   List<UserModel> users = [];
@@ -532,6 +623,7 @@ class AppCubit extends Cubit<AppStates> {
   }
 
   File? chatImage;
+
   Future<void> pickCatImage() async {
     final pickedfile = await picker.getImage(source: ImageSource.gallery);
     if (pickedfile != null) {
@@ -568,6 +660,7 @@ class AppCubit extends Cubit<AppStates> {
   }
 
   List<PostModel> userposts = [];
+
   void getUserAds() {
     userposts = [];
     FirebaseFirestore.instance
@@ -597,6 +690,7 @@ class AppCubit extends Cubit<AppStates> {
   Position? currentposition;
   var lat;
   var long;
+
   Future getpermission(context) async {
     LocationPermission permission;
     services = await Geolocator.isLocationServiceEnabled();
@@ -697,6 +791,7 @@ class AppCubit extends Cubit<AppStates> {
   List<XFile> addImages = [];
   List<String> imagesUrl = [];
   var pickerimage = ImagePicker();
+
   Future<void> getImages() async {
     final List<XFile>? pickerimage = await picker.pickMultiImage();
     if (pickerimage!.isNotEmpty) {
@@ -786,27 +881,8 @@ class AppCubit extends Cubit<AppStates> {
     }
   }
 
-  List<PostModel> searchADS = [];
-  void getsearch({required String place}) {
-    emit(AppGetPostsLoadingState());
-    searchADS = [];
-    FirebaseFirestore.instance
-        .collection('posts')
-        .where('place', isEqualTo: place)
-        .get()
-        .then((event) {
-      event.docs.forEach((element) {
-        searchADS = [];
-        searchADS.add(PostModel.fromJson(element.data()));
-        print(element.data());
-        print('=================================================>>>');
-      });
-      emit(AppGetSearchADSSuccessState());
-    });
-    emit(AppGetSearchADSErrorState(Error.safeToString(Error)));
-  }
-
   List<PostModel> filterAds = [];
+
   //List<PostModel> addDataIds = [];
   void filter_search({
     required String place,
@@ -815,33 +891,35 @@ class AppCubit extends Cubit<AppStates> {
     required String no_bath,
     required String area,
     required String price,
+    required String type,
   }) {
     filterAds = [];
     emit(AppGetFilterADSloadingState());
-    FirebaseFirestore.instance.collection('posts').get().then((event) {
+    FirebaseFirestore.instance.collection('posts').snapshots().listen((event) {
       filterAds = [];
-      postsId = [];
       for (var element in event.docs) {
         if (place == element.data()['place'] &&
             category == element.data()['category'] &&
             no_bath == element.data()['no_of_bathroom'] &&
             no_rooms == element.data()['no_of_room'] &&
             area == element.data()['area'] &&
-            price == element.data()['price']) {
+            price == element.data()['price'] &&
+            type == element.data()['type']) {
           filterAds.add(PostModel.fromJson(element.data()));
-          print(element.data());
         }
-        emit(AppGetFilterADSSuccessState());
         print(element.data());
-        log('=============================================>>>>>>');
-        log('success huyyy ');
       }
+      emit(AppGetFilterADSSuccessState());
+
+      log('جااااااااااااااااااااااااااااااب جااااااااااااتوه');
+      log('=============================================>>>>>>');
     });
     emit(AppGetFilterADSErrorState(Error.safeToString(Error)));
   }
 
   ServicesModel? servicesModel;
   List<ServicesModel> Service = [];
+
   void getservice() {
     emit(AppGetServicesloadingState());
     Service = [];
@@ -862,6 +940,7 @@ class AppCubit extends Cubit<AppStates> {
   }
 
   List<ServicesModel> LawServices = [];
+
   void getLawService() {
     emit(AppGetServicesloadingState());
     LawServices = [];
@@ -880,9 +959,29 @@ class AppCubit extends Cubit<AppStates> {
     emit(AppGetServicesErrorState(Error.safeToString(Error())));
   }
 
+  List<PostModel> searchADS = [];
+
+  void getsearch({required String place}) {
+    emit(AppGetPostsLoadingState());
+    FirebaseFirestore.instance
+        .collection('posts')
+        .where('place', isEqualTo: place)
+        .snapshots()
+        .listen((event) {
+      event.docs.forEach((element) {
+        searchADS.add(PostModel.fromJson(element.data()));
+        print(element.data());
+        print('=================================================>>>');
+        emit(AppGetSearchADSSuccessState());
+      });
+      emit(AppGetSearchADSErrorState(Error.safeToString(Error)));
+    });
+  }
+
   BunndelModel? bunndelModel;
   List<String> BundeList = [];
   List<BunndelModel> Bundel = [];
+
   void getBundle() {
     Bundel = [];
     BundeList = [];
@@ -918,41 +1017,62 @@ class AppCubit extends Cubit<AppStates> {
   }
 
   void sendNotification(
-      {required String token,
-      required String senderName,
-      String? messageText,
-      String? messageImage}) {
-    Diohelper.postnotificationData(data: {
-      "to": token,
+    UserModel model,
+    MessageModel messageModel,
+  ) {
+    notificationHelper
+        .postData(url: 'https://fcm.googleapis.com/fcm/send', data: {
+      "to": userModel!.token,
       "notification": {
-        "title": senderName,
-        "body":
-            "${messageText != null ? messageText : messageImage != null ? messageImage : 'ERROR 404'}",
+        "body": messageModel.text,
+        "title": userModel!.name,
         "sound": "default"
       },
       "android": {
-        "Priority": "HIGH",
+        "priortiy": "HIGH",
         "notification": {
-          "notification_Priority": "PRIORITY_MAX",
+          "notification_priority": "PRIORITY_MAX",
           "sound": "default",
-          "default_sound": true,
           "default_vibrate_timings": true,
           "default_light_settings": true
         }
       },
-      "data": {
-        "type": "order",
-        "id": "87",
-        "click_action": "FLUTTER_NOTIFICATION_CLICK",
-        "navigation": "chatDetails"
-      }
+      "data": {"messageModel": messageModel.toMap()}
+    }).then((value) {
+      print("notification pushed");
+    }).catchError((error) {
+      print(error.toString());
     });
-    emit(SendNotificationSuccessState());
-    print('==========================================>');
-    print('notification send succesfully');
   }
-}
- 
+
+/*
+  void pushNotificationOnsendMessage( 
+       MessageModel messageModel, UserModel userModel) { 
+     print("device token :" + userModel.deviceToken.toString()); 
+     DioHelper.postData(url: 'https://fcm.googleapis.com/fcm/send', data: { 
+       "to": userModel.deviceToken, 
+       "notification": { 
+         "body": messageModel.text, 
+         "title": userModel.name,
+         "sound": "default" 
+       }, 
+       "android": { 
+         "priortiy": "HIGH", 
+         "notification": { 
+           "notification_priority": "PRIORITY_MAX", 
+           "sound": "default", 
+           "default_vibrate_timings": true, 
+           "default_light_settings": true 
+         } 
+       }, 
+       "data": {"messageModel": messageModel.toJson()} 
+     }).then((value) { 
+       print("notification pushed"); 
+     }).catchError((error) { 
+       print(error.toString()); 
+     }); 
+   }
+   */
 /*
   void getAddsDataByFilter({
     required String minPrice,
@@ -986,3 +1106,4 @@ class AppCubit extends Cubit<AppStates> {
     });
   }
   */
+}

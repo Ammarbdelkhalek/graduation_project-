@@ -9,6 +9,7 @@ import 'package:realestateapp/models/category_model.dart';
 import 'package:realestateapp/models/post_model.dart';
 import 'package:realestateapp/models/user_model.dart';
 import 'package:realestateapp/modules/category/rentcategory.dart';
+import 'package:realestateapp/modules/chat/chatdetails.dart';
 import 'package:realestateapp/modules/cubit/cubit.dart';
 import 'package:realestateapp/modules/cubit/states.dart';
 import 'package:realestateapp/modules/home/adsdetails.dart';
@@ -19,16 +20,37 @@ import 'package:realestateapp/shared/components/constant.dart';
 import 'package:realestateapp/shared/components/constant.dart';
 import 'package:easy_localization/easy_localization.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
   HomeScreen({Key? key}) : super(key: key);
+
+
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  UserModel? usermodel;
   PageController AdsImages = PageController();
+
+  void chatwithOwner(context) {
+    if (AppCubit.get(context).users == usermodel!.uid) {
+      for (var i = 0; i > AppCubit.get(context).users.length; i++) {
+        print(AppCubit.get(context).users[i]);
+        navigateTo(context,
+            ChatDetailsScreen(userModel: AppCubit.get(context).users[i]));
+
+        print('=================================');
+        print('successs');
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<AppCubit, AppStates>(listener: (context, state) {
       if (state is AppAddToFavoritesSuccessState) {
         showToast(
-            text: 'faviourite added successfuly '.tr().toString(),
+            text: 'favorite added successfully '.tr().toString(),
             state: ToastStates.SUCCESS);
       }
     }, builder: (context, state) {
@@ -58,7 +80,7 @@ class HomeScreen extends StatelessWidget {
                       ),
                     ),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 8.0,
                   ),
                   ConditionalBuilder(
@@ -102,12 +124,15 @@ class HomeScreen extends StatelessWidget {
                   const SizedBox(
                     height: 8.0,
                   ),
-                  Text(
-                    "most recent ads ".tr().toString(),
-                    style: TextStyle(
-                        fontSize: 15.0,
-                        fontWeight: FontWeight.w800,
-                        fontStyle: FontStyle.italic),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Text(
+                      "Most Recent Ads ".tr().toString(),
+                      style: const TextStyle(
+                          fontSize: 15.0,
+                          fontWeight: FontWeight.w800,
+                          fontStyle: FontStyle.italic),
+                    ),
                   ),
                   const SizedBox(
                     height: 10.0,
@@ -159,7 +184,7 @@ class HomeScreen extends StatelessWidget {
                                       height: 6.0,
                                     ),
                                     Text(
-                                      ' you have no posts  '.tr().toString(),
+                                      ' You Have No Posts  '.tr().toString(),
                                       style: const TextStyle(
                                           fontSize: 15.0,
                                           fontWeight: FontWeight.bold,
@@ -179,9 +204,9 @@ class HomeScreen extends StatelessWidget {
 
   Widget BuildCategoryItems(CategoryDataModel? categoryDataModel) {
     return Padding(
-        padding: EdgeInsets.only(right: appPadding / 3),
+        padding: const EdgeInsets.only(right: appPadding / 3),
         child: Container(
-          padding: EdgeInsets.symmetric(horizontal: appPadding / 2),
+          padding: const EdgeInsets.symmetric(horizontal: appPadding / 2),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(20),
           ),
@@ -206,18 +231,14 @@ class HomeScreen extends StatelessWidget {
         ));
   }
 
-  Widget BuildPost(
-    PostModel model,
-    context,
-    index,
-  ) {
+  Widget BuildPost(PostModel model, context, index) {
     Size size = MediaQuery.of(context).size;
     return Expanded(
       child: Card(
         clipBehavior: Clip.antiAliasWithSaveLayer,
         elevation: 5.0,
         child: Padding(
-          padding: EdgeInsets.symmetric(
+          padding: const EdgeInsets.symmetric(
               horizontal: appPadding, vertical: appPadding / 2),
           child: Container(
             height: 300,
@@ -247,30 +268,30 @@ class HomeScreen extends StatelessWidget {
                       right: appPadding / 2,
                       top: appPadding / 2,
                       child: Container(
-                        decoration: BoxDecoration(
-                            color: white,
-                            borderRadius: BorderRadius.circular(15)),
-                        child: IconButton(
-                          icon: AppCubit.get(context).favorites.length == 0
-                              ? const Icon(
-                                  Icons.favorite_rounded,
-                                )
-                              : const Icon(
-                                  Icons.favorite_rounded,
-                                  color: Colors.red,
-                                ),
-                          onPressed: () {
-                            AppCubit.get(context).favorites.length == 0
-                                ? AppCubit.get(context).addtofav(
-                                    AppCubit.get(context).posts[index],
-                                  )
-                                : showToast(
-                                    text: 'aleardy added',
-                                    state: ToastStates.WARNING);
-                          },
-                        ),
-                      ),
-                    )
+                          decoration: BoxDecoration(
+                              color: white, borderRadius: BorderRadius.circular(15)),
+                          child: IconButton(
+                            icon: AppCubit.get(context).favorites.length == 0
+                                ? const Icon(
+                              Icons.favorite_rounded,
+                            )
+                                :  const Icon(
+                              Icons.favorite_rounded,
+                              color: Colors.red,
+                            ),
+                            onPressed: () {
+                              var index =0;
+                              AppCubit.get(context).favorites.length == 0
+                                  ? AppCubit.get(context).addtofav(
+                                AppCubit.get(context).posts[index],
+                                AppCubit.get(context).postsId[index],
+                              )  //the errro cause of null index  should br solved
+                                  : showToast(
+                                  text: 'Aleardy Added'.tr().toString(),
+                                  state: ToastStates.WARNING);
+                            },
+                          )),
+                    ),
                   ],
                 ),
                 Row(
@@ -285,27 +306,25 @@ class HomeScreen extends StatelessWidget {
                     const SizedBox(
                       width: 10,
                     ),
-                    Expanded(
-                      child: Text(
-                        '${model.place}',
-                        overflow: TextOverflow.ellipsis,
-                        style: TextStyle(
-                            fontSize: 15, color: black.withOpacity(0.4)),
-                      ),
+                    Text(
+                      '${model.place}',
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(
+                          fontSize: 15, color: black.withOpacity(0.4)),
                     ),
                   ],
                 ),
                 Row(
                   children: [
                     Text(
-                      '${model.no_of_room} bedrooms / ',
+                      '${model.no_of_room} Bedrooms / ',
                       style: const TextStyle(
                         fontSize: 15,
                         fontWeight: FontWeight.w600,
                       ),
                     ),
                     Text(
-                      '${model.no_of_bathroom} bathrooms / ',
+                      '${model.no_of_bathroom} Bathrooms / ',
                       style: const TextStyle(
                         fontSize: 15,
                         fontWeight: FontWeight.w600,
@@ -332,6 +351,20 @@ class HomeScreen extends StatelessWidget {
                         fontWeight: FontWeight.w600,
                       ),
                     ),
+                    Spacer(),
+                    MaterialButton(
+                        onPressed: () {
+                          navigateTo(context,
+                              ChatDetailsScreen(userModel: AppCubit.get(context).users[index]));
+                           },
+                        //  chatwithOwner(context);
+
+                        child: Row(
+                          children: const [
+                            Icon(Icons.chat),
+                            Text('Chat now '),
+                          ],
+                        )),
                   ],
                 )
               ],
@@ -341,217 +374,6 @@ class HomeScreen extends StatelessWidget {
       ),
     );
   }
-
-  /*
-      Card(
-        clipBehavior: Clip.antiAliasWithSaveLayer,
-        elevation: 5.0,
-        margin: const EdgeInsets.symmetric(
-          horizontal: 8.0,
-        ),
-        child: Padding(
-          padding: const EdgeInsets.all(10.0),
-          child: Column(
-            children: [
-              Row(
-                children: [
-                  CircleAvatar(
-                    backgroundImage: NetworkImage(
-                      '${model.image}',
-                    ),
-                  ),
-                  const SizedBox(
-                    width: 10,
-                  ),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Row(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                '${model.name}',
-                              ),
-                              const Icon(
-                                Icons.check_circle,
-                                size: 14,
-                                color: Colors.blue,
-                              ),
-                            ]),
-                        Text(
-                          '${model.date}',
-                          style: const TextStyle(
-                            fontSize: 10,
-                            color: Colors.grey,
-                          ),
-                        ),
-                        const SizedBox(
-                          height: 5,
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-              Container(
-                width: double.infinity,
-                height: 1.0,
-                color: Colors.grey[300],
-              ),
-              const SizedBox(
-                height: 5,
-              ),
-              const Padding(
-                padding: EdgeInsets.symmetric(vertical: 8),
-                child: SizedBox(
-                  width: double.infinity,
-                ),
-              ),
-              Stack(
-                children: [
-                  Container(
-                    width: 300.0,
-                    height: 200.0,
-                    child: PageView.builder(
-                      controller: AdsImages,
-                      scrollDirection: Axis.horizontal,
-                      itemBuilder: (context, index) => Image(
-                        image: NetworkImage('${model.postImage![index]}'),
-                        width: 200.0,
-                        height: 120.0,
-                      ),
-                      itemCount: model.postImage!.length,
-                    ),
-                  ),
-
-                  /* Image(
-                    image: NetworkImage('${model.postImage}'),
-                  ),
-                  */
-                  /*
-                  Align(
-                    alignment: Alignment.topLeft,
-                    child: Container(
-                      color: Colors.blue,
-                      width: 60.0,
-                      height: 25.0,
-                      child: Text('${model.category}'),
-                    ),
-                  ),
-                  */
-                  Align(
-                    alignment: Alignment.bottomLeft,
-                    child: Row(
-                      children: [
-                        Text(
-                          '${model.no_of_room}',
-                          style: const TextStyle(
-                            color: Colors.white,
-                          ),
-                        ),
-                        const Icon(
-                          Icons.king_bed_outlined,
-                          color: Colors.white,
-                        ),
-                        const SizedBox(
-                          width: 30,
-                        ),
-                        Text(
-                          '${model.no_of_bathroom}',
-                          style: const TextStyle(
-                            color: Colors.white,
-                          ),
-                        ),
-                        const Icon(
-                          Icons.bathtub_outlined,
-                          color: Colors.white,
-                        ),
-                        const SizedBox(
-                          width: 30,
-                        ),
-                        Text(
-                          '${model.area}',
-                          style: const TextStyle(
-                            color: Colors.white,
-                          ),
-                        ),
-                        const Text(
-                          'm',
-                          style: TextStyle(
-                            color: Colors.white,
-                          ),
-                        )
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-              Row(children: [
-                Expanded(
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 5),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Row(
-                          children: [
-                            const Icon(Icons.house_outlined),
-                            Text('${model.namePost}'),
-                          ],
-                        ),
-                        Row(
-                          children: [
-                            const Icon(Icons.description),
-                            Text(
-                              '${model.description}',
-                              maxLines: 5,
-                              overflow: TextOverflow.ellipsis,
-                            ),
-                          ],
-                        ),
-                        Row(
-                          children: [
-                            const Icon(Icons.place),
-                            Text('${model.place}'),
-                          ],
-                        ),
-                        Row(
-                          children: [
-                            const Icon(Icons.price_change_rounded),
-                            Text('${model.price}'),
-                            const SizedBox(
-                              width: 12.0,
-                            ),
-                            const Icon(Icons.category),
-                            Text('${model.category}'),
-                            const Spacer(),
-                            IconButton(
-                                onPressed: () {
-                                  AppCubit.get(context).addtofav(
-                                    AppCubit.get(context).posts[index],
-                                    AppCubit.get(context).postsId[index],
-                                  );
-                                },
-                                icon: const Icon(Icons.favorite,
-                                    color: Colors.grey)),
-                            IconButton(
-                                onPressed: () {
-                                  AppCubit.get(context).deletPost(
-                                      AppCubit.get(context).postsId[index]);
-                                },
-                                icon: const Icon(
-                                  Icons.delete,
-                                )),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ]),
-            ],
-          ),
-        ),*/
-
 }
+
+ 

@@ -26,15 +26,15 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
 
   List<BoardingModel> boarding = [
     BoardingModel(
-        image: 'assets/images/image5.jpg',
+        image: 'assets/images/image1.jpg',
         title: 'On Boarding 1 Title',
         body: 'Through our application, You can sale your real estate easily'),
     BoardingModel(
-        image: 'assets/images/image5.jpg',
+        image: 'assets/images/image2.jpg',
         title: ' onboarding 2 title',
         body: 'You can search about your dream house in few minutes'),
     BoardingModel(
-        image: 'assets/images/image5.jpg',
+        image: 'assets/images/image3.jpg',
         title: 'On Boarding 3 Title',
         body: 'We wish you Successful deals'),
   ];
@@ -104,7 +104,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                     expansionFactor: 4,
                     dotWidth: 10,
                     spacing: 5.0,
-                    activeDotColor: Colors.lightBlue,
+                    activeDotColor: Colors.greenAccent,
                   ),
                 ),
                 //  Text(
