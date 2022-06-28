@@ -87,12 +87,12 @@ class _Ads_DetailsState extends State<Ads_Details> {
                               // navigateTo(context,
                               //     ChatDetailsScreen(userModel: usermodel));
                               //  },
-                              chatwithOwner(context);
+                              // chatwithOwner(context);
                             },
                             child: Row(
                               children:  [
-                                Icon(Icons.chat),
-                                Text(' Chat now '.tr().toString()) ,
+                                Icon(Icons.email),
+                                Text(' Email'.tr().toString()) ,
                               ],
                             )),
                         const SizedBox(
@@ -101,7 +101,7 @@ class _Ads_DetailsState extends State<Ads_Details> {
                         MaterialButton(
                           onPressed: () {
                             AppCubit.get(context).whatsAppOpen(
-                                AppCubit.get(context).userModel!.phone!);
+                                usermodel.phone!);
                           },
                           child: Row(
                             children:  [
@@ -119,7 +119,7 @@ class _Ads_DetailsState extends State<Ads_Details> {
           ),
           floatingActionButton: FloatingActionButton(
             onPressed: () {
-              launch(usermodel.phone!);
+              launch('tel:01097442188');
             },
             child: const Icon(Icons.phone),
           ),

@@ -69,25 +69,7 @@ class profilesetting extends StatelessWidget {
                     const SizedBox(
                       height: 5.0,
                     ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        MaterialButton(
-                          onPressed: () {},
-                          child: const Icon(Icons.phone),
-                        ),
-                        const SizedBox(
-                          width: 10.0,
-                        ),
-                        MaterialButton(
-                          onPressed: () {},
-                          child: Icon(Icons.video_call),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(
-                      height: 20,
-                    ),
+
                     defaultFormField(
                       controller: nameController,
                       type: TextInputType.name,

@@ -176,7 +176,7 @@ class _useraccountState extends State<useraccount> {
                       children: [
                         const Icon(
                           Icons.dark_mode_outlined,
-                          color: Colors.green,
+                          color: Colors.greenAccent,
                         ),
 
                         Text(
@@ -213,7 +213,7 @@ class _useraccountState extends State<useraccount> {
                       children: [
                         const Icon(
                           Icons.map_outlined,
-                          color: Colors.green,
+                          color: Colors.greenAccent,
                         ),
                         Text(
                           'Country'.tr().toString(),
@@ -275,7 +275,7 @@ class _useraccountState extends State<useraccount> {
                         children: [
                           const Icon(
                             Icons.flag_outlined,
-                            color: Colors.green,
+                            color: Colors.greenAccent,
                           ),
                           Text(
                             'Language'.tr().toString(),
@@ -311,7 +311,7 @@ class _useraccountState extends State<useraccount> {
                       children: [
                         const Icon(
                           Icons.info_outline_rounded,
-                          color: Colors.green,
+                          color: Colors.greenAccent,
                         ),
                         Text(
                           'FAQs'.tr().toString(),
@@ -338,7 +338,7 @@ class _useraccountState extends State<useraccount> {
                       children: [
                         const Icon(
                           Icons.phone_in_talk_outlined,
-                          color: Colors.green,
+                          color: Colors.greenAccent,
                         ),
                         Text(
                           'Contact Us'.tr().toString(),

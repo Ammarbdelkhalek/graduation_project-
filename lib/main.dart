@@ -61,7 +61,6 @@ void main() async {
   bool? onboarding = CacheHelper.getData(key: 'onBoarding');
 
   print(uid);
-  // print(uid);
   if (onboarding != null) {
     if (uid != null) {
       widget = LayoutScreen();
@@ -76,7 +75,7 @@ void main() async {
     supportedLocales: [Locale('en', 'US'), Locale('ar', 'EG')],
     path: 'assets/translations',
     saveLocale: true, // <-- change the path of the translation files
-    fallbackLocale: const Locale('ar', 'EG'),
+    fallbackLocale: const Locale('en', 'US'),
     child: MyApp(
       startWidget: widget,
       isDark: isDark,

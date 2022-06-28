@@ -351,20 +351,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         fontWeight: FontWeight.w600,
                       ),
                     ),
-                    Spacer(),
-                    MaterialButton(
-                        onPressed: () {
-                          navigateTo(context,
-                              ChatDetailsScreen(userModel: AppCubit.get(context).users[index]));
-                           },
-                        //  chatwithOwner(context);
 
-                        child: Row(
-                          children: const [
-                            Icon(Icons.chat),
-                            Text('Chat now '),
-                          ],
-                        )),
                   ],
                 )
               ],

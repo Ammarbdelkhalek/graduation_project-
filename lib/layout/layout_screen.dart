@@ -80,10 +80,7 @@ class _LayoutScreenState extends State<LayoutScreen> {
                 icon: const Icon(Icons.favorite),
                 label: 'Favorite'.tr().toString(),
               ),
-              BottomNavigationBarItem(
-                icon: const Icon(Icons.message),
-                label: 'Chat'.tr().toString(),
-              ),
+
               BottomNavigationBarItem(
                 icon: const Icon(Icons.settings),
                 label: 'Settings'.tr().toString(),

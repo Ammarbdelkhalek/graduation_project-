@@ -10,6 +10,7 @@ import 'package:realestateapp/modules/cubit/states.dart';
 import 'package:realestateapp/modules/home/adsdetails.dart';
 import 'package:realestateapp/modules/search/Filter_Rsult.dart';
 import 'package:realestateapp/shared/components/components.dart';
+import 'package:realestateapp/shared/styles/colors.dart';
 
 class filter_page extends StatefulWidget {
   filter_page({Key? key}) : super(key: key);
@@ -154,6 +155,8 @@ class _filter_pageState extends State<filter_page> {
                           ),
                           Text('Select your Proper Area'),
                           Slider(
+                              activeColor: defaultColor,
+                              inactiveColor: defaultColor,
                               value: AreaValue,
                               max: 400,
                               divisions: 10,
@@ -168,6 +171,8 @@ class _filter_pageState extends State<filter_page> {
                           ),
                           Text('Select your Proper Price'),
                           Slider(
+                            activeColor: defaultColor,
+                              inactiveColor: defaultColor,
                               value: currentvalue,
                               max: 10000000,
                               divisions: 5,

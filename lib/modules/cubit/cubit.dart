@@ -89,7 +89,7 @@ class AppCubit extends Cubit<AppStates> {
     Categoryscreen(),
     AppServices(),
     FavouriteScreen(),
-    ChatScreen(),
+    //ChatScreen(),
     useraccount(),
   ];
 
@@ -266,6 +266,9 @@ class AppCubit extends Cubit<AppStates> {
     required String price,
     required List postImage,
     required String date,
+    required String email,
+    required String phone,
+    required String whatsApp,
   }) {
     emit(AppCreatePostLoadingState());
     PostModel model = PostModel(
@@ -285,6 +288,10 @@ class AppCubit extends Cubit<AppStates> {
       type: currenttypeValue,
       isnegotiate: false,
       bundel: currentbundleValue,
+      email: email,
+      phone: phone,
+      whatsApp: whatsApp,
+
     );
 
     FirebaseFirestore.instance
@@ -843,6 +850,9 @@ class AppCubit extends Cubit<AppStates> {
     required String type,
     required bool isnegotiate,
     required String Bundle,
+    required String email,
+    required String whatsApp,
+    required String phone,
 
     // required String postImage,
   }) {
@@ -869,6 +879,9 @@ class AppCubit extends Cubit<AppStates> {
                 price: price,
                 postImage: imagesUrl,
                 date: date,
+                email: email,
+                phone: phone,
+                whatsApp: whatsApp,
               );
               print('==========================================');
               print('upload post successfuly ');

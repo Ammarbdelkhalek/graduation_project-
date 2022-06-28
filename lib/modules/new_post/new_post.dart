@@ -12,9 +12,7 @@ import 'package:realestateapp/modules/cubit/states.dart';
 import 'package:realestateapp/modules/home/home_screen.dart';
 import 'package:realestateapp/modules/map/map.dart';
 import 'package:realestateapp/modules/map/map_screen.dart';
-
 import 'package:realestateapp/shared/components/components.dart';
-
 import '../../shared/components/constant.dart';
 
 class NewPost extends StatefulWidget {
@@ -25,22 +23,17 @@ class NewPost extends StatefulWidget {
 class _NewPostState extends State<NewPost> {
   bool isnogiate = false;
   var formKey = GlobalKey<FormState>();
-
   var NamePostController = TextEditingController();
-
   var DescriptionController = TextEditingController();
-
   var PlaceController = TextEditingController();
-
   var no_of_roomsController = TextEditingController();
-
   var no_of_bathroomController = TextEditingController();
-
   var AreaController = TextEditingController();
-
   var PriceController = TextEditingController();
   var datecontroller = TextEditingController();
   var phonecontroller = TextEditingController();
+  var phoneNumberWhatsAppController = TextEditingController();
+  var emailController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -51,15 +44,12 @@ class _NewPostState extends State<NewPost> {
           showToast(
               text: 'post created successfully'.tr().toString(),
               state: ToastStates.SUCCESS);
-
-
-
           navigateTo(context, LayoutScreen());
         }
       },
       builder: (context, state) {
         var userModel = AppCubit.get(context).userModel;
-        phonecontroller.text = userModel!.phone!;
+       // phonecontroller.text = userModel!.phone!;
         return Scaffold(
           appBar: AppBar(
             title: Text('New Post'.tr().toString()),
@@ -176,19 +166,8 @@ class _NewPostState extends State<NewPost> {
                                 hintText: 'Description'.tr().toString(),
                                 border: const OutlineInputBorder()),
                           ),
-                          /*
-                          defaultFormField(
-                            controller: DescriptionController,
-                            type: TextInputType.multiline,
-                            validate: (value) {
-                              if (value!.isEmpty) {
-                                return 'Please Enter Description';
-                              }
-                            },
-                            label: 'Description',
-                            prefix: Icons.description,
-                          ),
-                          */
+
+
                           const SizedBox(
                             height: 8.0,
                           ),
@@ -310,6 +289,22 @@ class _NewPostState extends State<NewPost> {
                             height: 10,
                           ),
                           defaultFormField(
+                            controller: emailController,
+                            type: TextInputType.text,
+                            validate: (value) {
+                              if (value!.isEmpty) {
+                                return 'Please Enter Your Email'
+                                    .tr()
+                                    .toString();
+                              }
+                            },
+                            label: 'Email'.tr().toString(),
+                            prefix: Icons.drive_file_rename_outline,
+                          ),
+                          const SizedBox(
+                            height: 10,
+                          ),
+                          defaultFormField(
                             controller: phonecontroller,
                             type: TextInputType.phone,
                             validate: (value) {
@@ -322,6 +317,26 @@ class _NewPostState extends State<NewPost> {
                             label: 'Phone '.tr().toString(),
                             prefix: Icons.price_change_outlined,
                           ),
+
+                          const SizedBox(
+                            height: 10,
+                          ),
+                          defaultFormField(
+                            controller: phoneNumberWhatsAppController,
+                            type: TextInputType.phone,
+                            validate: (value) {
+                              if (value!.isEmpty) {
+                                return 'WhatsApp Phone number is Required '
+                                    .tr()
+                                    .toString();
+                              }
+                            },
+                            label: 'WhatsApp Phone '.tr().toString(),
+                            prefix: Icons.price_change_outlined,
+                          ),
+
+
+
                           const SizedBox(
                             height: 10.0,
                           ),
@@ -409,12 +424,18 @@ class _NewPostState extends State<NewPost> {
                                 price: PriceController.text.toString(),
                                 category:
                                     AppCubit.get(context).categories.toString(),
-                                date: DateTime.now().toString());
+                                date: DateTime.now().toString(),
+                                email: emailController.text,
+                                whatsApp: phoneNumberWhatsAppController.text,
+                                phone: phonecontroller.text,
+                            );
+
                           }
                         }
                       },
                       child: Text(
-                        'Add Post'.tr().toString(),
+                        'Add Post'.tr().toString(),style:TextStyle(color: Colors.greenAccent),
+
                       ),
                     ),
                   ],

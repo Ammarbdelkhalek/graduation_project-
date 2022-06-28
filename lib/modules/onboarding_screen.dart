@@ -26,15 +26,15 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
 
   List<BoardingModel> boarding = [
     BoardingModel(
-        image: 'assets/images/image1.jpg',
+        image: 'assets/images/boarding1.png',
         title: 'On Boarding 1 Title',
         body: 'Through our application, You can sale your real estate easily'),
     BoardingModel(
-        image: 'assets/images/image2.jpg',
+        image: 'assets/images/boarding2.png',
         title: ' onboarding 2 title',
         body: 'You can search about your dream house in few minutes'),
     BoardingModel(
-        image: 'assets/images/image3.jpg',
+        image: 'assets/images/boarding3.png',
         title: 'On Boarding 3 Title',
         body: 'We wish you Successful deals'),
   ];
