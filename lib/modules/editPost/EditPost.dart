@@ -28,19 +28,17 @@ class EditPost extends StatelessWidget {
       listener: (context, state) {
         if (state is UpdatePostSuccessState) {
           showToast(text: 'success', state: ToastStates.SUCCESS);
-          navigateTo(context, User_Profile(postmodel));
+          navigateTo(context, LayoutScreen());
           AppCubit.get(context).getUserAds();
+          AppCubit.get(context).getPosts();
         }
         if (state is UpdatePostErrorState) {
           showToast(text: 'failed', state: ToastStates.ERROR);
         }
       },
       builder: (context, state) {
-        //var profileImage = AppCubit.get(context).postImage;
-
         NamePostController.text = postmodel!.namePost!;
         DescriptionController.text = postmodel!.description!;
-        // PlaceController.text = postmodel!.place!;
         no_of_roomsController.text = postmodel!.no_of_room!;
         no_of_bathroomController.text = postmodel!.no_of_bathroom!;
         AreaController.text = postmodel!.area!;

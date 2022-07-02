@@ -1,4 +1,5 @@
-class FavoriteDataModel {
+
+class wishlistModel {
   String? name;
   String? uid;
   String? image;
@@ -18,28 +19,36 @@ class FavoriteDataModel {
   String? type;
   String? bundel;
   List? services;
+  String? email;
+  String? whatsApp;
+  String? phone;
 
-  FavoriteDataModel(
-      {this.name,
-      this.uid,
-      this.image,
-      this.namePost,
-      this.description,
-      this.place,
-      this.no_of_room,
-      this.no_of_bathroom,
-      this.area,
-      this.postImage,
-      this.price,
-      this.date,
-      this.category,
-      this.postid,
-      this.isfav,
-      this.bundel,
-      this.type,
-      this.isnegotiate,
-      this.services});
-  FavoriteDataModel.fromJson(Map<String, dynamic> json) {
+
+  wishlistModel({
+    this.name,
+    this.uid,
+    this.image,
+    this.namePost,
+    this.description,
+    this.place,
+    this.no_of_room,
+    this.no_of_bathroom,
+    this.area,
+    this.postImage,
+    this.price,
+    this.date,
+    this.category,
+    this.postid,
+    this.isfav,
+    this.bundel,
+    this.type,
+    this.isnegotiate,
+    this.services,
+    this.email,
+    this.phone,
+    this.whatsApp,
+});
+  wishlistModel.fromJson(Map<String, dynamic> json) {
     name = json['name'];
     uid = json['uid'];
     image = json['image'];
@@ -59,6 +68,9 @@ class FavoriteDataModel {
     type = json['type'];
     isnegotiate = json['isnegatiated'];
     services = json['services'];
+    email = json ['email'];
+    phone = json ['phone'];
+    whatsApp = json['whatsApp'];
   }
 
   Map<String, dynamic> toMap() {
@@ -81,7 +93,14 @@ class FavoriteDataModel {
       'bundel': bundel,
       'isnegotiate': isnegotiate,
       'type': type,
-      'services': services
+      'services': services,
+      'email' : email,
+      'whatsApp' :whatsApp,
+      'phone' :phone,
     };
   }
 }
+
+
+
+

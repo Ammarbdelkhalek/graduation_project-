@@ -194,4 +194,15 @@ class SendNotificationSuccessState extends AppStates {}
 
 class PickedChatImageSuccessState extends AppStates {}
 
-class Removeonclick extends AppStates {}
+class AppCreateContactUsLoadingState extends AppStates {}
+class AppCreateContactUsSuccessState extends AppStates {}
+class AppCreateContactUsErrorState extends AppStates {
+  final String Error;
+  AppCreateContactUsErrorState(
+    this.Error,
+      );
+
+
+}
+
+

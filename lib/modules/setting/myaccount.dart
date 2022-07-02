@@ -10,6 +10,8 @@ import 'package:realestateapp/modules/setting/bundle.dart';
 import 'package:realestateapp/modules/setting/setting_screen.dart';
 import 'package:realestateapp/modules/setting/userprofile.dart';
 import '../../shared/components/components.dart';
+import '../App_INFO/ContactUS.dart';
+import '../App_INFO/FAQ.dart';
 
 class useraccount extends StatefulWidget {
   useraccount({Key? key}) : super(key: key);
@@ -290,20 +292,24 @@ class _useraccountState extends State<useraccount> {
                     ),
                   ),
                 ),
-                Container(
-                    width: double.infinity,
-                    color: AppCubit.get(context).isDark? Colors.grey[300] : Colors.grey[500],
-                    padding: const EdgeInsets.all(15),
-                    child: Text(
-                      'REACH US'.tr().toString(),
-                      style: TextStyle(
-                          color: AppCubit.get(context).isDark? Colors.grey : Colors.white,
-                          fontSize: 15,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    )),
+
+                   Container(
+                      width: double.infinity,
+                      color: AppCubit.get(context).isDark? Colors.grey[300] : Colors.grey[500],
+                      padding: const EdgeInsets.all(15),
+                      child: Text(
+                        'REACH US'.tr().toString(),
+                        style: TextStyle(
+                            color: AppCubit.get(context).isDark? Colors.grey : Colors.white,
+                            fontSize: 15,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      )),
+
                 InkWell(
-                  onTap: () {},
+                  onTap: () {
+                    navigateTo(context, FAQsScreen());
+                  },
                   child: Container(
                     color: AppCubit.get(context).isDark? Colors.white : HexColor('#333739'),
                     padding: const EdgeInsets.all(15),
@@ -330,7 +336,9 @@ class _useraccountState extends State<useraccount> {
                   color: AppCubit.get(context).isDark? Colors.grey[300] : Colors.grey[500],
                 ),
                 InkWell(
-                  onTap: () {},
+                  onTap: () {
+                    navigateTo(context, (ContactUsScreen()));
+                  },
                   child: Container(
                     padding: EdgeInsets.all(15),
                     color: AppCubit.get(context).isDark? Colors.white : HexColor('#333739'),

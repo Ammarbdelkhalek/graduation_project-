@@ -1,4 +1,5 @@
 import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:realestateapp/layout/layout_screen.dart';
@@ -22,16 +23,24 @@ class RegisterScreen extends StatelessWidget {
       create: (BuildContext context) => RegisterCubit(),
       child: BlocConsumer<RegisterCubit, RegisterStates>(
         listener: (context, state) {
+          if (state is CreateUserErrorState) {
+            showToast(
+              text: state.error,
+              state: ToastStates.ERROR,
+            );
+          }
           if (state is CreateUserSuccessState) {
             CacheHelper.saveData(
               key: 'uid',
               value: state.uid,
             ).then((value) => {
+              showToast(text:'registerd successfuly' , state:ToastStates.SUCCESS ),
                   navigateAndFinish(
                     context,
                     LayoutScreen(),
                   )
                 });
+
           }
         },
         builder: (context, state) {

@@ -19,6 +19,7 @@ class LayoutScreen extends StatefulWidget {
 }
 
 class _LayoutScreenState extends State<LayoutScreen> {
+
   FloatingSearchBarController controller = FloatingSearchBarController();
   @override
   Widget build(BuildContext context) {
@@ -30,18 +31,15 @@ class _LayoutScreenState extends State<LayoutScreen> {
           appBar: AppBar(
             actions: [
               IconButton(
-                onPressed: ({currentindex}) {
-                  var index = 0;
-                  currentindex = index;
-                  cubit.searchADS == null;
-                  navigateTo(context, SearchScreen(cubit.posts[index]));
+                onPressed: () {
+                  var index =0;
+                    navigateTo(context, SearchScreen(model: AppCubit.get(context).posts[index],));
                 },
                 icon: const Icon(Icons.search),
               ),
               IconButton(
-                onPressed: ({currentindex}) {
-                  var index = 0;
-                  currentindex = index;
+                onPressed: () {
+
                   navigateTo(context, filter_page());
                 },
                 icon: Icon(Icons.filter_list_alt),
@@ -80,7 +78,6 @@ class _LayoutScreenState extends State<LayoutScreen> {
                 icon: const Icon(Icons.favorite),
                 label: 'Favorite'.tr().toString(),
               ),
-
               BottomNavigationBarItem(
                 icon: const Icon(Icons.settings),
                 label: 'Settings'.tr().toString(),

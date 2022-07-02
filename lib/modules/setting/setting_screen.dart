@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:realestateapp/modules/cubit/cubit.dart';
 import 'package:realestateapp/modules/cubit/states.dart';
-import 'package:realestateapp/modules/videoandphoneCall/videoCallScreen.dart';
 import 'package:realestateapp/shared/components/components.dart';
 import 'package:easy_localization/easy_localization.dart';
 

@@ -8,22 +8,19 @@ import 'package:material_floating_search_bar/material_floating_search_bar.dart';
 import 'package:realestateapp/models/category_model.dart';
 import 'package:realestateapp/models/post_model.dart';
 import 'package:realestateapp/models/user_model.dart';
-import 'package:realestateapp/modules/category/rentcategory.dart';
-import 'package:realestateapp/modules/chat/chatdetails.dart';
+import 'package:realestateapp/modules/category/CateegoryAds.dart';
 import 'package:realestateapp/modules/cubit/cubit.dart';
 import 'package:realestateapp/modules/cubit/states.dart';
 import 'package:realestateapp/modules/home/adsdetails.dart';
-
 import 'package:realestateapp/modules/new_post/new_post.dart';
 import 'package:realestateapp/shared/components/components.dart';
 import 'package:realestateapp/shared/components/constant.dart';
 import 'package:realestateapp/shared/components/constant.dart';
 import 'package:easy_localization/easy_localization.dart';
+import '../search/search_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   HomeScreen({Key? key}) : super(key: key);
-
-
   @override
   State<HomeScreen> createState() => _HomeScreenState();
 }
@@ -32,18 +29,19 @@ class _HomeScreenState extends State<HomeScreen> {
   UserModel? usermodel;
   PageController AdsImages = PageController();
 
-  void chatwithOwner(context) {
-    if (AppCubit.get(context).users == usermodel!.uid) {
-      for (var i = 0; i > AppCubit.get(context).users.length; i++) {
-        print(AppCubit.get(context).users[i]);
-        navigateTo(context,
-            ChatDetailsScreen(userModel: AppCubit.get(context).users[i]));
 
-        print('=================================');
-        print('successs');
-      }
-    }
-  }
+  // void chatwithOwner(context) {
+  //   if (AppCubit.get(context).users == usermodel!.uid) {
+  //     for (var i = 0; i > AppCubit.get(context).users.length; i++) {
+  //       print(AppCubit.get(context).users[i]);
+  //       navigateTo(context,
+  //           ChatDetailsScreen(userModel: AppCubit.get(context).users[i]));
+  //
+  //       print('=================================');
+  //       print('successs');
+  //     }
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -55,6 +53,7 @@ class _HomeScreenState extends State<HomeScreen> {
       }
     }, builder: (context, state) {
       return Scaffold(
+
         body: SingleChildScrollView(
           child: Expanded(
             child: Column(
@@ -271,25 +270,31 @@ class _HomeScreenState extends State<HomeScreen> {
                           decoration: BoxDecoration(
                               color: white, borderRadius: BorderRadius.circular(15)),
                           child: IconButton(
-                            icon: AppCubit.get(context).favorites.length == 0
-                                ? const Icon(
-                              Icons.favorite_rounded,
-                            )
-                                :  const Icon(
-                              Icons.favorite_rounded,
-                              color: Colors.red,
-                            ),
+                          // icon: AppCubit.get(context).favorites.length == 0
+                            //     ? const Icon(
+                            //   Icons.favorite_rounded,
+                            // )
+                            //     :  const Icon(
+                            //   Icons.favorite_rounded,
+                            //   color: Colors.red,
+                            // ),
                             onPressed: () {
-                              var index =0;
-                              AppCubit.get(context).favorites.length == 0
-                                  ? AppCubit.get(context).addtofav(
-                                AppCubit.get(context).posts[index],
-                                AppCubit.get(context).postsId[index],
-                              )  //the errro cause of null index  should br solved
-                                  : showToast(
-                                  text: 'Aleardy Added'.tr().toString(),
-                                  state: ToastStates.WARNING);
-                            },
+                              AppCubit.get(context).addtofav(
+                                      AppCubit.get(context).posts[index],
+                                      AppCubit.get(context).postsId[index],
+
+                                   ) ;                            // AppCubit.get(context).favorites.length == 0
+                              //     ? AppCubit.get(context).addtofav(
+                              //     AppCubit.get(context).posts[index],
+                              //     AppCubit.get(context).postsId[index],
+                              // )
+                              // //the errro cause of null index  should br solved
+                              //     : showToast(
+                              //     text: 'Aleardy Added'.tr().toString(),
+                              //     state: ToastStates.WARNING);
+                            }, icon: const Icon(
+                               Icons.favorite_rounded,
+                             )
                           )),
                     ),
                   ],

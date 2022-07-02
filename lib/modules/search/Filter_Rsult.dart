@@ -60,9 +60,8 @@ class Filter_Result extends StatelessWidget {
                       ),
                   fallback: (context) =>
                       AppCubit.get(context).filterAds.length == 0
-                          ? Align(
-                              alignment: Alignment.center,
-                              child: Column(
+                          ?
+                               Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 children: const [
@@ -84,7 +83,7 @@ class Filter_Result extends StatelessWidget {
                                         color: Colors.grey),
                                   ),
                                 ],
-                              ),
+
                             )
                           : CircularProgressIndicator()),
             ],
@@ -93,7 +92,6 @@ class Filter_Result extends StatelessWidget {
       },
     );
   }
-
   Widget BuildPost(
     PostModel model,
     context,

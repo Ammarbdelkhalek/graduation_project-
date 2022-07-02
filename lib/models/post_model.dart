@@ -1,7 +1,5 @@
 class PostModel {
-  String? name;
   String? uid;
-  String? image;
   String? namePost;
   String? description;
   String? place;
@@ -13,19 +11,20 @@ class PostModel {
   String? price;
   String? category;
   String? postid;
-  bool? isfav;
   bool? isnegotiate;
+  bool? TermsAndCondition;
   String? type;
   String? bundel;
   List? services;
   String? email;
   String? whatsApp;
   String? phone;
+  double?lat;
+  double?long;
 
   PostModel(
-      {this.name,
+      {
       this.uid,
-      this.image,
       this.namePost,
       this.description,
       this.place,
@@ -33,36 +32,36 @@ class PostModel {
       this.no_of_bathroom,
       this.area,
       this.postImage,
+        this.TermsAndCondition,
       this.price,
       this.date,
       this.category,
       this.postid,
-      this.isfav,
       this.bundel,
       this.type,
       this.isnegotiate,
       this.services,
-        this.email,
-        this.phone,
-        this.whatsApp,
+      this.email,
+      this.phone,
+      this.whatsApp,
+      this.lat,
+      this.long,
       });
 
   PostModel.fromJson(Map<String, dynamic> json) {
-    name = json['name'];
     uid = json['uid'];
-    image = json['image'];
     namePost = json['namePost'];
     description = json['description'];
     place = json['place'];
     no_of_room = json['no_of_room'];
     no_of_bathroom = json['no_of_bathroom'];
+    TermsAndCondition = json['TermsAndCondition'];
     area = json['area'];
     postImage = json['postImage'];
     price = json['price'];
     date = json['date'];
     category = json['category'];
     postid = json['postid'];
-    isfav = json['isfav'];
     bundel = json['bundel'];
     type = json['type'];
     isnegotiate = json['isnegatiated'];
@@ -70,13 +69,13 @@ class PostModel {
     email = json ['email'];
     phone = json ['phone'];
     whatsApp = json['whatsApp'];
+    lat =json['lat'];
+    long =json['long'];
   }
 
   Map<String, dynamic> toMap() {
     return {
-      'name': name,
       'uid': uid,
-      'image': image,
       'namePost': namePost,
       'description': description,
       'place': place,
@@ -88,7 +87,6 @@ class PostModel {
       'date': date,
       'category': category,
       'postid': postid,
-      'isfav': isfav,
       'bundel': bundel,
       'isnegotiate': isnegotiate,
       'type': type,
@@ -96,6 +94,8 @@ class PostModel {
       'email' : email,
       'whatsApp' :whatsApp,
       'phone' :phone,
+      'lat':lat,
+      'long':long,
     };
   }
 }

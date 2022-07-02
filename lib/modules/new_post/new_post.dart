@@ -22,6 +22,7 @@ class NewPost extends StatefulWidget {
 
 class _NewPostState extends State<NewPost> {
   bool isnogiate = false;
+  bool AcceptTerm =false;
   var formKey = GlobalKey<FormState>();
   var NamePostController = TextEditingController();
   var DescriptionController = TextEditingController();
@@ -263,14 +264,16 @@ class _NewPostState extends State<NewPost> {
                           const SizedBox(
                             height: 10,
                           ),
-                          Text('Negotiability'.tr().toString()),
                           Checkbox(
                               value: isnogiate,
                               onChanged: (value) {
                                 setState(() {
                                   isnogiate = value!;
+                                  print(value);
                                 });
                               }),
+                          Text('Negotiability'.tr().toString()),
+
                           const SizedBox(
                             height: 10,
                           ),
@@ -335,10 +338,12 @@ class _NewPostState extends State<NewPost> {
                             prefix: Icons.price_change_outlined,
                           ),
 
-
-
                           const SizedBox(
                             height: 10.0,
+                          ),
+                          const Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Text('you have a free trial for one week '),
                           ),
                           DropdownButtonFormField(
                             items: AppCubit.get(context).BundeList.map((value) {
@@ -362,18 +367,38 @@ class _NewPostState extends State<NewPost> {
                                       .toString(),
                             ),
                           ),
+
+                          const SizedBox(
+                            height: 10.0,
+                          ),
+                          Row(children: [
+                            Checkbox(
+                                value: AcceptTerm,
+                                onChanged: (newvalue) {
+                                  setState(() {
+                                    AcceptTerm = newvalue!;
+                                  });
+                                  print(newvalue);
+                                }),
+
+                            Text(' I Accept all the Condition And terms'.tr().toString()),
+                          ],),
+                          const SizedBox(
+                            height: 10.0,
+                          ),
+
                           TextButton(
                             onPressed: () {
                               AppCubit.get(context).getImages();
                             },
                             child: Row(
                               children: [
-                                const Icon(Icons.photo_library_outlined),
+                                const Icon(Icons.photo_library_outlined,color: Colors.greenAccent,),
                                 const SizedBox(
                                   width: 10,
                                 ),
                                 Text(
-                                  'Add Photo'.tr().toString(),
+                                  'Add Photo'.tr().toString(),style:TextStyle(color: Colors.greenAccent),
                                 ),
                               ],
                             ),
@@ -413,7 +438,8 @@ class _NewPostState extends State<NewPost> {
                           if (state is PostImagePickedSuccessState) {
                             AppCubit.get(context).uploadpostandimage(
                                 Bundle: AppCubit.get(context).Bundel.toString(),
-                                isnegotiate: false,
+                                isnegotiate:isnogiate ,
+                              TermAndCondition :AcceptTerm,
                                 type: AppCubit.get(context).AdsType.toString(),
                                 namePost: NamePostController.text,
                                 description: DescriptionController.text,

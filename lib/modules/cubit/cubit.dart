@@ -19,7 +19,6 @@ import 'package:realestateapp/models/post_model.dart';
 import 'package:realestateapp/models/servicesmodel.dart';
 import 'package:realestateapp/models/user_model.dart';
 import 'package:realestateapp/modules/HomeServices/homeservics.dart';
-import 'package:realestateapp/modules/chat/chat_screen.dart';
 import 'package:realestateapp/modules/cubit/states.dart';
 import 'package:realestateapp/modules/favourite/favourite_screen.dart';
 import 'package:realestateapp/modules/home/home_screen.dart';
@@ -29,7 +28,9 @@ import 'package:realestateapp/shared/components/components.dart';
 import 'package:realestateapp/shared/components/constant.dart';
 import 'package:realestateapp/shared/network/local/cache_helper.dart';
 import 'package:realestateapp/shared/network/remote/notification_Dio.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:uuid/uuid.dart';
+import '../../models/ContactUsModel.dart';
 import '../../models/category_model.dart';
 import '../../models/chatmodel.dart';
 import '../../models/faviouritemodel.dart';
@@ -66,8 +67,7 @@ class AppCubit extends Cubit<AppStates> {
   List<String> AdsType = [
     'Rent',
     'Buy',
-    'vacation ',
-    'student',
+
   ];
 
   UserModel? userModel;
@@ -89,14 +89,14 @@ class AppCubit extends Cubit<AppStates> {
     Categoryscreen(),
     AppServices(),
     FavouriteScreen(),
-    //ChatScreen(),
+
     useraccount(),
   ];
 
   int currentIndex = 0;
 
   void ChangeBottomNav(int index) {
-    if (index == 3) getAllUsers();
+    // if (index == 3) getAllUsers();
     currentIndex = index;
     emit(AppChangeBottomNavState());
   }
@@ -124,7 +124,10 @@ class AppCubit extends Cubit<AppStates> {
     emit(UserUpdateLoadingState());
     firebase_storage.FirebaseStorage.instance
         .ref()
-        .child('users/${Uri.file(profileImage!.path).pathSegments.last}')
+        .child('users/${Uri
+        .file(profileImage!.path)
+        .pathSegments
+        .last}')
         .putFile(profileImage!)
         .then((value) {
       value.ref.getDownloadURL().then((value) {
@@ -212,50 +215,6 @@ class AppCubit extends Cubit<AppStates> {
     }
   }
 
-/*
-  void UploadNewPost({
-    required String namePost,
-    required String description,
-    required String place,
-    required String no_of_room,
-    required String no_of_bathroom,
-    required String area,
-    required String category,
-    required String price,
-    required String date,
-
-    // required String postImage,
-  }) {
-    emit(AppCreatePostLoadingState());
-    firebase_storage.FirebaseStorage.instance
-        .ref()
-        .child('users/${Uri.file(postImage!.path).pathSegments.last}')
-        .putFile(postImage!)
-        .then((value) {
-      value.ref.getDownloadURL().then((value) {
-        //   emit(SocialUploadCoverImageSuccessState());
-        print(value);
-//        coverImageUrl = value;
-        CreatePost(
-          namePost: namePost,
-          description: description,
-          area: area,
-          place: place,
-          no_of_room: no_of_room,
-          no_of_bathroom: no_of_bathroom,
-          date: date,
-          postImage: imagesUrl,
-          
-        );
-      }).catchError((error) {
-        emit(AppCreatePostErrorState(error.toString()));
-      });
-    }).catchError((error) {
-      emit(AppCreatePostErrorState(error.toString()));
-    });
-  }
-  */
-
   void CreatePost({
     required String namePost,
     required String description,
@@ -265,6 +224,8 @@ class AppCubit extends Cubit<AppStates> {
     required String area,
     required String price,
     required List postImage,
+    required bool negotiation,
+    required bool Terms,
     required String date,
     required String email,
     required String phone,
@@ -272,9 +233,7 @@ class AppCubit extends Cubit<AppStates> {
   }) {
     emit(AppCreatePostLoadingState());
     PostModel model = PostModel(
-      name: userModel!.name,
       uid: userModel!.uid,
-      image: userModel!.image,
       namePost: namePost,
       description: description,
       place: place,
@@ -286,14 +245,13 @@ class AppCubit extends Cubit<AppStates> {
       category: currentvalue,
       date: DateTime.now().toString(),
       type: currenttypeValue,
-      isnegotiate: false,
+      isnegotiate: negotiation,
+      TermsAndCondition:Terms,
       bundel: currentbundleValue,
       email: email,
       phone: phone,
       whatsApp: whatsApp,
-
     );
-
     FirebaseFirestore.instance
         .collection('posts')
         .add(model.toMap())
@@ -328,7 +286,7 @@ class AppCubit extends Cubit<AppStates> {
       event.docs.forEach((element) {
         print(element.id);
         postsId.add(element.id);
-        //  comments.add(SocialCommentPostModel.fromJson(element.data()));
+        //  commen0ts.add(SocialCommentPostModel.fromJson(element.data()));
         posts.add(PostModel.fromJson(element.data()));
       });
       emit(AppGetPostsSuccessState());
@@ -367,7 +325,6 @@ class AppCubit extends Cubit<AppStates> {
     FirebaseFirestore.instance.collection('categories').get().then((value) {
       value.docs.forEach((element) {
         categories.add(CategoryDataModel.fromJson(element.data()));
-
         print(element.data());
       });
       for (int i = 0; i < categories.length; i++) {
@@ -382,92 +339,15 @@ class AppCubit extends Cubit<AppStates> {
     });
   }
 
-  // Map<String, FavoriteDataModel> wishlist = {};
-  // Map<String, FavoriteDataModel> get getWishlistItems {
-  //   return wishlist;
-  // }
 
-  //  Future<void> addtoWishList({
-  //   required String? postid,
-  //   BuildContext? context,
-  // }) async {
-  //   final wislistId = const Uuid().v4();
-  //   try {
-  //     FirebaseFirestore.instance
-  //         .collection('users')
-  //         .doc(FirebaseAuth.instance.currentUser!.uid)
-  //         .update({
-  //       'userWish': FieldValue.arrayUnion([
-  //         {
-  //           'WishlistID': wislistId,
-  //           'postID': postid,
-  //         }
-  //       ])
-  //     });
-  //     await Fluttertoast.showToast(
-  //         msg: 'itemshas been added to your wishList ',
-  //         toastLength: Toast.LENGTH_SHORT,
-  //         gravity: ToastGravity.CENTER);
-  //   } catch (error) {
-  //     showToast(text: error.toString(), state: ToastStates.ERROR);
-  //   }
-  // }
+  wishlistModel? model;
+  List<wishlistModel> favorites = [];
+  List<String>favId = [];
 
-  // final usercollection = FirebaseFirestore.instance.collection('users');
-  // Future<void> fetchWishlist() async {
-  //   final DocumentSnapshot userDoc =
-  //       await usercollection.doc(FirebaseAuth.instance.currentUser!.uid).get();
-  //   if (userDoc == null) {
-  //     return;
-  //   }
-  //   final leng = userDoc.get('userWish').length;
-  //   for (var i = 0; i < leng; i++) {
-  //     wishlist.putIfAbsent(
-  //         userDoc.get('userWish')[i]['WishlistID'],
-  //         () => FavoriteDataModel(
-  //               postid: userDoc.get('userWish')[i]['postid'],
-  //               wishListId: userDoc.get('userWish')[i]['WishlistID'],
-  //             ));
-  //   }
-  //   emit(AppgetToFavoritesSuccessState());
-  // }
-
-  // Future<void> removeoneItem({
-  //   required String postid,
-  //   required String wishListId,
-  // }) async {
-  //   await usercollection.doc(FirebaseAuth.instance.currentUser!.uid).update({
-  //     'userWish': FieldValue.arrayRemove([
-  //       {'postid': postid, 'WishlistID': wishListId}
-  //     ])
-  //   });
-  //   wishlist.remove(postid);
-  //   await fetchWishlist();
-
-  //   emit(AppRemoveFromFavoritesSuccessState());
-  // }
-
-  // Future<void> removeonclick() async {
-  //   await usercollection.doc(FirebaseAuth.instance.currentUser!.uid).update({
-  //     'userWish': [],
-  //   });
-  //   wishlist.clear();
-  //   emit(Removeonclick());
-  // }
-
-  // void clearlocalWishlist() {
-  //   wishlist.clear();
-  //   emit(Removeonclick());
-  // }
-
-  FavoriteDataModel? model;
-  List<FavoriteDataModel> favorites = [];
-  List<String> favID = [];
-
-  void addtofav(PostModel model, String postid) {
+  Future addtofav(PostModel model,postid) async {
     final FirebaseAuth auth = FirebaseAuth.instance;
     var currentUser = auth.currentUser;
-    FavoriteDataModel favoriteDataModel = FavoriteDataModel(
+    wishlistModel favoriteDataModel = wishlistModel(
       namePost: model.namePost,
       no_of_bathroom: model.no_of_bathroom,
       no_of_room: model.no_of_room,
@@ -478,10 +358,10 @@ class AppCubit extends Cubit<AppStates> {
       category: model.category,
       date: model.date,
       place: model.place,
-      uid: model.uid,
+      uid: FirebaseAuth.instance.currentUser!.uid,
       postid: model.postid,
     );
-    FirebaseFirestore.instance
+    await FirebaseFirestore.instance
         .collection('favorite')
         .doc(FirebaseAuth.instance.currentUser!.uid)
         .collection('items')
@@ -495,20 +375,20 @@ class AppCubit extends Cubit<AppStates> {
     });
   }
 
-  void getfaviourite() {
+  Future getfaviourite() async {
     favorites = [];
     emit(AppgetToFavoritesloadingState());
-    FirebaseFirestore.instance
+    await FirebaseFirestore.instance
         .collection('favorite')
         .doc(FirebaseAuth.instance.currentUser!.uid)
         .collection('items')
-        .orderBy('date', descending: true)
-        .snapshots()
-        .listen((event) {
+        .get()
+        .then((event) {
+      favorites = [];
       event.docs.forEach((element) {
-        favorites.add(FavoriteDataModel.fromJson(element.data()));
-        model = FavoriteDataModel.fromJson(element.data());
-        favID.add(element.id);
+        postsId.add(element.id);
+        favorites.add(wishlistModel.fromJson(element.data()));
+        print(element.id);
 
         print(element.data());
       });
@@ -519,28 +399,21 @@ class AppCubit extends Cubit<AppStates> {
     emit(AppgetToFavoritesErrorState(error: Error.safeToString(Error)));
   }
 
-  void deletefavorite(String favid) {
-    favorites = [];
-    FirebaseFirestore.instance
+  Future deletefavorite(String postid) async {
+    favorites=[];
+    await FirebaseFirestore.instance
         .collection('favorite')
         .doc(FirebaseAuth.instance.currentUser!.uid)
         .collection('items')
-        .doc(favid)
+        .doc(postid)
         .delete()
         .then((value) {
+      favorites=[];
       emit(AppRemoveFromFavoritesSuccessState());
-      print(
-          '===================================================================');
-
-      print(
-          '===================================================================');
-
-      print(
-          '===================================================================');
       print('deleted sucessfuly');
+      getfaviourite();
     }).catchError((error) {
       print(error.toString());
-
       emit(AppRemoveFromFavoritesErrorState(error: error.toString()));
       print(error.toString());
       print(
@@ -549,104 +422,105 @@ class AppCubit extends Cubit<AppStates> {
   }
 
   // message function
+  //
+  // List<UserModel> users = [];
+  //
+  // getAllUsers() {
+  //   users = [];
+  //   emit(AppGetAllUserLoadingState());
+  //
+  //   FirebaseFirestore.instance.collection('users').get().then((value) {
+  //     value.docs.forEach((element) {
+  //       if (element.data()['uid'] != null)
+  //         users.add(UserModel.fromJson(element.data()));
+  //       emit(AppGetAllUserSuccessState());
+  //     });
+  //   }).catchError((error) {
+  //     emit(AppGetAllUserErrorState(error));
+  //   });
+  // }
 
-  List<UserModel> users = [];
-
-  getAllUsers() {
-    users = [];
-    emit(AppGetAllUserLoadingState());
-
-    FirebaseFirestore.instance.collection('users').get().then((value) {
-      value.docs.forEach((element) {
-        if (element.data()['uid'] != null)
-          users.add(UserModel.fromJson(element.data()));
-        emit(AppGetAllUserSuccessState());
-      });
-    }).catchError((error) {
-      emit(AppGetAllUserErrorState(error));
-    });
-  }
-
-  void sendMessage({
-    required String receiverId,
-    required String text,
-    required String dateTime,
-  }) {
-    MessageModel model = MessageModel(
-      receiverId: receiverId,
-      senderId: userModel!.uid,
-      text: text,
-      dateTime: dateTime,
-    );
-
-    FirebaseFirestore.instance
-        .collection('users')
-        .doc(userModel!.uid)
-        .collection('chats')
-        .doc(receiverId)
-        .collection('messages')
-        .add(model.toMap())
-        .then((value) {
-      emit(AppSendMessageSuccessState());
-    }).catchError((error) {
-      emit(AppSendMessageErrorState(error.toString()));
-    });
-
-    FirebaseFirestore.instance
-        .collection('users')
-        .doc(receiverId)
-        .collection('chats')
-        .doc(userModel!.uid)
-        .collection('messages')
-        .add(model.toMap())
-        .then((value) {
-      emit(AppSendMessageSuccessState());
-    }).catchError((error) {
-      emit(AppSendMessageErrorState(error.toString()));
-    });
-  }
-
-  List<MessageModel> Messages = [];
-
-  void getMessages({
-    required String receiverId,
-  }) {
-    FirebaseFirestore.instance
-        .collection('users')
-        .doc(userModel!.uid)
-        .collection('chats')
-        .doc(receiverId)
-        .collection('messages')
-        .orderBy('dateTime')
-        .snapshots()
-        .listen((event) {
-      Messages = [];
-
-      event.docs.forEach((element) {
-        Messages.add(MessageModel.fromJson(element.data()));
-      });
-      emit(AppGetMessagesSuccessState());
-    });
-  }
-
-  File? chatImage;
-
-  Future<void> pickCatImage() async {
-    final pickedfile = await picker.getImage(source: ImageSource.gallery);
-    if (pickedfile != null) {
-      chatImage = File(chatImage!.path);
-      emit(PickedChatImageSuccessState());
-    } else {
-      print('image not uplodaed try again ');
-    }
-  }
-
-/*
-  void uploadchatimage(String chatimage){
-    firebase_storage.FirebaseStorage.instance.ref(chatimage).child('').
-
-  }
-*/
+//
+//   void sendMessage({
+//     required String receiverId,
+//     required String text,
+//     required String dateTime,
+//   }) {
+//     MessageModel model = MessageModel(
+//       receiverId: receiverId,
+//       senderId: userModel!.uid,
+//       text: text,
+//       dateTime: dateTime,
+//     );
+//
+//     FirebaseFirestore.instance
+//         .collection('users')
+//         .doc(userModel!.uid)
+//         .collection('chats')
+//         .doc(receiverId)
+//         .collection('messages')
+//         .add(model.toMap())
+//         .then((value) {
+//       emit(AppSendMessageSuccessState());
+//     }).catchError((error) {
+//       emit(AppSendMessageErrorState(error.toString()));
+//     });
+//
+//     FirebaseFirestore.instance
+//         .collection('users')
+//         .doc(receiverId)
+//         .collection('chats')
+//         .doc(userModel!.uid)
+//         .collection('messages')
+//         .add(model.toMap())
+//         .then((value) {
+//       emit(AppSendMessageSuccessState());
+//     }).catchError((error) {
+//       emit(AppSendMessageErrorState(error.toString()));
+//     });
+//   }
+//
+//   List<MessageModel> Messages = [];
+//
+//   void getMessages({
+//     required String receiverId,
+//   }) {
+//     FirebaseFirestore.instance
+//         .collection('users')
+//         .doc(userModel!.uid)
+//         .collection('chats')
+//         .doc(receiverId)
+//         .collection('messages')
+//         .orderBy('dateTime')
+//         .snapshots()
+//         .listen((event) {
+//       Messages = [];
+//
+//       event.docs.forEach((element) {
+//         Messages.add(MessageModel.fromJson(element.data()));
+//       });
+//       emit(AppGetMessagesSuccessState());
+//     });
+//   }
+//
+//   File? chatImage;
+//
+//   Future<void> pickCatImage() async {
+//     final pickedfile = await picker.getImage(source: ImageSource.gallery);
+//     if (pickedfile != null) {
+//       chatImage = File(chatImage!.path);
+//       emit(PickedChatImageSuccessState());
+//     } else {
+//       print('image not uplodaed try again ');
+//     }
+//   }
+//
+// /*
+//   void uploadchatimage(String chatimage){
+//     firebase_storage.FirebaseStorage.instance.ref(chatimage).child('').
+//
+//   }
+// */
   List<PostModel> categoryPosts = [];
 
   void getCategoryProducts({required String categoryname}) {
@@ -692,6 +566,14 @@ class AppCubit extends Cubit<AppStates> {
         message: 'how are you ammar iwant to contact with you please');
   }
 
+  void launchEmail(email) async {
+    if (await canLaunch("mailto:$email")) {
+      await launch("mailto:$email");
+    } else {
+      throw 'Could not launch';
+    }
+  }
+
   CameraPosition? kGooglePlex;
   bool? services;
   Position? currentposition;
@@ -731,7 +613,7 @@ class AppCubit extends Cubit<AppStates> {
 
   Future<void> getlatAndlang() async {
     currentposition =
-        await Geolocator.getCurrentPosition().then((value) => value);
+    await Geolocator.getCurrentPosition().then((value) => value);
     lat = currentposition!.latitude;
     long = currentposition!.longitude;
     kGooglePlex = CameraPosition(
@@ -745,7 +627,7 @@ class AppCubit extends Cubit<AppStates> {
 
   Future<void> GetLocationFormat(Position? position) async {
     List<Placemark> placemarks =
-        await placemarkFromCoordinates(position!.latitude, position.longitude);
+    await placemarkFromCoordinates(position!.latitude, position.longitude);
   }
 
   void updatePost({
@@ -816,7 +698,10 @@ class AppCubit extends Cubit<AppStates> {
       for (int i = 0; i < addImages.length; i++) {
         firebase_storage.FirebaseStorage.instance
             .ref()
-            .child('users/${Uri.file(addImages[i].path).pathSegments.last}')
+            .child('users/${Uri
+            .file(addImages[i].path)
+            .pathSegments
+            .last}')
             .putFile(File(addImages[i].path))
             .then((value) {
           value.ref.getDownloadURL().then((value) {
@@ -849,6 +734,7 @@ class AppCubit extends Cubit<AppStates> {
     required String date,
     required String type,
     required bool isnegotiate,
+    required bool TermAndCondition,
     required String Bundle,
     required String email,
     required String whatsApp,
@@ -861,7 +747,10 @@ class AppCubit extends Cubit<AppStates> {
       for (int i = 0; i < addImages.length; i++) {
         firebase_storage.FirebaseStorage.instance
             .ref()
-            .child('users/${Uri.file(addImages[i].path).pathSegments.last}')
+            .child('users/${Uri
+            .file(addImages[i].path)
+            .pathSegments
+            .last}')
             .putFile(File(addImages[i].path))
             .then((value) {
           value.ref.getDownloadURL().then((value) {
@@ -878,6 +767,8 @@ class AppCubit extends Cubit<AppStates> {
                 area: area,
                 price: price,
                 postImage: imagesUrl,
+                negotiation:isnegotiate,
+                Terms:TermAndCondition ,
                 date: date,
                 email: email,
                 phone: phone,
@@ -915,9 +806,10 @@ class AppCubit extends Cubit<AppStates> {
             category == element.data()['category'] &&
             no_bath == element.data()['no_of_bathroom'] &&
             no_rooms == element.data()['no_of_room'] &&
-            area == element.data()['area'] &&
-            price == element.data()['price'] &&
-            type == element.data()['type']) {
+            type == element.data()['type']&&
+            area == element.data()['area']&&
+            price == element.data()['price']
+        ) {
           filterAds.add(PostModel.fromJson(element.data()));
         }
         print(element.data());
@@ -976,12 +868,14 @@ class AppCubit extends Cubit<AppStates> {
 
   void getsearch({required String place}) {
     emit(AppGetPostsLoadingState());
+    searchADS = [];
     FirebaseFirestore.instance
         .collection('posts')
         .where('place', isEqualTo: place)
         .snapshots()
         .listen((event) {
       event.docs.forEach((element) {
+        searchADS = [];
         searchADS.add(PostModel.fromJson(element.data()));
         print(element.data());
         print('=================================================>>>');
@@ -1029,10 +923,8 @@ class AppCubit extends Cubit<AppStates> {
     });
   }
 
-  void sendNotification(
-    UserModel model,
-    MessageModel messageModel,
-  ) {
+  void sendNotification(UserModel model,
+      MessageModel messageModel,) {
     notificationHelper
         .postData(url: 'https://fcm.googleapis.com/fcm/send', data: {
       "to": userModel!.token,
@@ -1058,65 +950,31 @@ class AppCubit extends Cubit<AppStates> {
     });
   }
 
-/*
-  void pushNotificationOnsendMessage( 
-       MessageModel messageModel, UserModel userModel) { 
-     print("device token :" + userModel.deviceToken.toString()); 
-     DioHelper.postData(url: 'https://fcm.googleapis.com/fcm/send', data: { 
-       "to": userModel.deviceToken, 
-       "notification": { 
-         "body": messageModel.text, 
-         "title": userModel.name,
-         "sound": "default" 
-       }, 
-       "android": { 
-         "priortiy": "HIGH", 
-         "notification": { 
-           "notification_priority": "PRIORITY_MAX", 
-           "sound": "default", 
-           "default_vibrate_timings": true, 
-           "default_light_settings": true 
-         } 
-       }, 
-       "data": {"messageModel": messageModel.toJson()} 
-     }).then((value) { 
-       print("notification pushed"); 
-     }).catchError((error) { 
-       print(error.toString()); 
-     }); 
-   }
-   */
-/*
-  void getAddsDataByFilter({
-    required String minPrice,
-    required String maxPrice,
-    required String category,
+  void CreateContactUs({
+    required String name,
+    required String email,
+    required String phone,
+    required String problem,
+
   }) {
-    addData = [];
-    addDataIds = [];
+    emit(AppCreateContactUsLoadingState());
+    ContactUsModel model = ContactUsModel(
+      name: userModel!.name,
+      uid: userModel!.uid,
+      phone: phone,
+      problem: problem,
+      email: email,
+    );
 
-    emit(AppGetAddsLoadingState());
     FirebaseFirestore.instance
-        .collection('adds')
-        .orderBy('addCreatedDate', descending: true)
-        .snapshots()
-        .listen((event) {
-      addData = [];
-      addDataIds = [];
-
-      for (var element in event.docs) {
-        if (double.parse(minPrice) <=
-                double.parse(element.data()['addPrice']) &&
-            double.parse(element.data()['addPrice']) <=
-                double.parse(maxPrice) &&
-            element.data()['addCategory'] == category) {
-          addData.add(AddModel.fromJson(element.data()));
-          addDataIds.add(element.id);
-        }
-
-        emit(AppGetAddsByFilterSuccessState());
-      }
+        .collection('ContactUs')
+        .add(model.toMap())
+        .then((value) {
+      emit(AppCreateContactUsSuccessState());
+    }).catchError((error) {
+      emit(AppCreateContactUsErrorState(error.toString()));
     });
   }
-  */
 }
+
+

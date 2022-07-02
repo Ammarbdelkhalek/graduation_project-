@@ -12,13 +12,14 @@ import 'package:realestateapp/shared/components/components.dart';
 import 'package:realestateapp/shared/components/constant.dart';
 
 class SearchScreen extends StatelessWidget {
-  SearchScreen(this.model, {Key? key}) : super(key: key);
-  PostModel? model;
+  SearchScreen({this.model});
   var searchcontroller = TextEditingController();
   PageController AdsImages = PageController();
+  PostModel ?model;
+
   @override
   Widget build(BuildContext context) {
-    AppCubit.get(context).getsearch(place: model!.place!);
+  AppCubit.get(context).getsearch(place: model!.place!);
     return BlocConsumer<AppCubit, AppStates>(
       listener: (context, state) {},
       builder: (context, state) {
@@ -37,9 +38,9 @@ class SearchScreen extends StatelessWidget {
                   child: Column(children: [
                     defaultFormField(
                       controller: searchcontroller,
-                      onSubmit: (place) {
-                        AppCubit.get(context).getsearch(place: place!);
-                      },
+                      onChange: (place){
+                       AppCubit.get(context).getsearch(place: place!);
+                          },
                       type: TextInputType.text,
                       validate: (value) {},
                       label: 'search',
@@ -61,7 +62,7 @@ class SearchScreen extends StatelessWidget {
                                                 model: AppCubit.get(context)
                                                     .posts[index]));
                                       }),
-                                      child: BuildPost(
+                                      child: BuildSearchItem(
                                           AppCubit.get(context)
                                               .searchADS[index],
                                           context,
@@ -76,44 +77,45 @@ class SearchScreen extends StatelessWidget {
                               ],
                             ),
                         // ignore: prefer_is_empty
-                        fallback: (context) => AppCubit.get(context)
-                                    .searchADS
-                                    .length ==
-                                0
-                            ? Align(
-                                alignment: Alignment.center,
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: const [
-                                    Image(
-                                      image: NetworkImage(
-                                          'https://correspondentsoftheworld.com/images/elements/clear/undraw_Content_structure_re_ebkv_clear.png'),
-                                      height: 300,
-                                      width: 380,
-                                      fit: BoxFit.cover,
-                                    ),
-                                    SizedBox(
-                                      height: 6.0,
-                                    ),
-                                    Text(
-                                      ' you have no posts  ',
-                                      style: TextStyle(
-                                          fontSize: 15.0,
-                                          fontWeight: FontWeight.bold,
-                                          color: Colors.grey),
-                                    ),
-                                  ],
-                                ),
-                              )
-                            : CircularProgressIndicator())
+                         fallback: (context) =>
+                             //AppCubit.get(context)
+                        //             .searchADS
+                        //             .length ==
+                        //         0
+                        //     ? Align(
+                        //         alignment: Alignment.center,
+                        //         child: Column(
+                        //           mainAxisAlignment: MainAxisAlignment.center,
+                        //           crossAxisAlignment: CrossAxisAlignment.center,
+                        //           children: const [
+                        //             Image(
+                        //               image: NetworkImage(
+                        //                   'https://correspondentsoftheworld.com/images/elements/clear/undraw_Content_structure_re_ebkv_clear.png'),
+                        //               height: 300,
+                        //               width: 380,
+                        //               fit: BoxFit.cover,
+                        //             ),
+                        //             SizedBox(
+                        //               height: 6.0,
+                        //             ),
+                        //             Text(
+                        //               ' you have no posts  ',
+                        //               style: TextStyle(
+                        //                   fontSize: 15.0,
+                        //                   fontWeight: FontWeight.bold,
+                        //                   color: Colors.grey),
+                        //             ),
+                        //           ],
+                        //         ),
+                        //       )
+                            CircularProgressIndicator())
                   ]),
                 )));
       },
     );
   }
 
-  Widget BuildPost(
+  Widget BuildSearchItem(
     PostModel model,
     context,
     index,
@@ -162,7 +164,7 @@ class SearchScreen extends StatelessWidget {
                         const Divider(),
                         Text(' ${model.place}  '),
                         const Divider(),
-                        Text(' ${model.name} '),
+                        Text(' ${model.namePost} '),
                         const Divider(),
                         Row(
                           children: [

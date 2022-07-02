@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:realestateapp/models/post_model.dart';
 import 'package:realestateapp/models/user_model.dart';
-import 'package:realestateapp/modules/chat/chatdetails.dart';
 import 'package:realestateapp/modules/cubit/cubit.dart';
 import 'package:realestateapp/modules/cubit/states.dart';
 import 'package:realestateapp/modules/setting/userprofile.dart';
@@ -30,19 +29,6 @@ class _Ads_DetailsState extends State<Ads_Details> {
   UserModel? usermodel;
 
   var ADSController = PageController();
-
-  void chatwithOwner(context) {
-    if (AppCubit.get(context).users == usermodel!.uid) {
-      for (var i = 0; i > AppCubit.get(context).users.length; i++) {
-        print(AppCubit.get(context).users[i]);
-        navigateTo(context,
-            ChatDetailsScreen(userModel: AppCubit.get(context).users[i]));
-
-        print('=================================');
-        print('successs');
-      }
-    }
-  }
 
   @override
   Widget build(
@@ -77,53 +63,11 @@ class _Ads_DetailsState extends State<Ads_Details> {
               Column(
                 children: [
                   builditems(widget.model!, usermodel!, context),
-                  Align(
-                    alignment: Alignment.bottomCenter,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        MaterialButton(
-                            onPressed: () {
-                              // navigateTo(context,
-                              //     ChatDetailsScreen(userModel: usermodel));
-                              //  },
-                              // chatwithOwner(context);
-                            },
-                            child: Row(
-                              children:  [
-                                Icon(Icons.email),
-                                Text(' Email'.tr().toString()) ,
-                              ],
-                            )),
-                        const SizedBox(
-                          width: 5.0,
-                        ),
-                        MaterialButton(
-                          onPressed: () {
-                            AppCubit.get(context).whatsAppOpen(
-                                usermodel.phone!);
-                          },
-                          child: Row(
-                            children:  [
-                              Icon(Icons.whatsapp),
-                              Text(' whatsapp'.tr().toString()),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
+                               ],
               ),
             ]),
           ),
-          floatingActionButton: FloatingActionButton(
-            onPressed: () {
-              launch('tel:01097442188');
-            },
-            child: const Icon(Icons.phone),
-          ),
-        );
+                 );
       },
     );
   }
@@ -165,24 +109,33 @@ class _Ads_DetailsState extends State<Ads_Details> {
                     decoration: BoxDecoration(
                         color: white, borderRadius: BorderRadius.circular(15)),
                     child: IconButton(
-                      icon: AppCubit.get(context).favorites.length == 0
-                          ? const Icon(
-                              Icons.favorite_rounded,
-                            )
-                     :  const Icon(
+                          icon:const Icon(
                         Icons.favorite_rounded,
-                        color: Colors.red,
-                      ),
+                                ),
                       onPressed: () {
-                        var index =0;
-                        AppCubit.get(context).favorites.length == 0
-                            ? AppCubit.get(context).addtofav(
-                                AppCubit.get(context).posts[index],
-                                AppCubit.get(context).postsId[index],
-                              )  //the errro cause of null index  should br solved
-                            : showToast(
-                                text: 'Aleardy Added'.tr().toString(),
-                                state: ToastStates.WARNING);
+                        AppCubit.get(context).addtofav(
+                          model,
+                          model.postid
+
+                        );
+
+                     //  icon: AppCubit.get(context).favorites.length == 0
+                     //      ? const Icon(
+                     //          Icons.favorite_rounded,
+                     //        )
+                     // :  const Icon(
+                     //    Icons.favorite_rounded,
+                     //    color: Colors.red,
+                     //  ),
+
+                        // AppCubit.get(context).favorites.length == 0
+                        //     ? AppCubit.get(context).addtofav(
+                        //            model,
+                        //     AppCubit.get(context).postsId[index]
+                        //       )  //the errro cause of null index  should br solved
+                        //     : showToast(
+                        //         text: 'Aleardy Added'.tr().toString(),
+                        //         state: ToastStates.WARNING);
                       },
                     )),
               ),
@@ -255,7 +208,7 @@ class _Ads_DetailsState extends State<Ads_Details> {
           myDivider(),
           Row(children: [
             const Icon(
-              Icons.king_bed_outlined,
+              Icons.space_bar_outlined,
             ),
             Text(
               ' Area'.tr().toString(),
@@ -339,6 +292,51 @@ class _Ads_DetailsState extends State<Ads_Details> {
               '${model.category}',
             ),
           ]),
-        ]));
+          Align(
+            alignment: Alignment.bottomCenter,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                MaterialButton(
+                    onPressed: () {
+                      AppCubit.get(context).launchEmail(model.email);
+                    },
+                    child: Row(
+                      children:  [
+                        Icon(Icons.email),
+                        Text(' Email'.tr().toString()) ,
+                      ],
+                    )),
+                const SizedBox(
+                  width: 5.0,
+                ),
+                MaterialButton(
+                  onPressed: () {
+                    AppCubit.get(context).whatsAppOpen(
+                        model.phone!);
+                  },
+                  child: Row(
+                    children:  [
+                      Icon(Icons.whatsapp),
+                      Text(' whatsapp'.tr().toString()),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+          FloatingActionButton(
+            onPressed: (){
+              launch(model.phone!);
+            },
+            child: const Icon(Icons.phone),
+          ),
+
+        ],
+        )
+    );
+
+
   }
+
 }

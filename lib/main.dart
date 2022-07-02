@@ -22,7 +22,7 @@ import 'package:realestateapp/shared/network/remote/notification_Dio.dart';
 import 'package:realestateapp/shared/styles/themes.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:easy_localization/easy_localization.dart';
-
+import 'modules/search/search_screen.dart';
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   // If you're going to use other Firebase services in the background, such as Firestore,
   // make sure you call `initializeApp` before using other Firebase services.
@@ -38,9 +38,6 @@ void main() async {
       // options: DefaultFirebaseOptions.currentPlatform,
 
       );
-
-  // var Token = await FirebaseMessaging.instance.getToken();
-  // print(Token);
 
   FirebaseMessaging.onMessage.listen((event) {
     print(event.data.toString());
@@ -104,9 +101,10 @@ class MyApp extends StatelessWidget {
               themeMode: isDark,
             )
             ..getCategoryData()
-            ..getBundle()
-            ..getAllUsers()
-            ..getUserToken(),
+            ..getBundle(),
+           // ..getAllUsers()
+            //..getfaviourite()
+           // ..getUserToken(),
         ),
         BlocProvider(
             create: (BuildContext context) =>

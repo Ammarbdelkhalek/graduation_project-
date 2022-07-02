@@ -13,7 +13,6 @@ import '../../shared/components/components.dart';
 class FavouriteScreen extends StatelessWidget {
   FavouriteScreen({Key? key}) : super(key: key);
   var favController = PageController();
-
   @override
   Widget build(BuildContext context) {
     AppCubit.get(context).getfaviourite();
@@ -60,7 +59,7 @@ class FavouriteScreen extends StatelessWidget {
         });
   }
 
-  Widget BuildfavoriteItes(FavoriteDataModel model, context, index) {
+  Widget BuildfavoriteItes(wishlistModel model, context, index) {
     Size size = MediaQuery.of(context).size;
     return Expanded(
       child: Card(
@@ -129,7 +128,7 @@ class FavouriteScreen extends StatelessWidget {
                 Row(
                   children: [
                     Text(
-                      '${model.place}',
+                      '${model .place}',
                       style: const TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
@@ -185,13 +184,19 @@ class FavouriteScreen extends StatelessWidget {
                         fontWeight: FontWeight.w600,
                       ),
                     ),
+                    Spacer(),
                     MaterialButton(
                       onPressed: () {
                         AppCubit.get(context)
-                            .deletefavorite(AppCubit.get(context).favID[index]);
+                            .deletefavorite(AppCubit.get(context).postsId[index]
+                        );
                       },
-                      child: Text('delete',
-                          style: TextStyle(color: Colors.grey[200])),
+                      child: Row(
+                        children: const [
+                          Icon(Icons.delete_outline),
+                          Text('delete',style: TextStyle(color: Colors.grey),)
+                        ],
+                      )
                     )
                   ],
                 )

@@ -13,6 +13,8 @@ import 'package:realestateapp/shared/components/constant.dart';
 import '../../shared/components/components.dart';
 import 'package:easy_localization/easy_localization.dart';
 
+import 'myaccount.dart';
+
 class User_Profile extends StatelessWidget {
   User_Profile(this.postModel, {Key? key}) : super(key: key);
   PostModel? postModel;
@@ -22,13 +24,20 @@ class User_Profile extends StatelessWidget {
   Widget build(BuildContext context) {
     AppCubit.get(context).getUserAds();
     return BlocConsumer<AppCubit, AppStates>(
-        listener: (context, state) {},
+        listener: (context, state) {
+
+        },
         builder: (context, state) {
           var userModel = AppCubit.get(context).userModel;
 
           return Scaffold(
               appBar: AppBar(
                 title: Text('Your Ads'),
+                // leading: MaterialButton(
+                //   onPressed: (){
+                //   },
+                //   child: Icon(Icons.arrow_back),
+                // ),
               ),
               body: ConditionalBuilder(
                 condition: AppCubit.get(context).userposts.length > 0 &&
