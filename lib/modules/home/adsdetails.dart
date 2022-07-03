@@ -115,7 +115,7 @@ class _Ads_DetailsState extends State<Ads_Details> {
                       onPressed: () {
                         AppCubit.get(context).addtofav(
                           model,
-                          model.postid
+
 
                         );
 

@@ -17,6 +17,7 @@ import 'package:realestateapp/shared/components/components.dart';
 import 'package:realestateapp/shared/components/constant.dart';
 import 'package:realestateapp/shared/components/constant.dart';
 import 'package:easy_localization/easy_localization.dart';
+import '../comment/commentScreen.dart';
 import '../search/search_screen.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -52,6 +53,8 @@ class _HomeScreenState extends State<HomeScreen> {
             state: ToastStates.SUCCESS);
       }
     }, builder: (context, state) {
+      var index ;
+     // AppCubit.get(context).getComment(postId: AppCubit.get(context).postsId[index]);
       return Scaffold(
 
         body: SingleChildScrollView(
@@ -281,7 +284,6 @@ class _HomeScreenState extends State<HomeScreen> {
                             onPressed: () {
                               AppCubit.get(context).addtofav(
                                       AppCubit.get(context).posts[index],
-                                      AppCubit.get(context).postsId[index],
 
                                    ) ;                            // AppCubit.get(context).favorites.length == 0
                               //     ? AppCubit.get(context).addtofav(
@@ -356,6 +358,21 @@ class _HomeScreenState extends State<HomeScreen> {
                         fontWeight: FontWeight.w600,
                       ),
                     ),
+                    Spacer(),
+                    Row(
+                      children: [
+                        Text('addComment'),
+                        MaterialButton(onPressed: (){
+
+                          navigateTo(context, CommentScreen(index,AppCubit.get(context).posts[index]));
+                          AppCubit.get(context).getComment(postId: model.postid);
+
+                        },
+                          child: Icon(Icons.insert_comment),
+                        )
+
+                      ],
+                    )
 
                   ],
                 )

@@ -38,7 +38,7 @@ class _filter_pageState extends State<filter_page> {
         if (state is AppGetFilterADSSuccessState) {
           int index = 0;
           navigateTo(
-              context, Filter_Result(AppCubit.get(context).posts[index]));
+              context, Filter_Result(AppCubit.get(context).postModel));
         }
       },
       builder: (context, state) {
@@ -218,7 +218,6 @@ class _filter_pageState extends State<filter_page> {
                               color: Colors.greenAccent,
                               child: MaterialButton(
                                 onPressed: () {
-                                  if (formkey.currentState!.validate()) {
                                     AppCubit.get(context).filter_search(
                                       place: PlaceController.text,
                                       no_bath: no_of_bathroomController.text,
@@ -234,8 +233,8 @@ class _filter_pageState extends State<filter_page> {
                                           .get(context)
                                           .currenttypeValue!,
                                     );
-                                  }
-                                },
+                                  },
+
                                 child: const Text('Search'),
                               ),
                             ),

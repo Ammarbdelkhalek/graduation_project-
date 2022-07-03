@@ -15,6 +15,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:realestateapp/models/BundleModel.dart';
+import 'package:realestateapp/models/Helping_posts.dart';
 import 'package:realestateapp/models/post_model.dart';
 import 'package:realestateapp/models/servicesmodel.dart';
 import 'package:realestateapp/models/user_model.dart';
@@ -30,6 +31,7 @@ import 'package:realestateapp/shared/network/local/cache_helper.dart';
 import 'package:realestateapp/shared/network/remote/notification_Dio.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:uuid/uuid.dart';
+import '../../models/Comment Model.dart';
 import '../../models/ContactUsModel.dart';
 import '../../models/category_model.dart';
 import '../../models/chatmodel.dart';
@@ -234,6 +236,8 @@ class AppCubit extends Cubit<AppStates> {
     emit(AppCreatePostLoadingState());
     PostModel model = PostModel(
       uid: userModel!.uid,
+      name: userModel!.name,
+      image: userModel!.image,
       namePost: namePost,
       description: description,
       place: place,
@@ -344,9 +348,7 @@ class AppCubit extends Cubit<AppStates> {
   List<wishlistModel> favorites = [];
   List<String>favId = [];
 
-  Future addtofav(PostModel model,postid) async {
-    final FirebaseAuth auth = FirebaseAuth.instance;
-    var currentUser = auth.currentUser;
+  Future addtofav(PostModel model,) async {
     wishlistModel favoriteDataModel = wishlistModel(
       namePost: model.namePost,
       no_of_bathroom: model.no_of_bathroom,
@@ -362,9 +364,7 @@ class AppCubit extends Cubit<AppStates> {
       postid: model.postid,
     );
     await FirebaseFirestore.instance
-        .collection('favorite')
-        .doc(FirebaseAuth.instance.currentUser!.uid)
-        .collection('items')
+        .collection('WishList')
         .doc()
         .set(favoriteDataModel.toMap())
         .then((value) {
@@ -379,14 +379,13 @@ class AppCubit extends Cubit<AppStates> {
     favorites = [];
     emit(AppgetToFavoritesloadingState());
     await FirebaseFirestore.instance
-        .collection('favorite')
-        .doc(FirebaseAuth.instance.currentUser!.uid)
-        .collection('items')
+        .collection('WishList')
+        .where('uid',isEqualTo:FirebaseAuth.instance.currentUser!.uid)
         .get()
         .then((event) {
       favorites = [];
       event.docs.forEach((element) {
-        postsId.add(element.id);
+        favId.add(element.id);
         favorites.add(wishlistModel.fromJson(element.data()));
         print(element.id);
 
@@ -399,13 +398,11 @@ class AppCubit extends Cubit<AppStates> {
     emit(AppgetToFavoritesErrorState(error: Error.safeToString(Error)));
   }
 
-  Future deletefavorite(String postid) async {
+  Future deletefavorite(favid) async {
     favorites=[];
     await FirebaseFirestore.instance
-        .collection('favorite')
-        .doc(FirebaseAuth.instance.currentUser!.uid)
-        .collection('items')
-        .doc(postid)
+        .collection('WishLIst')
+        .doc(favid)
         .delete()
         .then((value) {
       favorites=[];
@@ -420,6 +417,93 @@ class AppCubit extends Cubit<AppStates> {
           '===================================================================');
     });
   }
+  void addComment({String ?postid, String ?comment, String ?imageComment}) {
+    FirebaseFirestore.instance
+        .collection('posts')
+        .doc(postid)
+        .collection('comments')
+        .doc(userModel!.uid)
+        .set({
+      'image': userModel!.image,
+      'name': userModel!.name,
+      'textComment': comment,
+      'imageComment': imageComment ?? '',
+      'uId': userModel!.uid,
+    }).then((value) {
+     // emit
+      getComment(postId: postModel!.postid);
+      getPosts();
+     // getSinglePost(postId);
+    }).catchError((error) {
+      emit(AppCreatAddCommentErrorState(error.toString()));
+    });
+  }
+  CommentModel ?comment;
+  List<CommentModel> comments = [];
+
+  void getComment({
+    String ?postId,
+  }) {
+    // comments = [];
+    emit(SocialGetCommentLoadingState());
+    FirebaseFirestore.instance
+        .collection('posts')
+        .doc(postId)
+        .collection('comments')
+        .snapshots()
+        .listen((event) {
+      comments.clear();
+      event.docs.forEach((element) {
+        comments.add(CommentModel.fromJson(element.data()));
+        // getPosts();
+        emit(AppGETCommentSuccessState());
+      });
+    });
+  }
+  void updateComment() {
+    FirebaseFirestore.instance.collection('posts').snapshots().listen((event) {
+      event.docs.forEach((element) async {
+        await element.reference
+            .collection('comments')
+            .snapshots()
+            .listen((event) {
+          event.docs.forEach((element) {
+            if (element.data()['uId'] == userModel!.uid)
+              element.reference
+                  .update({'name': userModel!.name, 'image': userModel!.image});
+          });
+        });
+      });
+    });
+  }
+  // void createHelpingPost(
+  //     {@required String ?text,
+  //       @required String ?dateTime,
+  //       @required context,
+  //       }) {
+  //   emit(AppCreateHelpinPostLoadingState());
+  //   HelpingPostModel  HelpingpostModel = HelpingPostModel(
+  //     image: userModel!.image,
+  //     name: userModel!.name,
+  //     uId: userModel!.uid,
+  //     text: text,
+  //     dateTime: dateTime,
+  //     like: 0,
+  //     comment: 0,
+  //   );
+  //   FirebaseFirestore.instance
+  //       .collection('Help post')
+  //       .add(HelpingpostModel.toMap())
+  //       .then((value) {
+  //     // posts = [];
+  //     // getPosts();
+  //     emit(AppCreateHelpingPostSuccessState());
+  //     comments = [];
+  //     getComment();
+  //   }).catchError((error) {
+  //     emit(AppCreatHelpingPostErrorState(error));
+  //   });
+  // }
 
   // message function
   //
@@ -865,17 +949,15 @@ class AppCubit extends Cubit<AppStates> {
   }
 
   List<PostModel> searchADS = [];
-
   void getsearch({required String place}) {
     emit(AppGetPostsLoadingState());
-    searchADS = [];
     FirebaseFirestore.instance
         .collection('posts')
         .where('place', isEqualTo: place)
-        .snapshots()
-        .listen((event) {
+        .get()
+        .then((event) {
       event.docs.forEach((element) {
-        searchADS = [];
+
         searchADS.add(PostModel.fromJson(element.data()));
         print(element.data());
         print('=================================================>>>');
@@ -888,7 +970,6 @@ class AppCubit extends Cubit<AppStates> {
   BunndelModel? bunndelModel;
   List<String> BundeList = [];
   List<BunndelModel> Bundel = [];
-
   void getBundle() {
     Bundel = [];
     BundeList = [];
@@ -901,7 +982,6 @@ class AppCubit extends Cubit<AppStates> {
         BundeList.add(Bundel[i].bundleName.toString());
       }
       emit(AppGetBundleSuccessState());
-
       print(Bundel);
       print(BundeList);
     }).catchError((error) {

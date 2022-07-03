@@ -1,6 +1,6 @@
 class BunndelModel {
   String? bundleName;
-  int? bundleDuration;
+  String? bundleDuration;
   String? price;
 
   BunndelModel(

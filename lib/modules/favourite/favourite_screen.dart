@@ -188,7 +188,7 @@ class FavouriteScreen extends StatelessWidget {
                     MaterialButton(
                       onPressed: () {
                         AppCubit.get(context)
-                            .deletefavorite(AppCubit.get(context).postsId[index]
+                            .deletefavorite(AppCubit.get(context).favId[index]
                         );
                       },
                       child: Row(

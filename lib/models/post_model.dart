@@ -1,5 +1,7 @@
 class PostModel {
   String? uid;
+  String? name;
+  String? image;
   String? namePost;
   String? description;
   String? place;
@@ -21,9 +23,13 @@ class PostModel {
   String? phone;
   double?lat;
   double?long;
+  int?like ;
+  int ? comment;
 
   PostModel(
       {
+        this.name,
+        this.image,
       this.uid,
       this.namePost,
       this.description,

@@ -204,5 +204,28 @@ class AppCreateContactUsErrorState extends AppStates {
 
 
 }
+class AppCreateHelpinPostLoadingState extends AppStates {}
+
+class AppCreateHelpingPostSuccessState extends AppStates {}
+
+class AppCreatHelpingPostErrorState extends AppStates {
+  final String error;
+  AppCreatHelpingPostErrorState(this.error);
+}
+
+
+class AppCreateAddCommentSuccessState extends AppStates {}
+
+class AppCreatAddCommentErrorState extends AppStates {
+  final String error;
+  AppCreatAddCommentErrorState(this.error);
+}
+
+class AppGETCommentSuccessState extends AppStates {}
+class SocialGetCommentLoadingState extends AppStates {}
+class AppGETCommentErrorState extends AppStates {
+  final String error;
+  AppGETCommentErrorState(this.error);
+}
 
 

@@ -31,9 +31,12 @@ class _LayoutScreenState extends State<LayoutScreen> {
           appBar: AppBar(
             actions: [
               IconButton(
-                onPressed: () {
+                onPressed: ({currentindex}) {
                   var index =0;
-                    navigateTo(context, SearchScreen(model: AppCubit.get(context).posts[index],));
+                  setState(() {
+                    currentindex =index;
+                  });
+                    navigateTo(context, SearchScreen(model: AppCubit.get(context).posts[index]));
                 },
                 icon: const Icon(Icons.search),
               ),

@@ -40,12 +40,14 @@ class SearchScreen extends StatelessWidget {
                       controller: searchcontroller,
                       onChange: (place){
                        AppCubit.get(context).getsearch(place: place!);
+                       print(place);
                           },
                       type: TextInputType.text,
                       validate: (value) {},
                       label: 'search',
                       prefix: Icons.search_rounded,
                     ),
+
                     ConditionalBuilder(
                         condition: AppCubit.get(context).searchADS.isEmpty,
                         builder: (context) => Stack(
@@ -62,7 +64,7 @@ class SearchScreen extends StatelessWidget {
                                                 model: AppCubit.get(context)
                                                     .posts[index]));
                                       }),
-                                      child: BuildSearchItem(
+                                      child: BuildSeachItem(
                                           AppCubit.get(context)
                                               .searchADS[index],
                                           context,
@@ -78,73 +80,68 @@ class SearchScreen extends StatelessWidget {
                             ),
                         // ignore: prefer_is_empty
                          fallback: (context) =>
-                             //AppCubit.get(context)
-                        //             .searchADS
-                        //             .length ==
-                        //         0
-                        //     ? Align(
-                        //         alignment: Alignment.center,
-                        //         child: Column(
-                        //           mainAxisAlignment: MainAxisAlignment.center,
-                        //           crossAxisAlignment: CrossAxisAlignment.center,
-                        //           children: const [
-                        //             Image(
-                        //               image: NetworkImage(
-                        //                   'https://correspondentsoftheworld.com/images/elements/clear/undraw_Content_structure_re_ebkv_clear.png'),
-                        //               height: 300,
-                        //               width: 380,
-                        //               fit: BoxFit.cover,
-                        //             ),
-                        //             SizedBox(
-                        //               height: 6.0,
-                        //             ),
-                        //             Text(
-                        //               ' you have no posts  ',
-                        //               style: TextStyle(
-                        //                   fontSize: 15.0,
-                        //                   fontWeight: FontWeight.bold,
-                        //                   color: Colors.grey),
-                        //             ),
-                        //           ],
-                        //         ),
-                        //       )
-                            CircularProgressIndicator())
+                             AppCubit.get(context)
+                                    .searchADS
+                                    .length ==
+                                0
+                            ? Align(
+                                alignment: Alignment.center,
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: const [
+                                    Image(
+                                      image: NetworkImage(
+                                          'https://correspondentsoftheworld.com/images/elements/clear/undraw_Content_structure_re_ebkv_clear.png'),
+                                      height: 300,
+                                      width: 380,
+                                      fit: BoxFit.cover,
+                                    ),
+                                    SizedBox(
+                                      height: 6.0,
+                                    ),
+                                    Text(
+                                      ' you have no results  try again  ',
+                                      style: TextStyle(
+                                          fontSize: 15.0,
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors.grey),
+                                    ),
+                                  ],
+                                ),
+                              )
+                           : CircularProgressIndicator())
                   ]),
                 )));
       },
     );
   }
 
-  Widget BuildSearchItem(
-    PostModel model,
-    context,
-    index,
-  ) =>
-      Column(
-        mainAxisAlignment: MainAxisAlignment.end,
-        crossAxisAlignment: CrossAxisAlignment.end,
-        children: [
-          Padding(
-            padding: EdgeInsets.only(right: appPadding / 3),
-            child: Container(
-              padding: EdgeInsets.symmetric(horizontal: appPadding / 2),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(20),
-                color: Colors.white,
-              ),
-              width: double.infinity,
-              height: 130.0,
-              // color: Colors.grey[300],
-              child: Expanded(
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  crossAxisAlignment: CrossAxisAlignment.end,
+  Widget BuildSeachItem(
+      PostModel model,
+      context,
+      index,
+      ) {
+    Size size = MediaQuery.of(context).size;
+    return Expanded(
+      child: Card(
+        clipBehavior: Clip.antiAliasWithSaveLayer,
+        elevation: 5.0,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(
+              horizontal: appPadding, vertical: appPadding / 2),
+          child: Container(
+            height: 300,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Stack(
                   children: [
                     ClipRRect(
                       borderRadius: BorderRadius.circular(20),
                       child: Container(
-                        width: 180.0,
-                        height: 150.0,
+                        width: 400.0,
+                        height: 200.0,
                         child: PageView.builder(
                           controller: AdsImages,
                           scrollDirection: Axis.horizontal,
@@ -157,47 +154,74 @@ class SearchScreen extends StatelessWidget {
                         ),
                       ),
                     ),
-                    const SizedBox(width: 8.0),
-                    Column(
-                      children: [
-                        Text('${model.type}'),
-                        const Divider(),
-                        Text(' ${model.place}  '),
-                        const Divider(),
-                        Text(' ${model.namePost} '),
-                        const Divider(),
-                        Row(
-                          children: [
-                            Text(
-                              '${model.no_of_room} bedrooms / ',
-                              style: const TextStyle(
-                                fontSize: 15,
-                                fontWeight: FontWeight.w600,
-                              ),
-                            ),
-                            Text(
-                              '${model.no_of_bathroom} bathrooms / ',
-                              style: const TextStyle(
-                                fontSize: 15,
-                                fontWeight: FontWeight.w600,
-                              ),
-                            ),
-                            Text(
-                              '${model.area} sqft',
-                              style: const TextStyle(
-                                fontSize: 15,
-                                fontWeight: FontWeight.w600,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ],
+                  ],
+                ),
+                Row(
+                  children: [
+                    Text(
+                      '${model.place}',
+                      style: const TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    const SizedBox(
+                      width: 10,
+                    ),
+                    Expanded(
+                      child: Text(
+                        '${model.place}',
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle(
+                            fontSize: 15, color: black.withOpacity(0.4)),
+                      ),
                     ),
                   ],
                 ),
-              ),
+                Row(
+                  children: [
+                    Text(
+                      '${model.no_of_room} Bedrooms / ',
+                      style: const TextStyle(
+                        fontSize: 15,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                    Text(
+                      '${model.no_of_bathroom} Bathrooms / ',
+                      style: const TextStyle(
+                        fontSize: 15,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                    Text(
+                      '${model.area} sqft',
+                      style: const TextStyle(
+                        fontSize: 15,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  ],
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Icon(Icons.price_check_rounded),
+                    Text(
+                      '${model.price} Eg',
+                      style: const TextStyle(
+                        fontSize: 15,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  ],
+                )
+              ],
             ),
-          )
-        ],
-      );
+          ),
+        ),
+      ),
+    );
+  }
 }
