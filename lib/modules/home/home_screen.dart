@@ -304,7 +304,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 Row(
                   children: [
                     Text(
-                      '${model.place}',
+                      '${model.type}',
                       style: const TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
@@ -314,7 +314,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       width: 10,
                     ),
                     Text(
-                      '${model.place}',
+                      '${model.type}',
                       overflow: TextOverflow.ellipsis,
                       style: TextStyle(
                           fontSize: 15, color: black.withOpacity(0.4)),
@@ -358,30 +358,32 @@ class _HomeScreenState extends State<HomeScreen> {
                         fontWeight: FontWeight.w600,
                       ),
                     ),
-                    Spacer(),
-                    Row(
-                      children: [
-                        Text('addComment'),
-                        MaterialButton(onPressed: (){
+                    // Spacer(),
+                    // Row(
+                    //   children: [
+                    //     Text('addComment'),
+                    //     MaterialButton(onPressed: (){
+                    //
+                    //       navigateTo(context, CommentScreen(index,AppCubit.get(context).posts[index]));
+                    //       AppCubit.get(context).getComment(postId: model.postid);
+                    //
+                    //     },
+                    //       child: Icon(Icons.insert_comment),
+                    //     )
+                //   ],
+                // )
 
-                          navigateTo(context, CommentScreen(index,AppCubit.get(context).posts[index]));
-                          AppCubit.get(context).getComment(postId: model.postid);
-
-                        },
-                          child: Icon(Icons.insert_comment),
-                        )
-
-                      ],
-                    )
 
                   ],
                 )
               ],
+          )
             ),
           ),
-        ),
-      ),
+        )
     );
+
+
   }
 }
 

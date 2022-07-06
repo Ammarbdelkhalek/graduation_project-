@@ -128,7 +128,7 @@ class FavouriteScreen extends StatelessWidget {
                 Row(
                   children: [
                     Text(
-                      '${model .place}',
+                      '${model .type}',
                       style: const TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
@@ -139,7 +139,7 @@ class FavouriteScreen extends StatelessWidget {
                     ),
                     Expanded(
                       child: Text(
-                        '${model.place}',
+                        '${model.type}',
                         overflow: TextOverflow.ellipsis,
                         style: TextStyle(
                             fontSize: 15, color: black.withOpacity(0.4)),
@@ -188,7 +188,8 @@ class FavouriteScreen extends StatelessWidget {
                     MaterialButton(
                       onPressed: () {
                         AppCubit.get(context)
-                            .deletefavorite(AppCubit.get(context).favId[index]
+                            .deletefavorite(
+                          model.postid!
                         );
                       },
                       child: Row(

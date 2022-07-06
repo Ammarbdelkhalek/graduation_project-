@@ -327,7 +327,7 @@ class _Ads_DetailsState extends State<Ads_Details> {
           ),
           FloatingActionButton(
             onPressed: (){
-              launch(model.phone!);
+              launch('tel:${model.phone}');
             },
             child: const Icon(Icons.phone),
           ),

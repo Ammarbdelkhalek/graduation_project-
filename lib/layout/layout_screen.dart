@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:material_floating_search_bar/material_floating_search_bar.dart';
@@ -29,6 +30,7 @@ class _LayoutScreenState extends State<LayoutScreen> {
         var cubit = AppCubit.get(context);
         return Scaffold(
           appBar: AppBar(
+            title:Image.asset('assets/images/12.png'),
             actions: [
               IconButton(
                 onPressed: ({currentindex}) {

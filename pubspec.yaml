@@ -48,7 +48,6 @@ dependencies:
   google_fonts: ^2.3.2
   flutter_rating_bar: ^4.0.0
   webview_flutter: ^3.0.4
-  flutter_zoom_drawer: ^3.0.2
   flutter_launcher_icons: ^0.9.2
   easy_localization: 3.0.0 
   dio: ^4.0.6
@@ -72,9 +71,7 @@ dependencies:
   firebase_storage: ^10.2.9
   firebase_messaging: ^11.4.0
 
-  #agora
-  agora_rtc_engine: ^5.0.1
-  permission_handler: 
+ 
 
   
 

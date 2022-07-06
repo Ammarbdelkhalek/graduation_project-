@@ -134,7 +134,7 @@ class Filter_Result extends StatelessWidget {
                 Row(
                   children: [
                     Text(
-                      '${model.place}',
+                      '${model.type}',
                       style: const TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
@@ -145,7 +145,7 @@ class Filter_Result extends StatelessWidget {
                     ),
                     Expanded(
                       child: Text(
-                        '${model.place}',
+                        '${model.type}',
                         overflow: TextOverflow.ellipsis,
                         style: TextStyle(
                             fontSize: 15, color: black.withOpacity(0.4)),

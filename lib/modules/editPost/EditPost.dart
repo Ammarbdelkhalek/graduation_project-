@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:realestateapp/layout/layout_screen.dart';
+import 'package:realestateapp/models/place.dart';
 import 'package:realestateapp/models/post_model.dart';
 import 'package:realestateapp/models/user_model.dart';
 import 'package:realestateapp/modules/cubit/cubit.dart';
@@ -43,6 +44,7 @@ class EditPost extends StatelessWidget {
         no_of_bathroomController.text = postmodel!.no_of_bathroom!;
         AreaController.text = postmodel!.area!;
         PriceController.text = postmodel!.price!;
+        PlaceController.text =postmodel!.place!;
 
         return Scaffold(
           appBar: AppBar(

@@ -180,7 +180,8 @@ class User_Profile extends StatelessWidget {
                                           AppCubit.get(context).deletPost(
                                               AppCubit.get(context)
                                                   .postsId[index]);
-                                          navigateTo(context, LayoutScreen());
+                                          AppCubit.get(context).getUserAds();
+
                                           print('Deleted');
                                         },
                                       ),
@@ -203,7 +204,7 @@ class User_Profile extends StatelessWidget {
                 Row(
                   children: [
                     Text(
-                      '${model.place}',
+                      '${model.type}',
                       style: const TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
@@ -214,7 +215,7 @@ class User_Profile extends StatelessWidget {
                     ),
                     Expanded(
                       child: Text(
-                        '${model.place}',
+                        '${model.type}',
                         overflow: TextOverflow.ellipsis,
                         style: TextStyle(
                             fontSize: 15, color: black.withOpacity(0.4)),

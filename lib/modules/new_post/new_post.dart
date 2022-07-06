@@ -35,6 +35,14 @@ class _NewPostState extends State<NewPost> {
   var phonecontroller = TextEditingController();
   var phoneNumberWhatsAppController = TextEditingController();
   var emailController = TextEditingController();
+  String generateCountryFlag() {
+    String countryCode = 'eg';
+
+    String flag = countryCode.toUpperCase().replaceAllMapped(RegExp(r'[A-Z]'),
+            (match) => String.fromCharCode(match.group(0)!.codeUnitAt(0) + 127397));
+
+    return flag;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -204,7 +212,7 @@ class _NewPostState extends State<NewPost> {
                             controller: PlaceController,
                             onChange: (location) {},
                             ontap: () {
-                              navigateTo(context, MapScreen());
+                             // navigateTo(context, MapScreen());
                             },
                             type: TextInputType.text,
                             validate: (value) {

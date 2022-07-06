@@ -48,9 +48,11 @@ class SearchScreen extends StatelessWidget {
                       prefix: Icons.search_rounded,
                     ),
 
-                    ConditionalBuilder(
-                        condition: AppCubit.get(context).searchADS.isEmpty,
-                        builder: (context) => Stack(
+                    SizedBox(height: 20.0,),
+
+                        ConditionalBuilder(
+                            condition: AppCubit.get(context).searchADS.isNotEmpty,
+                            builder: (context) => Stack(
                               alignment: AlignmentDirectional.bottomEnd,
                               children: [
                                 ListView.separated(
@@ -65,52 +67,46 @@ class SearchScreen extends StatelessWidget {
                                                     .posts[index]));
                                       }),
                                       child: BuildSeachItem(
-                                          AppCubit.get(context)
-                                              .searchADS[index],
+                                          AppCubit.get(context).searchADS[index],
                                           context,
                                           index)),
                                   separatorBuilder: (context, index) =>
-                                      const SizedBox(
+                                  const SizedBox(
                                     height: 10,
                                   ),
-                                  itemCount:
-                                      AppCubit.get(context).searchADS.length,
+                                  itemCount: AppCubit.get(context).searchADS.length,
                                 ),
                               ],
                             ),
-                        // ignore: prefer_is_empty
-                         fallback: (context) =>
-                             AppCubit.get(context)
-                                    .searchADS
-                                    .length ==
-                                0
-                            ? Align(
-                                alignment: Alignment.center,
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: const [
-                                    Image(
-                                      image: NetworkImage(
-                                          'https://correspondentsoftheworld.com/images/elements/clear/undraw_Content_structure_re_ebkv_clear.png'),
-                                      height: 300,
-                                      width: 380,
-                                      fit: BoxFit.cover,
-                                    ),
-                                    SizedBox(
-                                      height: 6.0,
-                                    ),
-                                    Text(
-                                      ' you have no results  try again  ',
-                                      style: TextStyle(
-                                          fontSize: 15.0,
-                                          fontWeight: FontWeight.bold,
-                                          color: Colors.grey),
-                                    ),
-                                  ],
+                            fallback: (context) =>
+                            AppCubit.get(context).searchADS.length == 0
+                                ?
+                            Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: const [
+                                Image(
+                                  image: NetworkImage(
+                                      'https://correspondentsoftheworld.com/images/elements/clear/undraw_Content_structure_re_ebkv_clear.png'),
+                                  height: 300,
+                                  width: 380,
+                                  fit: BoxFit.cover,
                                 ),
-                              )
-                           : CircularProgressIndicator())
+                                SizedBox(
+                                  height: 6.0,
+                                ),
+                                Text(
+                                  ' No Result Matched ',
+                                  style: TextStyle(
+                                      fontSize: 15.0,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.grey),
+                                ),
+                              ],
+
+                            )
+                                : CircularProgressIndicator()),
+
                   ]),
                 )));
       },
